@@ -1,0 +1,40 @@
+﻿@model SimpleMembership.Models.UserProfile[]
+
+@{
+    ViewBag.Title = "title";
+}
+
+<h2>Members</h2>
+<div style="float:right">@Html.ActionLink("Delete All", "DeleteAll")</div>
+
+<br/>
+@for (int i = 0; i < Model.Length; i++)
+{
+    @Html.DisplayFor(u => Model[i])
+    
+    <ul>
+
+        @{ var userTokens = Model[i].Tokens.ToArray();
+           for (int j = 0; j < userTokens.Length; j++)
+           {
+               <li>
+                   <div>Token #@(j+1)</div>
+                   @Html.DisplayFor(u => userTokens[j])
+               </li>
+           }
+        }
+
+    </ul>
+}
+
+<style>
+    .display-label {
+        display: inline-block;
+        width: 15%;
+    }
+
+    .display-field {
+        display: inline-block;
+        width: 75%;
+    }
+</style>

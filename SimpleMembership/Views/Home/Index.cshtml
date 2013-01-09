@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                Log in is on upper right, Einstein.
+            </p>
+        </div>
+    </section>
+}
+<h3>We suggest the following:</h3>
+<ol class="round">
+    <li class="one">
+        <h5>Login</h5>
+        Choose one of several OAuth provider
+    </li>
+
+    <li class="two">
+        <h5>View Membership records</h5>
+        @Html.ActionLink("Membership", "Membership");
+    </li>
+
+    <li class="three">
+        <h5>Clear Membership Records</h5>
+        There is a link for that on the @Html.ActionLink("Membership Page", "Membership")
+    </li>
+</ol>

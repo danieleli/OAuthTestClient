@@ -1,0 +1,33 @@
+mxmerchant
+  
+  oauth workflow
+    - login page
+    - retrieve user info on authorize
+	- authorize page
+      * if user is logged in it should give opportunity to logoff and login as different user
+	  * force_login query param not honored - http://test.mxmerchant.com/oauth/authorize?oauth_token=A13EC3DE2A3D1968&force_login=true
+  
+
+
+  sandbox environment
+    - create and manage test users
+	- view test data
+
+  page to test consumer credentials
+
+
+
+
+
+Simple Membership App
+  
+  store token and secret in db - dbTokenManager
+
+
+
+
+1/5
+dbTokenManager
+deploy to appharbor
+
+Braintree workflow
