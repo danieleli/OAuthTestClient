@@ -15,6 +15,7 @@ TestResults
 *.user
 *.sln.docstates
 *.Debug.config
+web.config_output
 
 # Build results
 [Dd]ebug/
