@@ -14,7 +14,7 @@ TestResults
 *.suo
 *.user
 *.sln.docstates
-#*.Debug.config
+*.Debug.config
 web.config_output
 
 # Build results
