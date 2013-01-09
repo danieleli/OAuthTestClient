@@ -13,7 +13,7 @@ TestResults
 # User-specific files
 *.suo
 *.user
-*.sln.docstates
+*.sln.docstates 
 web.config_output
 
 # Build results
