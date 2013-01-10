@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Web.WebPages.OAuth;
 using SimpleMembership.Auth;
 using SimpleMembership.Auth.OAuth1a;
+using SimpleMembership.Auth.OAuth2;
 
 
 namespace SimpleMembership
@@ -32,6 +33,10 @@ namespace SimpleMembership
 
             OAuthWebSecurity.RegisterClient(
                 new MxClient(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant", null);
+
+
+            OAuthWebSecurity.RegisterClient(
+                new MxOAuth2Client(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant OAuth2", null);
         }
     }
 }

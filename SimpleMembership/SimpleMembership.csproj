@@ -172,7 +172,7 @@
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Auth\OAuth2\MxClient2.cs" />
+    <Compile Include="Auth\OAuth2\MxOAuth2Client.cs" />
     <Compile Include="Models\Login\ExternalLogin.cs" />
     <Compile Include="Models\Login\LocalPasswordModel.cs" />
     <Compile Include="Models\Login\LoginModel.cs" />
