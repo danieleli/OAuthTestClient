@@ -1,10 +1,4 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="FacebookClient.cs" company="Outercurve Foundation">
-//     Copyright (c) Outercurve Foundation. All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -102,11 +96,9 @@ namespace SimpleMembership.Auth.OAuth2
             }
             return new string(chars);
         }
-
-
     }
 
-    public static class Extensions
+    public static class ValidationHelper
     {
         /// <summary>
         /// Verifies something about the argument supplied to a method.
@@ -115,17 +107,19 @@ namespace SimpleMembership.Auth.OAuth2
         /// <param name="message">The message to use in the exception if the condition is false.</param>
         /// <param name="args">The string formatting arguments, if any.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="condition"/> evaluates to <c>false</c>.</exception>
-        
-        internal static void VerifyArgument(bool condition, string message, params object[] args)
+        public static void VerifyArgument(bool condition, string message, params object[] args)
         {
-        //    Requires.NotNull(args, "args");
-           // Assumes.True(message != null);
+            //    Requires.NotNull(args, "args");
+            // Assumes.True(message != null);
             if (!condition)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, message, args));
             }
         }
+    }
 
+    public static class Extensions
+    {
         internal static void AppendQueryArgs(this UriBuilder builder, IEnumerable<KeyValuePair<string, string>> args)
         {
             //Requires.NotNull(builder, "builder");
@@ -156,8 +150,8 @@ namespace SimpleMembership.Auth.OAuth2
 
             foreach (var p in args)
             {
-                Extensions.VerifyArgument(!string.IsNullOrEmpty(p.Key), "Unexpected Null Or Empty Key");
-                Extensions.VerifyArgument(p.Value != null, "Unexpected Null Value", p.Key);
+                ValidationHelper.VerifyArgument(!string.IsNullOrEmpty(p.Key), "Unexpected Null Or Empty Key");
+                ValidationHelper.VerifyArgument(p.Value != null, "Unexpected Null Value", p.Key);
                 sb.Append(EscapeUriDataStringRfc3986(p.Key));
                 sb.Append('=');
                 sb.Append(EscapeUriDataStringRfc3986(p.Value));
