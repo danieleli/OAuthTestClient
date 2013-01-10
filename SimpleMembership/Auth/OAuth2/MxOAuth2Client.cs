@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
+using DotNetOpenAuth.AspNet;
 using DotNetOpenAuth.AspNet.Clients;
 using System;
 using DotNetOpenAuth.OAuth2;
@@ -29,6 +30,25 @@ namespace SimpleMembership.Auth.OAuth2
             _consumerSecret = consumerSecret;
         }
 
+        /// <summary>
+        /// Attempts to authenticate users by forwarding them to an external website, and upon succcess or failure, redirect users back to the specified url.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        /// <param name="returnUrl">
+        /// The return url after users have completed authenticating against external website. 
+        /// </param>
+        public override void RequestAuthentication(HttpContextBase context, Uri returnUrl)
+        {
+            //Requires.NotNull(context, "context");
+            //Requires.NotNull(returnUrl, "returnUrl");
+
+            string redirectUrl = this.GetServiceLoginUrl(returnUrl).AbsoluteUri;
+            context.Response.Redirect(redirectUrl, endResponse: true);
+        }
+
+
         protected override Uri GetServiceLoginUrl(Uri returnUrl)
         {
             var builder = new UriBuilder(MxDescription.AuthorizationEndpoint);
@@ -44,6 +64,53 @@ namespace SimpleMembership.Auth.OAuth2
         protected override IDictionary<string, string> GetUserData(string accessToken)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Check if authentication succeeded after user is redirected back from the service provider.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="returnPageUrl">The return URL which should match the value passed to RequestAuthentication() method.</param>
+        /// <returns>
+        /// An instance of <see cref="AuthenticationResult"/> containing authentication result.
+        /// </returns>
+        public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
+        {
+          //  Requires.NotNull(context, "context");
+
+            string code = context.Request.QueryString["code"];
+            if (string.IsNullOrEmpty(code))
+            {
+                return AuthenticationResult.Failed;
+            }
+
+            string accessToken = this.QueryAccessToken(returnPageUrl, code);
+            if (accessToken == null)
+            {
+                return AuthenticationResult.Failed;
+            }
+
+            IDictionary<string, string> userData = this.GetUserData(accessToken);
+            if (userData == null)
+            {
+                return AuthenticationResult.Failed;
+            }
+
+            string id = userData["id"];
+            string name;
+
+            // Some oAuth providers do not return value for the 'username' attribute. 
+            // In that case, try the 'name' attribute. If it's still unavailable, fall back to 'id'
+            if (!userData.TryGetValue("username", out name) && !userData.TryGetValue("name", out name))
+            {
+                name = id;
+            }
+
+            // add the access token to the user data dictionary just in case page developers want to use it
+            userData["accesstoken"] = accessToken;
+
+            return new AuthenticationResult(
+                isSuccessful: true, provider: this.ProviderName, providerUserId: id, userName: name, extraData: userData);
         }
 
         protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
