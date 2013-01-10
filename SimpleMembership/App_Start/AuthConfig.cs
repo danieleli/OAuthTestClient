@@ -19,18 +19,18 @@ namespace SimpleMembership
             //    clientId: "",
             //    clientSecret: "");
 
-            OAuthWebSecurity.RegisterTwitterClient(
-                consumerKey: Credentials.Twitter.KEY,
-                consumerSecret: Credentials.Twitter.SECRET);
+            //OAuthWebSecurity.RegisterTwitterClient(
+            //    consumerKey: Credentials.Twitter.KEY,
+            //    consumerSecret: Credentials.Twitter.SECRET);
 
-            OAuthWebSecurity.RegisterFacebookClient(
-                appId: Credentials.Facebook.KEY,
-                appSecret: Credentials.Facebook.SECRET);
+            //OAuthWebSecurity.RegisterFacebookClient(
+            //    appId: Credentials.Facebook.KEY,
+            //    appSecret: Credentials.Facebook.SECRET);
 
-            OAuthWebSecurity.RegisterGoogleClient();
+            //OAuthWebSecurity.RegisterGoogleClient();
 
-            OAuthWebSecurity.RegisterClient(
-                new MxClient(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant", null);
+            //OAuthWebSecurity.RegisterClient(
+            //    new MxClient(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant", null);
         }
     }
 }
