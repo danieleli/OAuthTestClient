@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Web.WebPages.OAuth;
 using NUnit.Framework;
-using SimpleMembership.OAuth;
 
 namespace SimpleMembership._Tests.Controllers
 {

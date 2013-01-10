@@ -7,7 +7,7 @@ using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
 using SimpleMembership.Models;
 
-namespace SimpleMembership.OAuth
+namespace SimpleMembership.Auth
 {
     public class DbTokenManager : IConsumerTokenManager
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Web.WebPages.OAuth;
-using SimpleMembership.OAuth;
+using SimpleMembership.Auth.OAuth1a;
 
 namespace SimpleMembership._Tests
 {

@@ -5,10 +5,8 @@ using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
-using Microsoft.Web.WebPages.OAuth;
-using SimpleMembership.Models;
 
-namespace SimpleMembership.OAuth
+namespace SimpleMembership.Auth.OAuth1a
 {
 
     public class MxClient : OAuthClient

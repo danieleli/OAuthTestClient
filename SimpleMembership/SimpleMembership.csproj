@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Membership.OpenAuth">
+      <HintPath>..\packages\Microsoft.AspNet.Membership.OpenAuth.1.0.0\lib\net45\Microsoft.AspNet.Membership.OpenAuth.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -165,10 +168,10 @@
     <Compile Include="Models\Login\LoginModel.cs" />
     <Compile Include="Models\Login\RegisterExternalLoginModel.cs" />
     <Compile Include="Models\Login\RegisterModel.cs" />
-    <Compile Include="OAuth\Credentials.cs" />
-    <Compile Include="OAuth\DbTokenManager.cs" />
+    <Compile Include="Auth\Credentials.cs" />
+    <Compile Include="Auth\DbTokenManager.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="OAuth\MxClient.cs" />
+    <Compile Include="Auth\OAuth1a\MxClient.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -299,6 +302,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Auth\OAuth2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
+using SimpleMembership.Auth;
+using SimpleMembership.Auth.OAuth1a;
 using SimpleMembership.Models;
-using SimpleMembership.OAuth;
 
 namespace SimpleMembership
 {
