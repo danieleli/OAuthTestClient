@@ -41,8 +41,8 @@ namespace SimpleMembership.Auth.OAuth1a
 
         /// Check if authentication succeeded after user is redirected back from the service provider.
         /// The response token returned from service provider authentication result. 
-        protected override AuthenticationResult VerifyAuthenticationCore(AuthorizedTokenResponse response)
-        {
+         protected override AuthenticationResult VerifyAuthenticationCore(AuthorizedTokenResponse response)
+         {
             string accessToken = response.AccessToken;
             var accessTokenSecret = (response as ITokenSecretContainingMessage).TokenSecret;
  
@@ -78,5 +78,8 @@ namespace SimpleMembership.Auth.OAuth1a
             //    return new AuthenticationResult(exception);
             //}
         }
+
+  
     }
+
 }
