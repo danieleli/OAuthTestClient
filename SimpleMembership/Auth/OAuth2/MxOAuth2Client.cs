@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -12,85 +13,45 @@ using DotNetOpenAuth.Messaging;
 
 namespace SimpleMembership.Auth.OAuth2
 {
-    public class MxOAuth2Client : OAuth2Client
+    public static class Requester
     {
-        private readonly string _consumerKey;
-        private readonly string _consumerSecret;
-
-        private static readonly AuthorizationServerDescription MxDescription = new AuthorizationServerDescription
+        public static void RequestAuthentication(string authEndpoint, string consumerKey, Action<string, bool> redirectMethod, Uri returnUrl)
         {
-            TokenEndpoint = new Uri("https://test.api.mxmerchant.com/v1/oauth/2/access_token"),
-            AuthorizationEndpoint = new Uri("https://test.api.mxmerchant.com/v1/oauth/2/authorize"),
-        };
-
-        public MxOAuth2Client(string consumerKey, string consumerSecret)
-            : base("MxOAuth2Client")
-        {
-            _consumerKey = consumerKey;
-            _consumerSecret = consumerSecret;
+            var redirectUrl = GetServiceLoginUrl(authEndpoint, consumerKey, returnUrl).AbsoluteUri;
+            redirectMethod(redirectUrl, true);
         }
 
-        /// <summary>
-        /// Attempts to authenticate users by forwarding them to an external website, and upon succcess or failure, redirect users back to the specified url.
-        /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <param name="returnUrl">
-        /// The return url after users have completed authenticating against external website. 
-        /// </param>
-        public override void RequestAuthentication(HttpContextBase context, Uri returnUrl)
+        public static Uri GetServiceLoginUrl(string authEndpoint, string consumerKey, Uri returnUrl)
         {
-            //Requires.NotNull(context, "context");
-            //Requires.NotNull(returnUrl, "returnUrl");
-
-            string redirectUrl = this.GetServiceLoginUrl(returnUrl).AbsoluteUri;
-            context.Response.Redirect(redirectUrl, endResponse: true);
-        }
-
-
-        protected override Uri GetServiceLoginUrl(Uri returnUrl)
-        {
-            var builder = new UriBuilder(MxDescription.AuthorizationEndpoint);
+            var builder = new UriBuilder(authEndpoint);
+            
             builder.AppendQueryArgs(
                 new Dictionary<string, string> {
-					{ "client_id", this._consumerKey },
+					{ "client_id", consumerKey },
 					{ "redirect_uri", returnUrl.AbsoluteUri },
 					{ "scope", "email" },
 				});
             return builder.Uri;
         }
+    }
 
-        protected override IDictionary<string, string> GetUserData(string accessToken)
+    public static class Verifier
+    {
+        public static AuthenticationResult VerifyAuthentication(string tokenEndpoint, string consumerKey, string consumerSecret, NameValueCollection queryString, Uri returnPageUrl)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Check if authentication succeeded after user is redirected back from the service provider.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="returnPageUrl">The return URL which should match the value passed to RequestAuthentication() method.</param>
-        /// <returns>
-        /// An instance of <see cref="AuthenticationResult"/> containing authentication result.
-        /// </returns>
-        public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
-        {
-          //  Requires.NotNull(context, "context");
-
-            string code = context.Request.QueryString["code"];
+            string code = queryString["code"];
             if (string.IsNullOrEmpty(code))
             {
                 return AuthenticationResult.Failed;
             }
 
-            string accessToken = this.QueryAccessToken(returnPageUrl, code);
+            string accessToken = QueryAccessToken(tokenEndpoint, consumerKey, consumerSecret, returnPageUrl, code);
             if (accessToken == null)
             {
                 return AuthenticationResult.Failed;
             }
 
-            IDictionary<string, string> userData = this.GetUserData(accessToken);
+            IDictionary<string, string> userData = GetUserData(accessToken);
             if (userData == null)
             {
                 return AuthenticationResult.Failed;
@@ -110,25 +71,25 @@ namespace SimpleMembership.Auth.OAuth2
             userData["accesstoken"] = accessToken;
 
             return new AuthenticationResult(
-                isSuccessful: true, provider: this.ProviderName, providerUserId: id, userName: name, extraData: userData);
+                isSuccessful: true, provider: "MxOAuth2Client", providerUserId: id, userName: name, extraData: userData);
         }
 
-        protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
+        private static string QueryAccessToken(string tokenEndpoint, string consumerKey, string consumerSecret, Uri returnUrl, string authorizationCode)
         {
             // Note: Facebook doesn't like us to url-encode the redirect_uri value
-            var builder = new UriBuilder(MxDescription.TokenEndpoint);
+            var builder = new UriBuilder(tokenEndpoint);
             builder.AppendQueryArgs(
                 new Dictionary<string, string> {
-					{ "client_id", this._consumerKey },
-					{ "redirect_uri", NormalizeHexEncoding(returnUrl.AbsoluteUri) },
-					{ "client_secret", this._consumerSecret },
+					{ "client_id", consumerKey },
+					{ "redirect_uri", returnUrl.AbsoluteUri.NormalizeHexEncoding() },
+					{ "client_secret", consumerSecret },
 					{ "code", authorizationCode },
 					{ "scope", "email" },
 				});
 
-            using (WebClient client = new WebClient())
+            using (var client = new WebClient())
             {
-                string data = client.DownloadString(builder.Uri);
+                var data = client.DownloadString(builder.Uri);
                 if (string.IsNullOrEmpty(data))
                 {
                     return null;
@@ -139,30 +100,64 @@ namespace SimpleMembership.Auth.OAuth2
             }
         }
 
-        /// <summary>
-        /// Converts any % encoded values in the URL to uppercase.
-        /// </summary>
-        /// <param name="url">The URL string to normalize</param>
-        /// <returns>The normalized url</returns>
-        /// <example>NormalizeHexEncoding("Login.aspx?ReturnUrl=%2fAccount%2fManage.aspx") returns "Login.aspx?ReturnUrl=%2FAccount%2FManage.aspx"</example>
-        /// <remarks>
-        /// There is an issue in Facebook whereby it will rejects the redirect_uri value if
-        /// the url contains lowercase % encoded values.
-        /// </remarks>
-        private static string NormalizeHexEncoding(string url)
+        public static IDictionary<string, string> GetUserData(string accessToken)
         {
-            var chars = url.ToCharArray();
-            for (int i = 0; i < chars.Length - 2; i++)
-            {
-                if (chars[i] == '%')
-                {
-                    chars[i + 1] = char.ToUpperInvariant(chars[i + 1]);
-                    chars[i + 2] = char.ToUpperInvariant(chars[i + 2]);
-                    i += 2;
-                }
-            }
-            return new string(chars);
+            throw new NotImplementedException();
+            return new Dictionary<string, string>();
         }
+
+    }
+
+    public class MxOAuth2Client : OAuth2Client
+    {
+        private readonly string _consumerKey;
+        private readonly string _consumerSecret;
+
+        public const string AUTHORIZATION_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/authorize";
+        public const string TOKEN_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/access_token";
+
+        public MxOAuth2Client(string consumerKey, string consumerSecret)
+            : base("MxOAuth2Client")
+        {
+            _consumerKey = consumerKey;
+            _consumerSecret = consumerSecret;
+        }
+
+        /// <summary>
+        /// Attempts to authenticate users by forwarding them to an external website, and upon succcess or failure, redirect users back to the specified url.
+        /// </summary>
+        public override void RequestAuthentication(HttpContextBase context, Uri returnUrl)
+        {
+            Requester.RequestAuthentication(AUTHORIZATION_ENDPOINT, _consumerKey, context.Response.Redirect, returnUrl);
+        }
+
+        /// <summary>
+        /// Check if authentication succeeded after user is redirected back from the service provider.
+        /// </summary>
+        /// <param name="returnPageUrl">The return URL which should match the value passed to RequestAuthentication() method.</param>
+        public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
+        {
+            return Verifier.VerifyAuthentication(TOKEN_ENDPOINT, _consumerKey, _consumerSecret, context.Request.QueryString,
+                                          returnPageUrl);
+
+        }
+
+        protected override Uri GetServiceLoginUrl(Uri returnUrl)
+        {
+            throw new NotImplementedException();
+            //return Requester.GetServiceLoginUrl(AUTHORIZATION_ENDPOINT, _consumerKey, returnUrl);
+        }
+
+        protected override IDictionary<string, string> GetUserData(string accessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
     public static class ValidationHelper
@@ -185,15 +180,45 @@ namespace SimpleMembership.Auth.OAuth2
         }
     }
 
-    public static class Extensions
+    public static class StringExtensions
     {
-        internal static void AppendQueryArgs(this UriBuilder builder, IEnumerable<KeyValuePair<string, string>> args)
+        /// <summary>
+        /// Converts any % encoded values in the URL to uppercase.
+        /// </summary>
+        /// <param name="url">The URL string to normalize</param>
+        /// <returns>The normalized url</returns>
+        /// <example>NormalizeHexEncoding("Login.aspx?ReturnUrl=%2fAccount%2fManage.aspx") returns "Login.aspx?ReturnUrl=%2FAccount%2FManage.aspx"</example>
+        /// <remarks>
+        /// There is an issue in Facebook whereby it will rejects the redirect_uri value if
+        /// the url contains lowercase % encoded values.
+        /// </remarks>
+        public static string NormalizeHexEncoding(this string s)
+        {
+            var chars = s.ToCharArray();
+            for (int i = 0; i < chars.Length - 2; i++)
+            {
+                if (chars[i] == '%')
+                {
+                    chars[i + 1] = char.ToUpperInvariant(chars[i + 1]);
+                    chars[i + 2] = char.ToUpperInvariant(chars[i + 2]);
+                    i += 2;
+                }
+            }
+            return new string(chars);
+        }
+    }
+
+    public static class UriBuilderExtensions
+    {
+        private static readonly string[] UriRfc3986CharsToEscape = new[] { "!", "*", "'", "(", ")" };
+
+        public static void AppendQueryArgs(this UriBuilder builder, IDictionary<string, string> args)
         {
             //Requires.NotNull(builder, "builder");
 
             if (args != null && args.Count() > 0)
             {
-                StringBuilder sb = new StringBuilder(50 + (args.Count() * 10));
+                var sb = new StringBuilder(50 + (args.Count() * 10));
                 if (!string.IsNullOrEmpty(builder.Query))
                 {
                     sb.Append(builder.Query.Substring(1));
@@ -205,7 +230,7 @@ namespace SimpleMembership.Auth.OAuth2
             }
         }
 
-        internal static string CreateQueryString(IEnumerable<KeyValuePair<string, string>> args)
+        internal static string CreateQueryString(IDictionary<string, string> args)
         {
             //Requires.NotNull(args, "args");
 
@@ -213,7 +238,7 @@ namespace SimpleMembership.Auth.OAuth2
             {
                 return string.Empty;
             }
-            StringBuilder sb = new StringBuilder(args.Count() * 10);
+            var sb = new StringBuilder(args.Count() * 10);
 
             foreach (var p in args)
             {
@@ -249,6 +274,5 @@ namespace SimpleMembership.Auth.OAuth2
             return escaped.ToString();
         }
 
-        private static readonly string[] UriRfc3986CharsToEscape = new[] { "!", "*", "'", "(", ")" };
     }
 }

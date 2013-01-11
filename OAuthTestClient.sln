@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuth1", "OAuth1", "{DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8929EB4-3D47-4AA1-AC77-7611BE0E6823}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		creds.txt = creds.txt
+		readme.md = readme.md
+		SQLQuery1.sql = SQLQuery1.sql
+		todo.txt = todo.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{61C77E98-16A8-42FA-8B8C-0C4B7E1CC305}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMembership", "SimpleMembership\SimpleMembership.csproj", "{92108E63-B43E-44B6-9F8C-FC92771A74ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMembership._Tests", "SimpleMembership._Tests\SimpleMembership._Tests.csproj", "{3EAA60CD-3DA9-4968-A68D-4F68E415C602}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Mvc4|Any CPU = Mvc4|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.Mvc4|Any CPU.ActiveCfg = Release|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.Mvc4|Any CPU.Build.0 = Release|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Mvc4|Any CPU.ActiveCfg = Release|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Mvc4|Any CPU.Build.0 = Release|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{92108E63-B43E-44B6-9F8C-FC92771A74ED} = {DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}
+		{3EAA60CD-3DA9-4968-A68D-4F68E415C602} = {DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}
+	EndGlobalSection
+EndGlobal
