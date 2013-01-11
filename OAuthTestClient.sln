@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuth1", "OAuth1", "{DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8929EB4-3D47-4AA1-AC77-7611BE0E6823}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,16 +12,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		todo.txt = todo.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{61C77E98-16A8-42FA-8B8C-0C4B7E1CC305}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMembership", "SimpleMembership\SimpleMembership.csproj", "{92108E63-B43E-44B6-9F8C-FC92771A74ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMembership._Tests", "SimpleMembership._Tests\SimpleMembership._Tests.csproj", "{3EAA60CD-3DA9-4968-A68D-4F68E415C602}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthAuthorizationServer", "Auth2Server\OAuthAuthorizationServer.csproj", "{C78E8235-1D46-43EB-A912-80B522C4E9AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{A35379A5-38B0-48B6-AB4F-463B32141448}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +44,14 @@ Global
 		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Mvc4|Any CPU.Build.0 = Release|Any CPU
 		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EAA60CD-3DA9-4968-A68D-4F68E415C602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.Mvc4|Any CPU.ActiveCfg = Release|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.Mvc4|Any CPU.Build.0 = Release|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,5 +59,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{92108E63-B43E-44B6-9F8C-FC92771A74ED} = {DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}
 		{3EAA60CD-3DA9-4968-A68D-4F68E415C602} = {DA6EF95A-C3A3-4ABE-AABA-880082AD12BF}
+		{C78E8235-1D46-43EB-A912-80B522C4E9AE} = {A35379A5-38B0-48B6-AB4F-463B32141448}
 	EndGlobalSection
 EndGlobal
