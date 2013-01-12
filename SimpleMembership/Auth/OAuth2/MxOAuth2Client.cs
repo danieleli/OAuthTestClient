@@ -113,9 +113,12 @@ namespace SimpleMembership.Auth.OAuth2
         private readonly string _consumerKey;
         private readonly string _consumerSecret;
 
-        public const string AUTHORIZATION_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/authorize";
-        public const string TOKEN_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/access_token";
+        //public const string AUTHORIZATION_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/authorize";
+        //public const string TOKEN_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/access_token";
 
+        public const string AUTHORIZATION_ENDPOINT = "http://localhost:50172/oauth/authorize";
+        public const string TOKEN_ENDPOINT = "http://localhost:50172/oauth/access_token";
+                                   
         public MxOAuth2Client(string consumerKey, string consumerSecret)
             : base("MxOAuth2Client")
         {
