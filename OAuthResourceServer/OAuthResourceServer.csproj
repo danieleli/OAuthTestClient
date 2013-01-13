@@ -58,6 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\DotNetOpenAuth.OAuth2.ResourceServer.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty.UI">
+      <HintPath>..\lib\DotNetOpenAuth.OpenId.RelyingParty.UI.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\src\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>

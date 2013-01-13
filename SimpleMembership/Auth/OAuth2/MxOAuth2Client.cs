@@ -15,7 +15,9 @@ namespace SimpleMembership.Auth.OAuth2
 {
     public static class Requester
     {
-        public static void RequestAuthentication(string authEndpoint, string consumerKey, Action<string, bool> redirectMethod, Uri returnUrl)
+        public delegate void RedirectMethod(string url, bool endResponse);
+
+        public static void RequestAuthentication(string authEndpoint, Uri returnUrl, string consumerKey, RedirectMethod redirectMethod)
         {
             var redirectUrl = GetServiceLoginUrl(authEndpoint, consumerKey, returnUrl).AbsoluteUri;
             redirectMethod(redirectUrl, true);
@@ -131,7 +133,8 @@ namespace SimpleMembership.Auth.OAuth2
         /// </summary>
         public override void RequestAuthentication(HttpContextBase context, Uri returnUrl)
         {
-            Requester.RequestAuthentication(AUTHORIZATION_ENDPOINT, _consumerKey, context.Response.Redirect, returnUrl);
+            
+            Requester.RequestAuthentication(AUTHORIZATION_ENDPOINT, returnUrl, _consumerKey, context.Response.Redirect);
         }
 
         /// <summary>
