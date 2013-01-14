@@ -16,19 +16,13 @@ namespace SimpleMembership.Auth
 
         private Dictionary<string, string> requestTokens = new Dictionary<string, string>();
 
-        private readonly IOAuthTokenManager tokenManager;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SimpleConsumerTokenManager"/> class.
-		/// </summary>
 		/// <param name="consumerKey">The consumer key.</param>
 		/// <param name="consumerSecret">The consumer secret.</param>
-		/// <param name="tokenManager">The OAuth token manager.</param>
-        public DbTokenManager(string consumerKey, string consumerSecret, IOAuthTokenManager tokenManager)
+        public DbTokenManager(string consumerKey, string consumerSecret)
         {
 			this.ConsumerKey = consumerKey;
 			this.ConsumerSecret = consumerSecret;
-			this.tokenManager = tokenManager;
 		}
 
     
