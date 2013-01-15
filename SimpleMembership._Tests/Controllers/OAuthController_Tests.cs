@@ -14,13 +14,14 @@ using SimpleMembership.Controllers;
 using System.Security.Principal;
 using System.Collections.Generic;
 using Microsoft.Web.WebPages.OAuth;
+using log4net;
 
 namespace SimpleMembership._Tests.Controllers
 {
     [TestFixture]
     public class OAuthController_Tests
     {
-
+        private static readonly ILog log = LogManager.GetLogger(typeof(OAuthController_Tests));
         public class OAuthMocks
         {
             public AccountController Controller { get; set; }
@@ -170,8 +171,7 @@ namespace SimpleMembership._Tests.Controllers
             // Arrange
             var mocks = new OAuthMocks();
             var controller = GetController(mocks);
-            var extraData = new Dictionary<string, string>();
-            extraData.Add("accesstoken", "providerAccessToken");
+            var extraData = new Dictionary<string, string> {{"accesstoken", "providerAccessToken"}};
             var authResult = new AuthenticationResult(true, PROVIDER, PROVIDER_USERID, USERNAME, extraData);
             var mxClient = new MxClient(new InMemoryOAuthTokenManager("a", "b"));
 
@@ -195,8 +195,15 @@ namespace SimpleMembership._Tests.Controllers
             Assert.AreEqual(model.UserName, authResult.UserName);
             Assert.AreEqual(model.ExternalLoginData, authResult.ProviderUserId);
             Assert.AreEqual(model.AccessToken, "providerAccessToken");
-            
         }
+
+
+          [Test]
+          public void ExternalLoginConfirmation()
+          {
+              log.Debug("tests");
+              Assert.Fail();
+          }
 
     }
 }

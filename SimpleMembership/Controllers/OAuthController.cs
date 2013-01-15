@@ -53,9 +53,10 @@ namespace SimpleMembership.Controllers
                 return RedirectToAction("ExternalLoginFailure");
             }
 
+            // Try to login based on provider's userId
             var knownProviderUserId = OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
             if (knownProviderUserId)
-            {
+            {                                          
                 return RedirectToLocal(returnUrl);
             }
 
@@ -90,7 +91,7 @@ namespace SimpleMembership.Controllers
 
             if (WebSecurity.CurrentUser.Identity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
             {
-                return RedirectToAction("Manage");
+                return RedirectToAction("Manage", "Account");
             }
 
             if (ModelState.IsValid)
@@ -104,7 +105,7 @@ namespace SimpleMembership.Controllers
                     {
                         // Insert name into the profile table
                         var userProfile = new UserProfile() { UserName = model.UserName };
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                        db.UserProfiles.Add(userProfile);
                         db.SaveChanges();
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
@@ -174,34 +175,7 @@ namespace SimpleMembership.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        [ChildActionOnly]
-        public ActionResult ExternalLoginsList(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
-        }
 
-        [ChildActionOnly]
-        public ActionResult RemoveExternalLogins()
-        {
-            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(WebSecurity.CurrentUser.Identity.Name);
-            List<ExternalLogin> externalLogins = new List<ExternalLogin>();
-            foreach (OAuthAccount account in accounts)
-            {
-                AuthenticationClientData clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
-
-                externalLogins.Add(new ExternalLogin
-                {
-                    Provider = account.Provider,
-                    ProviderDisplayName = clientData.DisplayName,
-                    ProviderUserId = account.ProviderUserId,
-                });
-            }
-
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(WebSecurity.CurrentUser.Identity.Name));
-            return PartialView("_RemoveExternalLoginsPartial", externalLogins);
-        }
 
         #region Helpers
         private ActionResult RedirectToLocal(string returnUrl)
@@ -214,13 +188,6 @@ namespace SimpleMembership.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-        }
-
-        public enum ManageMessageId
-        {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
         }
 
         public class ExternalLoginResult : ActionResult

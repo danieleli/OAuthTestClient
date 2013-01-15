@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using log4net;
 
 namespace SimpleMembership
 {
@@ -14,8 +15,11 @@ namespace SimpleMembership
            // test
     public class MvcApplication : System.Web.HttpApplication
     {
+
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(MvcApplication));
         protected void Application_Start()
         {
+            LOG.Info("Start");
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

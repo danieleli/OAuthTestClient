@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using DotNetOpenAuth.AspNet.Clients;
 using Microsoft.Web.WebPages.OAuth;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -25,7 +26,8 @@ namespace SimpleMembership._Tests.Controllers
         [Test]
         public void TokenManager()
         {
-            var mxClient = new MxClient("a","b");
+            var tokenManager = new InMemoryOAuthTokenManager("a", "b");
+            var mxClient = new MxClient(tokenManager);
             Assert.NotNull(mxClient, "mxClient");
             var tokens = mxClient.TokenManager;
             Assert.NotNull(tokens, "tokens");

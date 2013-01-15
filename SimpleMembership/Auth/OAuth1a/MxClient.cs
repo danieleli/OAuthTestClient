@@ -8,14 +8,15 @@ using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OAuth;
 using DotNetOpenAuth.OAuth.ChannelElements;
 using DotNetOpenAuth.OAuth.Messages;
+using log4net;
 
 namespace SimpleMembership.Auth.OAuth1a
 {
 
     public class MxClient : OAuthClient
     {
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(MxClient));
 
-        public const string NAME = "MxClient";
         public static readonly ServiceProviderDescription MxServiceDescription = new ServiceProviderDescription
         {
             RequestTokenEndpoint = new MessageReceivingEndpoint("https://test.api.mxmerchant.com/v1/OAuth/1A/RequestToken", HttpDeliveryMethods.AuthorizationHeaderRequest | HttpDeliveryMethods.GetRequest),
@@ -25,9 +26,12 @@ namespace SimpleMembership.Auth.OAuth1a
             ProtocolVersion = ProtocolVersion.V10a
         };
 
+        public const string NAME = "MxClient";
+
         public IConsumerTokenManager TokenManager { get; private set; }
 
-
+        #region -- Constructors --
+        
         public MxClient(string consumerKey, string consumerSecret)
             : this(new InMemoryOAuthTokenManager(consumerKey, consumerSecret))
         {
@@ -39,23 +43,16 @@ namespace SimpleMembership.Auth.OAuth1a
             this.TokenManager = tokenManager;
         }
 
-        /// Check if authentication succeeded after user is redirected back from the service provider.
-        /// The response token returned from service provider authentication result. 
+        #endregion  -- Constructors --
+
         protected override AuthenticationResult VerifyAuthenticationCore(AuthorizedTokenResponse response)
         {
-            var accessToken = response.AccessToken;
-            var accessTokenSecret = (response as ITokenSecretContainingMessage).TokenSecret;
-
-            var extraData = response.ExtraData;
-
-            // todo: fetch user profile (insert into extra data) to pre-populate user registration fields.
-            // var profile = Helper.GetUserProfile(this.TokenManager, null, accessToken);
-
-            return Helper.VerifyAuthenticationCore(extraData, accessToken, accessTokenSecret, this.ProviderName);
+            LOG.Debug("vERITY");
+            return Helper.CreateAuthenticationResult(response, this.ProviderName);
         }
 
 
-
+        
         public static class Helper
         {
             public static object GetUserProfile(IConsumerTokenManager tokenManager, MessageReceivingEndpoint profileEndpoint, string accessToken)
@@ -81,27 +78,33 @@ namespace SimpleMembership.Auth.OAuth1a
                 return null;
             }
 
-            public static AuthenticationResult VerifyAuthenticationCore(IDictionary<string, string> extraData, string accessToken, string accessTokenSecret, string provider)
+            public static AuthenticationResult CreateAuthenticationResult(AuthorizedTokenResponse response, string providerName)
             {
+                var accessToken = response.AccessToken;
+                var accessTokenSecret = (response as ITokenSecretContainingMessage).TokenSecret;
+
+                var extraData = response.ExtraData;
+
                 string userId = null;
                 string userName = null;
 
                 extraData.TryGetValue("userid", out userId);
                 extraData.TryGetValue("username", out userName);
 
+
                 var randomString = Guid.NewGuid().ToString().Substring(0, 5);
-                userId = userId ?? "simulatedUserId" + randomString;
-                userName = userName ?? "simulatedUserName" + randomString;
+                userId = userId ?? "userIdNotFound" + randomString;
+                userName = userName ?? "userNameNotFound" + randomString;
+
+
+                // todo: fetch user profile (insert into extra data) to pre-populate user registration fields.
+                // var profile = Helper.GetUserProfile(this.TokenManager, null, accessToken);
 
                 const bool isSuccessful = true;
-                return new AuthenticationResult(isSuccessful, provider, userId, userName, extraData);
-
+                return new AuthenticationResult(isSuccessful, providerName, userId, userName, extraData);   
             }
-
         }
 
     }
-
-
 
 }
