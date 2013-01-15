@@ -11,7 +11,7 @@ using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using SimpleMembership.Auth.OAuth1a;
 using SimpleMembership.Models.Login;
-using WebMatrix.WebData;
+
 using SimpleMembership.Filters;
 using SimpleMembership.Models;
 
@@ -21,6 +21,19 @@ namespace SimpleMembership.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        protected IOAuthWebSecurity OAuthWebSecurity { get; set; }
+        protected IWebSecurity WebSecurity { get; set; }
+        
+        public AccountController()
+            : this(new WebSecurityWrapper(), new OAuthWebSecurityWrapper()){}
+
+        public AccountController(IWebSecurity webSecurity, IOAuthWebSecurity oAuthWebSecurity)
+        {
+            WebSecurity = webSecurity;
+            OAuthWebSecurity = oAuthWebSecurity;
+        }
+
+
         //
         // GET: /Account/Login
 
@@ -212,7 +225,7 @@ namespace SimpleMembership.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }), this.OAuthWebSecurity);
         }
 
         //
@@ -327,7 +340,7 @@ namespace SimpleMembership.Controllers
 
         }
 
-        private static string GetMxSecret(RegisterExternalLoginModel model)
+        private string GetMxSecret(RegisterExternalLoginModel model)
         {
             var clientData = OAuthWebSecurity.GetOAuthClientData("MxClient");
             var extraData = clientData.ExtraData;
@@ -407,16 +420,18 @@ namespace SimpleMembership.Controllers
             RemoveLoginSuccess,
         }
 
-        internal class ExternalLoginResult : ActionResult
+        public class ExternalLoginResult : ActionResult
         {
-            public ExternalLoginResult(string provider, string returnUrl)
+            public ExternalLoginResult(string provider, string returnUrl, IOAuthWebSecurity oAuthWebSecurity)
             {
                 Provider = provider;
                 ReturnUrl = returnUrl;
+                OAuthWebSecurity = oAuthWebSecurity;
             }
 
             public string Provider { get; private set; }
             public string ReturnUrl { get; private set; }
+            public IOAuthWebSecurity OAuthWebSecurity { get; private set; }
 
             public override void ExecuteResult(ControllerContext context)
             {
