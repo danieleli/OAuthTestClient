@@ -179,6 +179,7 @@
     <Compile Include="Auth\Extensions\StringExtensions.cs" />
     <Compile Include="Auth\Extensions\UriBuilderExtensions.cs" />
     <Compile Include="Auth\ValidationHelper.cs" />
+    <Compile Include="Controllers\OAuthController.cs" />
     <Compile Include="Models\IOAuthWebSecurity.cs" />
     <Compile Include="Models\Login\ExternalLogin.cs" />
     <Compile Include="Models\Login\LocalPasswordModel.cs" />
@@ -315,6 +316,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Membership.cshtml" />
+    <Content Include="Views\OAuth\ExternalLoginConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

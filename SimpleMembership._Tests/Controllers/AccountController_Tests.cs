@@ -31,37 +31,37 @@ namespace SimpleMembership._Tests.Controllers
 		private Mock<IIdentity> Identity { get; set; }
 
 
-        [SetUp]
-        public void Setup()
-        {
+		[SetUp]
+		public void Setup()
+		{
 
-            WebSecurity = new Mock<IWebSecurity>(MockBehavior.Strict);
-            OAuthWebSecurity = new Mock<IOAuthWebSecurity>(MockBehavior.Strict);
+			WebSecurity = new Mock<IWebSecurity>(MockBehavior.Strict);
+			OAuthWebSecurity = new Mock<IOAuthWebSecurity>(MockBehavior.Strict);
 
-            Identity = new Mock<IIdentity>(MockBehavior.Strict);
-            User = new Mock<IPrincipal>(MockBehavior.Strict);
-            User.SetupGet(u => u.Identity).Returns(Identity.Object);
-            WebSecurity.SetupGet(w => w.CurrentUser).Returns(User.Object);
+			Identity = new Mock<IIdentity>(MockBehavior.Strict);
+			User = new Mock<IPrincipal>(MockBehavior.Strict);
+			User.SetupGet(u => u.Identity).Returns(Identity.Object);
+			WebSecurity.SetupGet(w => w.CurrentUser).Returns(User.Object);
 
-            Routes = new RouteCollection();
-            RouteConfig.RegisterRoutes(Routes);
+			Routes = new RouteCollection();
+			RouteConfig.RegisterRoutes(Routes);
 
-            Request = new Mock<HttpRequestBase>(MockBehavior.Strict);
-            Request.SetupGet(x => x.ApplicationPath).Returns("/");
-            Request.SetupGet(x => x.Url).Returns(new Uri("http://localhost/a", UriKind.Absolute));
-            Request.SetupGet(x => x.ServerVariables).Returns(new System.Collections.Specialized.NameValueCollection());
+			Request = new Mock<HttpRequestBase>(MockBehavior.Strict);
+			Request.SetupGet(x => x.ApplicationPath).Returns("/");
+			Request.SetupGet(x => x.Url).Returns(new Uri("http://localhost/a", UriKind.Absolute));
+			Request.SetupGet(x => x.ServerVariables).Returns(new System.Collections.Specialized.NameValueCollection());
 
-            Response = new Mock<HttpResponseBase>(MockBehavior.Strict);
+			Response = new Mock<HttpResponseBase>(MockBehavior.Strict);
 
-            Context = new Mock<HttpContextBase>(MockBehavior.Strict);
-            Context.SetupGet(x => x.Request).Returns(Request.Object);
-            Context.SetupGet(x => x.Response).Returns(Response.Object);
+			Context = new Mock<HttpContextBase>(MockBehavior.Strict);
+			Context.SetupGet(x => x.Request).Returns(Request.Object);
+			Context.SetupGet(x => x.Response).Returns(Response.Object);
 
-            Controller = new AccountController(WebSecurity.Object, OAuthWebSecurity.Object);
-            Controller.ControllerContext = new ControllerContext(Context.Object, new RouteData(), Controller);
-            Controller.Url = new UrlHelper(new RequestContext(Context.Object, new RouteData()), Routes);
-            
-        }
+			Controller = new AccountController(WebSecurity.Object, OAuthWebSecurity.Object);
+			Controller.ControllerContext = new ControllerContext(Context.Object, new RouteData(), Controller);
+			Controller.Url = new UrlHelper(new RequestContext(Context.Object, new RouteData()), Routes);
+			
+		}
 
 		[Test]
 		public void Login_ReturnUrlSet()
@@ -107,6 +107,7 @@ namespace SimpleMembership._Tests.Controllers
 			};
 
 			var result = Controller.Login(model, returnUrl) as ViewResult;
+            Assert.True(Controller.ModelState.Count== 1, "ModelState Values");
 			Assert.NotNull(result);
 		}
 

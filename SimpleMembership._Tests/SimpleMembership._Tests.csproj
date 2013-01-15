@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController_Tests.cs" />
+    <Compile Include="Controllers\OAuthController_Tests.cs" />
     <Compile Include="MxClient_Tests.cs" />
     <Compile Include="OAuth\OAuth1a\MxClient_Tests.cs" />
     <Compile Include="TestAuthConfig.cs" />
