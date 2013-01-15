@@ -15,6 +15,7 @@ namespace SimpleMembership.Auth.OAuth1a
     public class MxClient : OAuthClient
     {
 
+        public const string NAME = "MxClient";
         public static readonly ServiceProviderDescription MxServiceDescription = new ServiceProviderDescription
         {
             RequestTokenEndpoint = new MessageReceivingEndpoint("https://test.api.mxmerchant.com/v1/OAuth/1A/RequestToken", HttpDeliveryMethods.AuthorizationHeaderRequest | HttpDeliveryMethods.GetRequest),
@@ -33,7 +34,7 @@ namespace SimpleMembership.Auth.OAuth1a
         }
 
         public MxClient(IConsumerTokenManager tokenManager)
-            : base("MxClient", MxServiceDescription, tokenManager)
+            : base(NAME, MxServiceDescription, tokenManager)
         {
             this.TokenManager = tokenManager;
         }
@@ -42,12 +43,12 @@ namespace SimpleMembership.Auth.OAuth1a
         /// The response token returned from service provider authentication result. 
         protected override AuthenticationResult VerifyAuthenticationCore(AuthorizedTokenResponse response)
         {
-            string accessToken = response.AccessToken;
+            var accessToken = response.AccessToken;
             var accessTokenSecret = (response as ITokenSecretContainingMessage).TokenSecret;
 
             var extraData = response.ExtraData;
 
-            // todo: this is good place to fetch user profile (insert into extra data) to pre-populate user registration fields.
+            // todo: fetch user profile (insert into extra data) to pre-populate user registration fields.
             // var profile = Helper.GetUserProfile(this.TokenManager, null, accessToken);
 
             return Helper.VerifyAuthenticationCore(extraData, accessToken, accessTokenSecret, this.ProviderName);
@@ -76,6 +77,8 @@ namespace SimpleMembership.Auth.OAuth1a
                 {
                     return new AuthenticationResult(exception);
                 }
+
+                return null;
             }
 
             public static AuthenticationResult VerifyAuthenticationCore(IDictionary<string, string> extraData, string accessToken, string accessTokenSecret, string provider)

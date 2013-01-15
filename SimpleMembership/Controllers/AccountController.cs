@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 using System.Web.Mvc;
 using System.Web.Security;
-using System.Web.Services.Description;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using SimpleMembership.Auth.OAuth1a;
-using SimpleMembership.Models.Login;
-
 using SimpleMembership.Filters;
 using SimpleMembership.Models;
+using SimpleMembership.Models.Login;
 
 namespace SimpleMembership.Controllers
 {
@@ -21,18 +18,19 @@ namespace SimpleMembership.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
-        protected IOAuthWebSecurity OAuthWebSecurity { get; set; }
-        protected IWebSecurity WebSecurity { get; set; }
-        
+        private IWebSecurity WebSecurity { get; set; }
+        private IOAuthWebSecurity OAuthWebSecurity { get; set; }
+
         public AccountController()
-            : this(new WebSecurityWrapper(), new OAuthWebSecurityWrapper()){}
+            : this(new WebSecurityWrapper(), new OAuthWebSecurityWrapper())
+        {
+        }
 
         public AccountController(IWebSecurity webSecurity, IOAuthWebSecurity oAuthWebSecurity)
         {
             WebSecurity = webSecurity;
             OAuthWebSecurity = oAuthWebSecurity;
         }
-
 
         //
         // GET: /Account/Login
@@ -121,13 +119,13 @@ namespace SimpleMembership.Controllers
             ManageMessageId? message = null;
 
             // Only disassociate the account if the currently logged in user is the owner
-            if (ownerAccount == User.Identity.Name)
+            if (ownerAccount == WebSecurity.CurrentUser.Identity.Name)
             {
                 // Use a transaction to prevent the user from deleting their last login credential
                 using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                 {
-                    bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
+                    bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(WebSecurity.CurrentUser.Identity.Name));
+                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(WebSecurity.CurrentUser.Identity.Name).Count > 1)
                     {
                         OAuthWebSecurity.DeleteAccount(provider, providerUserId);
                         scope.Complete();
@@ -149,7 +147,7 @@ namespace SimpleMembership.Controllers
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : "";
-            ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(WebSecurity.CurrentUser.Identity.Name));
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
         }
@@ -161,7 +159,7 @@ namespace SimpleMembership.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Manage(LocalPasswordModel model)
         {
-            bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(WebSecurity.CurrentUser.Identity.Name));
             ViewBag.HasLocalPassword = hasLocalAccount;
             ViewBag.ReturnUrl = Url.Action("Manage");
             if (hasLocalAccount)
@@ -172,7 +170,7 @@ namespace SimpleMembership.Controllers
                     bool changePasswordSucceeded;
                     try
                     {
-                        changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
+                        changePasswordSucceeded = WebSecurity.ChangePassword(WebSecurity.CurrentUser.Identity.Name, model.OldPassword, model.NewPassword);
                     }
                     catch (Exception)
                     {
@@ -203,7 +201,7 @@ namespace SimpleMembership.Controllers
                 {
                     try
                     {
-                        WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
+                        WebSecurity.CreateAccount(WebSecurity.CurrentUser.Identity.Name, model.NewPassword);
                         return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
                     }
                     catch (Exception e)
@@ -245,10 +243,10 @@ namespace SimpleMembership.Controllers
                 return RedirectToLocal(returnUrl);
             }
 
-            if (User.Identity.IsAuthenticated)
+            if (WebSecurity.CurrentUser.Identity.IsAuthenticated)
             {
                 // If the current user is logged in add the new account
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
+                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, WebSecurity.CurrentUser.Identity.Name);
                 return RedirectToLocal(returnUrl);
             }
             else
@@ -261,10 +259,8 @@ namespace SimpleMembership.Controllers
                 var accessToken = "";
                 result.ExtraData.TryGetValue("accesstoken", out accessToken);
 
-
                 return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, AccessToken = accessToken, ExternalLoginData = loginData });
             }
-            return null;
         }
 
         //
@@ -278,7 +274,7 @@ namespace SimpleMembership.Controllers
             string provider = null;
             string providerUserId = null;
 
-            if (User.Identity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
+            if (WebSecurity.CurrentUser.Identity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
             {
                 return RedirectToAction("Manage");
             }
@@ -286,14 +282,15 @@ namespace SimpleMembership.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (var db = new UsersContext())
+                using (UsersContext db = new UsersContext())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        var userProfile = db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                        var userProfile = new UserProfile() { UserName = model.UserName };
+                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
                         db.SaveChanges();
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
@@ -323,8 +320,6 @@ namespace SimpleMembership.Controllers
                         db.OAuthTokens.Add(newToken);
                         var rows = db.SaveChanges();
                         Debug.WriteLine("Rows updated: " + rows);
-
-
                         return RedirectToLocal(returnUrl);
                     }
                     else
@@ -337,8 +332,8 @@ namespace SimpleMembership.Controllers
             ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(provider).DisplayName;
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
-
         }
+
 
         private string GetMxSecret(RegisterExternalLoginModel model)
         {
@@ -374,14 +369,12 @@ namespace SimpleMembership.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
-
-            return null;
         }
 
         [ChildActionOnly]
         public ActionResult RemoveExternalLogins()
         {
-            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name);
+            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(WebSecurity.CurrentUser.Identity.Name);
             List<ExternalLogin> externalLogins = new List<ExternalLogin>();
             foreach (OAuthAccount account in accounts)
             {
@@ -395,9 +388,8 @@ namespace SimpleMembership.Controllers
                 });
             }
 
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(WebSecurity.CurrentUser.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
-
         }
 
         #region Helpers
@@ -420,7 +412,7 @@ namespace SimpleMembership.Controllers
             RemoveLoginSuccess,
         }
 
-        public class ExternalLoginResult : ActionResult
+        internal class ExternalLoginResult : ActionResult
         {
             public ExternalLoginResult(string provider, string returnUrl, IOAuthWebSecurity oAuthWebSecurity)
             {
@@ -478,6 +470,4 @@ namespace SimpleMembership.Controllers
         }
         #endregion
     }
-
-
 }

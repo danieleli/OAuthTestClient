@@ -176,6 +176,10 @@
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Auth\OAuth2\MxOAuth2Client.cs" />
+    <Compile Include="Auth\Extensions\StringExtensions.cs" />
+    <Compile Include="Auth\Extensions\UriBuilderExtensions.cs" />
+    <Compile Include="Auth\ValidationHelper.cs" />
+    <Compile Include="Models\IOAuthWebSecurity.cs" />
     <Compile Include="Models\Login\ExternalLogin.cs" />
     <Compile Include="Models\Login\LocalPasswordModel.cs" />
     <Compile Include="Models\Login\LoginModel.cs" />
