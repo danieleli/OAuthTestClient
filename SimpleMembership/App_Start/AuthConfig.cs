@@ -35,8 +35,8 @@ namespace SimpleMembership
                 new MxClient(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant", null);
 
 
-            OAuthWebSecurity.RegisterClient(
-                new MxOAuth2Client(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant OAuth2", null);
+            //OAuthWebSecurity.RegisterClient(
+            //    new MxOAuth2Client(Credentials.MxMerchant.KEY, Credentials.MxMerchant.SECRET), "MxMerchant OAuth2", null);
         }
     }
 }
