@@ -72,9 +72,14 @@ namespace SimpleMembership._Tests.Controllers
         }
 
 
+        const string RETURN_URL = "/Home/Index";
+        const string PROVIDER = "MxMerchant";
+        const string PROVIDER_DISPLAY_NAME = "Mx Merchant";
+        const string PROVIDER_USERID = "pUser";
+        const string USERNAME = "username";
 
         [Test]
-        public void ExternalLogin_ReturnsExternalLoginResult()
+        public void ExternalLogin_Returns_ExternalLoginResult()
         {
             // Arrange
             var mocks = new OAuthMocks();
@@ -114,7 +119,7 @@ namespace SimpleMembership._Tests.Controllers
 
 
         [Test]
-        public void ExternalLoginCallback_RedirectsToReturnUrl_When_KnownUser()
+        public void UnauthenticatedUser_And_KnownProviderUserId_Should_LoginUser_And_RedirectToReturnUrl()
         {
             // Arrange
             var mocks = new OAuthMocks();
@@ -131,10 +136,11 @@ namespace SimpleMembership._Tests.Controllers
             // Assert
             Assert.NotNull(result, "result");
             Assert.NotNull(result.Url, RETURN_URL);
+            mocks.OAuthWebSecurity.Verify(ows => ows.Login(PROVIDER, PROVIDER_USERID, false),Times.Exactly(1));
         }
 
         [Test]
-        public void ExternalLoginCallback_UpdatesAccount_When_UserExists_And_ProviderUserIdIsNew()
+        public void AuthenticatedUser_And_NewProviderUserId_Should_UpdateAccount()
         {
             // Arrange
             var mocks = new OAuthMocks();
@@ -158,15 +164,8 @@ namespace SimpleMembership._Tests.Controllers
             mocks.OAuthWebSecurity.Verify(ows => ows.CreateOrUpdateAccount(PROVIDER, PROVIDER_USERID, USERNAME), Times.Exactly(1));
         }
 
-
-        const string RETURN_URL = "/Home/Index";
-        const string PROVIDER = "MxMerchant";
-        const string PROVIDER_DISPLAY_NAME = "Mx Merchant";
-        const string PROVIDER_USERID = "pUser";
-        const string USERNAME = "username";
-
         [Test]
-        public void ExternalLoginCallback_RedirectsToExternalLoginConfirm_WhenUserIsNew()
+        public void ExternalLoginCallback_RedirectsTo_ExternalLoginConfirm_WhenUserIsNew()
         {
             // Arrange
             var mocks = new OAuthMocks();
