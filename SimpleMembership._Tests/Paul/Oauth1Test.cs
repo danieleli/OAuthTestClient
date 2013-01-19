@@ -29,7 +29,7 @@ namespace MXM.API.Test.Controllers
     [TestFixture]
     public class OAuth1Test
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(Oauth1Test));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Test));
                                    
         public const string RETURN_URL = "https://api.pps.io/oauth/2/callback";
 
