@@ -21,10 +21,10 @@ namespace SimpleMembership.Auth.OAuth2
 
             builder.AppendQueryArgs(
                 new Dictionary<string, string> {
-					{ "client_id", consumerKey },
-					{ "redirect_uri", returnUrl.AbsoluteUri },
-					{ "scope", "email" },
-				});
+                    { "client_id", consumerKey },                               
+                    { "redirect_uri", returnUrl.AbsoluteUri },
+                    { "scope", "email" },
+                });
 
             redirectMethod(builder.Uri.AbsoluteUri, true);
         }
@@ -73,12 +73,12 @@ namespace SimpleMembership.Auth.OAuth2
             var builder = new UriBuilder(tokenEndpoint);
             builder.AppendQueryArgs(
                 new Dictionary<string, string> {
-					{ "client_id", consumerKey },
-					{ "redirect_uri", returnUrl.AbsoluteUri.NormalizeHexEncoding() },
-					{ "client_secret", consumerSecret },
-					{ "code", authorizationCode },
-					{ "scope", "email" },
-				});
+                    { "client_id", consumerKey },
+                    { "redirect_uri", returnUrl.AbsoluteUri.NormalizeHexEncoding() },
+                    { "client_secret", consumerSecret },
+                    { "code", authorizationCode },
+                    { "scope", "email" },
+                });
 
             using (var client = new WebClient())
             {
@@ -106,11 +106,11 @@ namespace SimpleMembership.Auth.OAuth2
         private readonly string _consumerKey;
         private readonly string _consumerSecret;
 
-        //public const string AUTHORIZATION_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/authorize";
-        //public const string TOKEN_ENDPOINT = "https://test.api.mxmerchant.com/v1/oauth/2/access_token";
+        public const string AUTHORIZATION_ENDPOINT = "http://test.mxmerchant.com/oauth/authorize";
+        public const string TOKEN_ENDPOINT = "http://test.mxmerchant.com/oauth/access_token";
 
-        public const string AUTHORIZATION_ENDPOINT = "http://localhost:50172/oauth/authorize";
-        public const string TOKEN_ENDPOINT = "http://localhost:50172/oauth/access_token";
+        //public const string AUTHORIZATION_ENDPOINT = "http://localhost:50172/oauth/authorize";
+        //public const string TOKEN_ENDPOINT = "http://localhost:50172/oauth/access_token";
 
         public MxOAuth2Client(string consumerKey, string consumerSecret)
             : base("MxOAuth2Client")
