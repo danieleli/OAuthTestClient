@@ -27,7 +27,7 @@ namespace MXM.API.Test.Controllers
     }
 
     [TestFixture]
-    public class Oauth1Test
+    public class OAuth1Test
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(Oauth1Test));
                                    
