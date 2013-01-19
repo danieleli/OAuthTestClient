@@ -1,66 +1,25 @@
-﻿using System.Collections.Specialized;
-using System.Web.Http;
+﻿#region
+
+using System.Runtime.Remoting;
 using NUnit.Framework;
-using Xunit.Sdk;
 using log4net;
+
+#endregion
 
 namespace MXM.API.Test.Controllers
 {
-    public static class Keys
-    {
-        public const string OAUTH_VERIFIER = "oauth_verifier";
-        public const string TOKEN = "token";
-        public const string TOKEN_SECRET = "token_secret";
-    }
-
-
-    public static partial class OAuthRoutes
-    {
-        public static class V1A
-        {
-            public const string ROUTE = G.BASE_URL + "/OAuth/1a/";
-
-            public const string REQUEST_TOKEN = ROUTE + "RequestToken";
-            public const string TOKEN_VERIFIER = ROUTE + "AuthorizeToken?token={0}&isAuthorized=true";
-            public const string ACCESS_TOKEN = ROUTE + "AccessToken";
-        }
-    }
-
     [TestFixture]
     public class OAuth1Test
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Test));
-                                   
-        public const string RETURN_URL = "https://api.pps.io/oauth/2/callback";
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Test));
 
-        [Test]
-        public void ThreeLegged_Success()
+        public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
         {
-            GetThreeLegAccessToken(TestCreds.Dan.Consumer, TestCreds.Dan.User, "oob");
-        }
-
-        [Test]
-        public void ThreeLegged_Success2()
-        {
-            GetThreeLegAccessToken(TestCreds.Dan.Consumer, TestCreds.Dan.User, "oob");
-        }
-
-        [Test]
-        public void ThreeLegged_Success3()
-        {
-            GetThreeLegAccessToken(TestCreds.Dan.Consumer, TestCreds.Dan.User, "oob");
-        }
-        
-        public static void GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
-        {
-            // Act
             var requestToken = OAuth1Helper.GetRequstToken(consumer, returnUrl);
             var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, user);
             var accessToken = OAuth1Helper.GetAccessToken(requestToken.Key, verifier, consumer);
 
-            // Assert
-            Assert.IsNotNull(accessToken, "AccessToken");
-
+            return accessToken;
         }
 
         public static void GetTwoLegAccessToken(Creds user, string returnUrl)
@@ -69,19 +28,43 @@ namespace MXM.API.Test.Controllers
         }
 
 
+        [Test, ExpectedException(ExpectedException = typeof (ServerException))]
+        public void BadMerchant_Should_ThrowServerException_On_RequestVerifier()
+        {
+            // Arrrange
+            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");
 
+            // Act
+            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, TestCreds.ThreeLegUser);
 
-        //[Test]
-        //public void ThreeLegged_BadMerchant()
-        //{
-        //    var rt1 = GetRequstToken();
-        //    Assert.IsNotNull(rt1);
-        //    var rt = GetRequstToken(base.consumerKey, base.consumerSecret);
-        //    Assert.IsNotNull(rt);
-        //    var ov = GetTokenVerifier(rt, rt1["oauth_token"], "100001320");
-        //    Assert.IsNull(ov);
+            // Assert
+            Assert.Fail("Expected ServerException not thrown.");
+        }
 
-        //}
+        [Test] // Three leg has different consumer and user creds.
+        public void ThreeLegged_Success()
+        {
+            // Act
+            var accessToken = GetThreeLegAccessToken(TestCreds.Dan.Consumer, TestCreds.Dan.User, "oob");
+
+            // Assert
+            Assert.IsNotNull(accessToken, "AccessToken");
+            Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
+            Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
+        }
+
+        [Test] // Two leg is same as three leg but reuse consumer creds as user creds.
+        public void TwoLegged_Success()
+        {
+            // Act            
+            var accessToken = GetThreeLegAccessToken(TestCreds.TwoLegUser, TestCreds.TwoLegUser, "oob");
+
+            // Assert
+            Assert.IsNotNull(accessToken, "AccessToken");
+            Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
+            Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
+        }
+
 
         //[Test]
         //public void ThreeLegged_DuplicateAuthorization()
@@ -145,6 +128,4 @@ namespace MXM.API.Test.Controllers
 
         //}
     }
-
-
 }

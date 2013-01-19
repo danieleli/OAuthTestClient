@@ -1,28 +1,36 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Net.Http;
 using log4net;
 
+#endregion
+
 namespace MXM.API.Test.Controllers
 {
+    public static class Keys
+    {
+        public const string OAUTH_VERIFIER = "oauth_verifier";
+        public const string TOKEN = "token";
+        public const string TOKEN_SECRET = "token_secret";
+    }
+
+    public static partial class OAuthRoutes
+    {
+        public static class V1A
+        {
+            public const string ROUTE = G.BASE_URL + "/OAuth/1a/";
+
+            public const string REQUEST_TOKEN = ROUTE + "RequestToken";
+            public const string TOKEN_VERIFIER = ROUTE + "AuthorizeToken?token={0}&isAuthorized=true";
+            public const string ACCESS_TOKEN = ROUTE + "AccessToken";
+        }
+    }
+
     public static class OAuth1Helper
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Helper));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Helper));
 
-
-        private static class Util
-        {
-            public static void LogCreds(string credType, Creds creds)
-            {
-                LOG.Info(credType + ": " + creds.Key);
-                LOG.Info(credType + "Secret: " + creds.Secret);
-            }
-
-            public static void LogPair(string key, string value)
-            {
-                LOG.Info(key + ": " + value);
-            }
-
-        }
 
         public static Creds GetRequstToken(Creds consumer, string returnUrl)
         {
@@ -95,6 +103,19 @@ namespace MXM.API.Test.Controllers
             return accessToken;
         }
 
+        private static class Util
+        {
+            public static void LogCreds(string credType, Creds creds)
+            {
+                LOG.Info(credType + ": " + creds.Key);
+                LOG.Info(credType + "Secret: " + creds.Secret);
+            }
+
+            public static void LogPair(string key, string value)
+            {
+                LOG.Info(key + ": " + value);
+            }
+        }
     }
 
     public static class Crypto
@@ -107,7 +128,8 @@ namespace MXM.API.Test.Controllers
         }
 
 
-        public static HttpRequestMessage SignVerifierMsg(HttpRequestMessage msg, Creds consumer, string token, string verifier)
+        public static HttpRequestMessage SignVerifierMsg(HttpRequestMessage msg, Creds consumer, string token,
+                                                         string verifier)
         {
             //msg.Sign(SignatureMethod.OAuth1A, consumer.Key, consumer.Secret, otherCreds.Key,
             //         otherCreds.Secret, null, null, returnUrl, null);
