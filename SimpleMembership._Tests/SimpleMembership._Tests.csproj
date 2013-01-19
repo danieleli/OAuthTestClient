@@ -132,7 +132,7 @@
     <Compile Include="Paul\MsgHelper.cs" />
     <Compile Include="Paul\OAuth1Helper.cs" />
     <Compile Include="Paul\OAuth2Helper.cs" />
-    <Compile Include="Paul\Oauth1Test.cs" />
+    <Compile Include="Paul\OAuth1Test.cs" />
     <Compile Include="TestAuthConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
