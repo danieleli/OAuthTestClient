@@ -11,7 +11,7 @@ namespace MXM.API.Test.Controllers
 
         private static class Util
         {
-            public static void LogCreds(Creds creds, string credType)
+            public static void LogCreds(string credType, Creds creds)
             {
                 LOG.Info(credType + ": " + creds.Key);
                 LOG.Info(credType + "Secret: " + creds.Secret);
@@ -27,16 +27,16 @@ namespace MXM.API.Test.Controllers
         public static Creds GetRequstToken(Creds consumer, string returnUrl)
         {
             LOG.Debug("-----------GetRequestToken-----------");
-            Util.LogCreds(consumer, "Consumer");
+            Util.LogCreds("Consumer", consumer);
             Util.LogPair("ReturnUrl", returnUrl);
 
             var msg = MsgHelper.CreateRequestMessage(OAuthRoutes.V1A.REQUEST_TOKEN, HttpMethod.Post);
-            msg = Crypto.SignMsg(msg, consumer, returnUrl);
+            msg = Crypto.SignRequestTokenMsg(msg, consumer, returnUrl);
             var response = MsgHelper.Send(msg);
 
             var requestToken = ExtractToken(response);
 
-            Util.LogCreds(requestToken, "RequestToken");
+            Util.LogCreds("RequestToken", requestToken);
             return requestToken;
         }
 
@@ -58,7 +58,7 @@ namespace MXM.API.Test.Controllers
         public static string GetTokenVerifier(string requestToken, Creds consumer)
         {
             LOG.Debug("-----------GetTokenVerifier-----------");
-            Util.LogCreds(consumer, "Consumer");
+            Util.LogCreds("Consumer", consumer);
             Util.LogPair("RequestToken", requestToken);
 
             var url = string.Format(OAuthRoutes.V1A.TOKEN_VERIFIER, requestToken);
@@ -82,14 +82,16 @@ namespace MXM.API.Test.Controllers
         public static Creds GetAccessToken(string token, string verifier, Creds consumer)
         {
             LOG.Debug("-----------GetAccessToken-----------");
-            Util.LogCreds(consumer, "Consumer");
+            Util.LogCreds("Consumer", consumer);
+            Util.LogPair("Verifier", verifier);
 
             var msg = MsgHelper.CreateRequestMessage(OAuthRoutes.V2.ACCESS_TOKEN, HttpMethod.Post);
-            Crypto.SignMsg(msg, consumer, token, verifier, null);
+            Crypto.SignVerifierMsg(msg, consumer, token, verifier);
             var response = MsgHelper.Send(msg);
 
             var accessToken = ExtractToken(response);
-            Util.LogCreds(accessToken, "AccessToken");
+            Util.LogCreds("AccessToken", accessToken);
+
             return accessToken;
         }
 
@@ -97,7 +99,7 @@ namespace MXM.API.Test.Controllers
 
     public static class Crypto
     {
-        public static HttpRequestMessage SignMsg(HttpRequestMessage msg, Creds consumer, string returnUrl)
+        public static HttpRequestMessage SignRequestTokenMsg(HttpRequestMessage msg, Creds consumer, string returnUrl)
         {
             //msg.Sign(SignatureMethod.OAuth1A, consumer.Key, consumer.Secret, otherCreds.Key,
             //         otherCreds.Secret, null, null, returnUrl, null);
@@ -105,7 +107,14 @@ namespace MXM.API.Test.Controllers
         }
 
 
-        public static HttpRequestMessage SignMsg(HttpRequestMessage msg, Creds consumer, string token, string verifier, string returnUrl)
+        public static HttpRequestMessage SignVerifierMsg(HttpRequestMessage msg, Creds consumer, string token, string verifier)
+        {
+            //msg.Sign(SignatureMethod.OAuth1A, consumer.Key, consumer.Secret, otherCreds.Key,
+            //         otherCreds.Secret, null, null, returnUrl, null);
+            return msg;
+        }
+
+        public static HttpRequestMessage SignMsg(HttpRequestMessage msg, Creds consumer, Creds user, string state)
         {
             //msg.Sign(SignatureMethod.OAuth1A, consumer.Key, consumer.Secret, otherCreds.Key,
             //         otherCreds.Secret, null, null, returnUrl, null);
