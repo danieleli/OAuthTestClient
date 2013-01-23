@@ -17,13 +17,13 @@ namespace SimpleMembership.Auth
         private Dictionary<string, string> requestTokens = new Dictionary<string, string>();
 
 
-		/// <param name="consumerKey">The consumer key.</param>
-		/// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
         public DbTokenManager(string consumerKey, string consumerSecret)
         {
-			this.ConsumerKey = consumerKey;
-			this.ConsumerSecret = consumerSecret;
-		}
+            this.ConsumerKey = consumerKey;
+            this.ConsumerSecret = consumerSecret;
+        }
 
     
         public string GetTokenSecret(string token)

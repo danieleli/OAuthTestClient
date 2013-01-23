@@ -28,18 +28,7 @@ namespace MXM.API.Test.Controllers
         }
 
 
-        [Test, ExpectedException(ExpectedException = typeof (ServerException))]
-        public void BadMerchant_Should_ThrowServerException_On_RequestVerifier()
-        {
-            // Arrrange
-            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");
 
-            // Act
-            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, TestCreds.ThreeLegUser);
-
-            // Assert
-            Assert.Fail("Expected ServerException not thrown.");
-        }
 
         [Test] // Three leg has different consumer and user creds.
         public void ThreeLegged_Success()
@@ -65,6 +54,19 @@ namespace MXM.API.Test.Controllers
             Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
         }
 
+
+        [Test, ExpectedException(ExpectedException = typeof(ServerException))]
+        public void BadVerifier_Should_ThrowServerException_On_RequestVerifier()
+        {
+            // Arrrange
+            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");
+
+            // Act
+            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, TestCreds.ThreeLegUser);
+
+            // Assert
+            Assert.Fail("Expected ServerException not thrown.");
+        }
 
         //[Test]
         //public void ThreeLegged_DuplicateAuthorization()
