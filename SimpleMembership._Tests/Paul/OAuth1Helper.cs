@@ -2,6 +2,7 @@
 
 using System;
 using System.Net.Http;
+using PPS.API.Common.Helpers;
 using log4net;
 
 #endregion
@@ -122,6 +123,12 @@ namespace MXM.API.Test.Controllers
     {
         public static HttpRequestMessage SignRequestTokenMsg(HttpRequestMessage msg, Creds consumer, string returnUrl)
         {
+            var oauth1a = new OAuth1ASignature();
+            string normalizedUrl;
+            string normalizedRequestParams;
+            var signature = oauth1a.GenerateSignature(msg.RequestUri, consumer.Key, consumer.Secret, null, null, msg.Method.ToString(),
+                                      null, null, OAuth1ASignature.SignatureTypes.HMACSHA1, null, null,
+                                      out normalizedUrl, out normalizedRequestParams);
             //msg.Sign(SignatureMethod.OAuth1A, consumer.Key, consumer.Secret, otherCreds.Key,
             //         otherCreds.Secret, null, null, returnUrl, null);
             return msg;

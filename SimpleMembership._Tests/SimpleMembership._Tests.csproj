@@ -134,7 +134,7 @@
     <Compile Include="Paul\OAuth1Helper.cs" />
     <Compile Include="Paul\OAuth2Helper.cs" />
     <Compile Include="Paul\OAuth1Test.cs" />
-    <Compile Include="Paul\SignatureHelper.cs" />
+    <Compile Include="Paul\OAuthUtils.cs" />
     <Compile Include="Paul\Signature.cs" />
     <Compile Include="TestAuthConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

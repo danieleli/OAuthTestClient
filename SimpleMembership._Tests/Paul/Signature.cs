@@ -79,7 +79,7 @@ namespace PPS.API.Common.Helpers
             return string.Join(DELIMITER, values);
         }
 
-        public static string GetOAuth1ASignature(HttpRequestMessage request, string consumerKey, string consumerSecret, string accessToken, string accessSecret, string ts, string n, string callback, string verifier)
+        public static string GetOAuth1ASignature(HttpRequestMessage request, string consumerKey, string consumerSecret, string accessToken, string accessSecret, string timestamp, string nonce, string callback, string verifier)
         {
             OAuth1ASignature oauth = new OAuth1ASignature();
             string normalizedurl;
@@ -162,7 +162,6 @@ namespace PPS.API.Common.Helpers
         protected const string PlainTextSignatureType = "PLAINTEXT";
         protected const string RSASHA1SignatureType = "RSA-SHA1";
 
-        protected Random random = new Random();
 
         protected string unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
@@ -184,10 +183,12 @@ namespace PPS.API.Common.Helpers
                 throw new ArgumentNullException("data");
             }
 
-            byte[] dataBuffer = System.Text.Encoding.ASCII.GetBytes(data);
+            byte[] dataBuffer = Encoding.ASCII.GetBytes(data);
             byte[] hashBytes = hashAlgorithm.ComputeHash(dataBuffer);
 
-            return Convert.ToBase64String(hashBytes);
+            var rtn = Convert.ToBase64String(hashBytes);
+
+            return rtn;
         }
 
         /// <summary>
@@ -229,7 +230,7 @@ namespace PPS.API.Common.Helpers
 
         public string UrlDecode(string value)
         {
-            return System.Uri.UnescapeDataString(value);
+            return Uri.UnescapeDataString(value);
         }
 
         /// <summary>
@@ -419,26 +420,7 @@ namespace PPS.API.Common.Helpers
             }
         }
 
-        /// <summary>
-        /// Generate the timestamp for the signature        
-        /// </summary>
-        /// <returns></returns>
-        public virtual string GenerateTimeStamp()
-        {
-            // Default implementation of UNIX time of the current UTC time
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalSeconds).ToString();
-        }
 
-        /// <summary>
-        /// Generate a nonce
-        /// </summary>
-        /// <returns></returns>
-        public virtual string GenerateNonce()
-        {
-            // Just a simple implementation of a random number between 123400 and 9999999
-            return random.Next(123400, 9999999).ToString();
-        }
 
     }
 
