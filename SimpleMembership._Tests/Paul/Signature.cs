@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using PPS.API.Constants;
 
 namespace PPS.API.Common.Helpers
 {
@@ -90,29 +91,6 @@ namespace PPS.API.Common.Helpers
         }
     }
 
-    public partial class Constants
-    {
-        public partial class OAuth
-        {
-            public partial class V1
-            {
-                public partial class Keys
-                {
-                    public const string CONSUMER = "oauth_consumer_key";
-                    public const string CALLBACK = "oauth_callback";
-                    public const string VERSION= "oauth_version";
-                    public const string SIGNATURE_METHOD = "oauth_signature_method";
-                    public const string SIGNATURE = "oauth_signature";
-                    public const string TIMESTAMP = "oauth_timestamp";
-                    public const string NONCE = "oauth_nonce";
-                    public const string TOKEN = "oauth_token";
-                    public const string TOKEN_SECRET = "oauth_token_secret";
-                    public const string VERIFIER = "oauth_verifier";
-                }
-            }
-        }
-    }
-
     public class OAuth1ASignature
     {
 
@@ -177,9 +155,7 @@ namespace PPS.API.Common.Helpers
         protected const string OAuthVersion = "1.0";
         protected const string OAuthParameterPrefix = "oauth_";
 
-        //
-        // List of know and used oauth parameters' names
-        //        
+    
 
 
         protected const string HMACSHA1SignatureType = "HMAC-SHA1";
@@ -345,19 +321,19 @@ namespace PPS.API.Common.Helpers
             normalizedRequestParameters = null;
 
             List<QueryParameter> parameters = GetQueryParameters(url.Query);
-            parameters.Add(new QueryParameter(OAuthVersionKey, OAuthVersion));
-            parameters.Add(new QueryParameter(OAuthNonceKey, nonce));
-            parameters.Add(new QueryParameter(OAuthTimestampKey, timeStamp));
-            parameters.Add(new QueryParameter(OAuthSignatureMethodKey, signatureType));
-            parameters.Add(new QueryParameter(OAuthConsumerKeyKey, consumerKey));
+            parameters.Add(new QueryParameter(OAuth.V1.Keys.VERSION, OAuthVersion));
+            parameters.Add(new QueryParameter(OAuth.V1.Keys.NONCE, nonce));
+            parameters.Add(new QueryParameter(OAuth.V1.Keys.TIMESTAMP, timeStamp));
+            parameters.Add(new QueryParameter(OAuth.V1.Keys.SIGNATURE_METHOD, signatureType));
+            parameters.Add(new QueryParameter(OAuth.V1.Keys.CONSUMER, consumerKey));
             if (callback != null)
-                parameters.Add(new QueryParameter(OAuthCallbackKey, callback));//UrlDecode(callback)));
+                parameters.Add(new QueryParameter(OAuth.V1.Keys.CALLBACK, callback));//UrlDecode(callback)));
             if (verifier != null)
-                parameters.Add(new QueryParameter(OAuthVerifierKey, verifier));
+                parameters.Add(new QueryParameter(OAuth.V1.Keys.VERIFIER, verifier));
 
             if (!string.IsNullOrEmpty(token))
             {
-                parameters.Add(new QueryParameter(OAuthTokenKey, token));
+                parameters.Add(new QueryParameter(OAuth.V1.Keys.TOKEN, token));
             }
 
             parameters.Sort(new QueryParameterComparer());
