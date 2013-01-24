@@ -154,10 +154,6 @@ namespace PPS.API.Common.Helpers
 
         protected const string OAuthVersion = "1.0";
         protected const string OAuthParameterPrefix = "oauth_";
-
-    
-
-
         protected const string HMACSHA1SignatureType = "HMAC-SHA1";
         protected const string PlainTextSignatureType = "PLAINTEXT";
         protected const string RSASHA1SignatureType = "RSA-SHA1";
@@ -318,15 +314,12 @@ namespace PPS.API.Common.Helpers
                 throw new ArgumentNullException("signatureType");
             }
 
-            normalizedUrl = null;
-            normalizedRequestParameters = null;
-
             List<QueryParameter> parameters = GetQueryParameters(url.Query);
             parameters.Add(new QueryParameter(OAuth.V1.Keys.VERSION, OAuthVersion));
             parameters.Add(new QueryParameter(OAuth.V1.Keys.NONCE, nonce));
             parameters.Add(new QueryParameter(OAuth.V1.Keys.TIMESTAMP, timeStamp));
             parameters.Add(new QueryParameter(OAuth.V1.Keys.SIGNATURE_METHOD, signatureType));
-            parameters.Add(new QueryParameter(OAuth.V1.Keys.CONSUMER, consumerKey));
+            parameters.Add(new QueryParameter(OAuth.V1.Keys.CONSUMER_KEY, consumerKey));
             if (callback != null)
                 parameters.Add(new QueryParameter(OAuth.V1.Keys.CALLBACK, callback));//UrlDecode(callback)));
             if (verifier != null)

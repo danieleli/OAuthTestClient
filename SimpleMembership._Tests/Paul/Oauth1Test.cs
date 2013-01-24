@@ -11,24 +11,29 @@ namespace MXM.API.Test.Controllers
     [TestFixture]
     public class OAuth1Test
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Test));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Test));
 
-        public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
+/*
+   For example, the HTTP request:
+
+     POST /request?b5=%3D%253D&a3=a&c%40=&a2=r%20b HTTP/1.1
+     Host: example.com
+     Content-Type: application/x-www-form-urlencoded
+     Authorization: OAuth realm="Example",
+                    oauth_consumer_key="9djdj82h48djs9d2",
+                    oauth_token="kkk9d7dh3k39sjv7",
+                    oauth_signature_method="HMAC-SHA1",
+                    oauth_timestamp="137131201",
+                    oauth_nonce="7d8f3e4a",
+                    oauth_signature="bYT5CMsGcbgUdFHObYMEfcx6bsw%3D"
+
+     c2&a3=2+q
+*/
+        [Test]
+        public void GenerateBaseSignatureString()
         {
-            var requestToken = OAuth1Helper.GetRequstToken(consumer, returnUrl);
-            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, user);
-            var accessToken = OAuth1Helper.GetAccessToken(requestToken.Key, verifier, consumer);
 
-            return accessToken;
         }
-
-        public static void GetTwoLegAccessToken(Creds user, string returnUrl)
-        {
-            GetThreeLegAccessToken(user, user, returnUrl);
-        }
-
-
-
 
         [Test] // Three leg has different consumer and user creds.
         public void ThreeLegged_Success()
@@ -66,6 +71,21 @@ namespace MXM.API.Test.Controllers
 
             // Assert
             Assert.Fail("Expected ServerException not thrown.");
+        }
+
+
+        public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
+        {
+            var requestToken = OAuth1Helper.GetRequstToken(consumer, returnUrl);
+            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, user);
+            var accessToken = OAuth1Helper.GetAccessToken(requestToken.Key, verifier, consumer);
+
+            return accessToken;
+        }
+
+        public static void GetTwoLegAccessToken(Creds user, string returnUrl)
+        {
+            GetThreeLegAccessToken(user, user, returnUrl);
         }
 
         //[Test]
