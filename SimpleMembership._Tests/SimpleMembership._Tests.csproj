@@ -127,7 +127,7 @@
     <Compile Include="Controllers\OAuthController_Tests.cs" />
     <Compile Include="MxClient_Tests.cs" />
     <Compile Include="OAuth\OAuth1a\MxClient_Tests.cs" />
-    <Compile Include="Paul\Constants.cs" />
+    <Compile Include="Paul\OAuth1\Constants.cs" />
     <Compile Include="Paul\OAuth1\Crypto.cs" />
     <Compile Include="Paul\Helpers\Signature.cs" />
     <Compile Include="Paul\OAuth1\CryptoTest.cs" />

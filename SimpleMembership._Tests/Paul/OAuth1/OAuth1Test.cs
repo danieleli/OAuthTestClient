@@ -12,38 +12,75 @@ namespace SimpleMembership._Tests.Paul.OAuth1
     [TestFixture]
     public class OAuth1CryptoFixture
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1CryptoFixture));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1CryptoFixture));
 
+        public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
+        {
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(consumer, returnUrl);
+            var verifier = OAuth1Helper.VerifierTokenHelper.GetVerifierToken(requestToken, consumer, user);
+            var accessToken = OAuth1Helper.AccessTokenHelper.GetAccessToken(consumer, verifier);
 
-        /*
-           For example, the HTTP request:
+            return accessToken;
+        }
 
-             POST /request?b5=%3D%253D&a3=a&c%40=&a2=r%20b HTTP/1.1
-             Host: example.com
-             Content-Type: application/x-www-form-urlencoded
-             Authorization: OAuth realm="Example",
-                            oauth_consumer_key="9djdj82h48djs9d2",
-                            oauth_token="kkk9d7dh3k39sjv7",
-                            oauth_signature_method="HMAC-SHA1",
-                            oauth_timestamp="137131201",
-                            oauth_nonce="7d8f3e4a",
-                            oauth_signature="bYT5CMsGcbgUdFHObYMEfcx6bsw%3D"
+        public static void GetTwoLegAccessToken(Creds user, string returnUrl)
+        {
+            GetThreeLegAccessToken(user, user, returnUrl);
+        }
 
-             c2&a3=2+q
-        */
-        
+        [Test, ExpectedException(ExpectedException = typeof (ServerException))]
+        public void BadVerifier_Should_ThrowServerException_On_RequestVerifier()
+        {
+            // Arrrange
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");
+
+            // Act
+            var verifier = OAuth1Helper.VerifierTokenHelper.GetVerifierToken(requestToken, TestCreds.Dan.Consumer,
+                                                                             TestCreds.Dan.User);
+
+            // Assert
+            Assert.Fail("Expected ServerException not thrown.");
+        }
 
         [Test]
         public void GetRequestToken()
         {
             // Act
-            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
             Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
             Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
         }
+
+        [Test]
+        public void GetUserTokenAndVerifer()
+        {
+            // Arrange
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+
+            // Act
+            var verifier = OAuth1Helper.VerifierTokenHelper
+                                       .GetVerifierToken(requestToken, TestCreds.Dan.Consumer, TestCreds.Dan.User);
+
+            // Assert
+            LOG.Debug("Verifier: " + verifier);
+            Assert.IsNotNullOrEmpty(verifier.Secret, "Verifier");
+        }
+
+        [Test,
+         ExpectedException(ExpectedException = typeof (ServerException),
+             ExpectedMessage = "something like: Auth header missing")]
+        public void MissingAuthHeader_Should_ThrowServerException_On_RequestToken()
+        {
+            // Act
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+
+            // Assert
+            Assert.Fail("Expected ServerException not thrown.");
+        }
+
 
         [Test] // Three leg has different consumer and user creds.
         public void ThreeLegged_Success()
@@ -69,45 +106,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
         }
 
-
-        [Test, ExpectedException(ExpectedException = typeof(ServerException), ExpectedMessage = "something like: Auth header missing")]
-        public void MissingAuthHeader_Should_ThrowServerException_On_RequestToken()
-        {
-            // Act
-            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
-
-            // Assert
-            Assert.Fail("Expected ServerException not thrown.");
-        }
-
-
-        [Test, ExpectedException(ExpectedException = typeof(ServerException))]
-        public void BadVerifier_Should_ThrowServerException_On_RequestVerifier()
-        {
-            // Arrrange
-            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");
-
-            // Act
-            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, TestCreds.ThreeLegUser);
-
-            // Assert
-            Assert.Fail("Expected ServerException not thrown.");
-        }
-
-
-        public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
-        {
-            var requestToken = OAuth1Helper.GetRequstToken(consumer, returnUrl);
-            var verifier = OAuth1Helper.GetTokenVerifier(requestToken.Key, user);
-            var accessToken = OAuth1Helper.GetAccessToken(requestToken.Key, verifier, consumer);
-
-            return accessToken;
-        }
-
-        public static void GetTwoLegAccessToken(Creds user, string returnUrl)
-        {
-            GetThreeLegAccessToken(user, user, returnUrl);
-        }
 
         //[Test]
         //public void ThreeLegged_DuplicateAuthorization()

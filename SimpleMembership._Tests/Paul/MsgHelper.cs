@@ -52,11 +52,15 @@ namespace MXM.API.Test.Controllers
             var isAuthorized = (response.StatusCode != HttpStatusCode.Unauthorized);
             if (!isAuthorized) throw new UnauthorizedAccessException("Unauthorized");
 
-            var isServerError = (response.StatusCode != HttpStatusCode.InternalServerError);
-            if (!isServerError)
+            var isServerError = (response.StatusCode == HttpStatusCode.InternalServerError);
+            if (isServerError)
             {
                 LOG.Error("Server Error: " + response.ReasonPhrase);
-                throw new ServerException("InternalServerError: '" + response.ReasonPhrase +"'");
+                var msg = "Internal Server Error: '{0}' \nMessage: {1}\nDetails:{2}";
+                var content = response.Content.ReadAsStringAsync().Result;
+                content = Uri.UnescapeDataString(content);
+                msg = string.Format(msg, response.ReasonPhrase, content, "det");
+                throw new ServerException(msg);
             }
         }
     }
