@@ -54,7 +54,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         /// <summary>
         /// Request Token
         /// </summary>
-        public static class RequestTokenMessage
+        public static class RequestTokenSigner
         {
             public static HttpRequestMessage Sign(HttpRequestMessage msg, Creds consumer, string callback)
             {
@@ -76,7 +76,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         /// <summary>
         /// Verifier Token
         /// </summary>
-        public static class VerifierMessage
+        public static class VerifierSigner
         {
             public static HttpRequestMessage Sign(HttpRequestMessage msg, Creds consumer, Creds requestToken)
             {
@@ -98,7 +98,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         /// <summary>
         /// Access Token
         /// </summary>
-        public static class AccessTokenMessage
+        public static class AccessTokenSigner
         {
             public static HttpRequestMessage Sign(HttpRequestMessage msg, Creds consumer, Creds verifierToken)
             {

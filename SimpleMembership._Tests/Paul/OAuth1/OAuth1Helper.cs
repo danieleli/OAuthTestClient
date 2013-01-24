@@ -23,7 +23,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogCreds("Verifier", verifierToken);
 
                 var msg = MsgHelper.CreateRequestMessage(OAuthRoutes.V2.ACCESS_TOKEN, HttpMethod.Post);
-                Crypto.AccessTokenMessage.Sign(msg, consumer, verifierToken);
+                Crypto.AccessTokenSigner.Sign(msg, consumer, verifierToken);
                 var response = MsgHelper.Send(msg);
 
                 var accessToken = Util.ExtractToken(response);
@@ -42,7 +42,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogPair("ReturnUrl", returnUrl);
 
                 var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
-                msg = Crypto.RequestTokenMessage.Sign(msg, consumer, returnUrl);
+                msg = Crypto.RequestTokenSigner.Sign(msg, consumer, returnUrl);
                 var response = MsgHelper.Send(msg);
 
                 var requestToken = Util.ExtractToken(response);
@@ -91,7 +91,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 var url = OAuth.V1.Routes.GetTokenVerifierRoute(requestToken.Key);
                 var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Post);
-                msg = Crypto.VerifierMessage.Sign(msg, consumer, requestToken);
+                msg = Crypto.VerifierSigner.Sign(msg, consumer, requestToken);
                 var response = MsgHelper.Send(msg);
 
                 var verifier = ExtractVerifier(response);
