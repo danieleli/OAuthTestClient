@@ -102,11 +102,20 @@ namespace PPS.API.Common.Helpers
                                                  string accessToken, string accessSecret, string timestamp, string nonce,
                                                  string callback, string verifier)
         {
+            return GetOAuth1ASignature(request.RequestUri, request.Method, consumerKey, consumerSecret, accessToken,
+                                accessSecret, timestamp, nonce, callback, verifier);
+            
+        }
+
+        public static string GetOAuth1ASignature(Uri requestUri, HttpMethod httpMethod, string consumerKey, string consumerSecret,
+                                         string accessToken, string accessSecret, string timestamp, string nonce,
+                                         string callback, string verifier)
+        {
             var oauth = new OAuth1ASignature();
             string normalizedurl;
             string normalizedqueryparameters;
-            var sig = oauth.GenerateSignature(request.RequestUri, consumerKey, consumerSecret, accessToken, accessSecret,
-                                              request.Method.ToString().ToUpper(), timestamp, nonce,
+            var sig = oauth.GenerateSignature(requestUri, consumerKey, consumerSecret, accessToken, accessSecret,
+                                              httpMethod.ToString().ToUpper(), timestamp, nonce,
                                               OAuth1ASignature.SignatureTypes.HMACSHA1, callback, verifier,
                                               out normalizedurl, out normalizedqueryparameters);
 
