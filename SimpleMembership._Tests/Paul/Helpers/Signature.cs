@@ -17,8 +17,8 @@ namespace PPS.API.Common.Helpers
 		OAuth1A
 	}
 
-    public static class Signature
-    {
+	public static class Signature
+	{                                                                                                                   
 		internal const string DELIMITER = "\n";
 
 		public static string GetSimpleSignature(HttpRequestMessage request, byte[] apiSecret, string token, string n, string ts)
@@ -38,11 +38,11 @@ namespace PPS.API.Common.Helpers
 
 			string normalizedRequest = string.Join(DELIMITER, new string[] { token, ts, n, bodyHash, requestMethod, resourcePath, normalizedParameters });
 
-            Logger.Debug(typeof(Signature), "MAC Protected string begin");
-            Logger.Debug(typeof(Signature), normalizedRequest.Replace("\n", System.Environment.NewLine));
-            Logger.Debug(typeof(Signature), "API Secret - Base64 " + Convert.ToBase64String(apiSecret));
-            Logger.Debug(typeof(Signature), "API Secret - Hex " + BitConverter.ToString(apiSecret).Replace("-", string.Empty));
-            Logger.Debug(typeof(Signature), "MAC Protected string end");
+			Logger.Debug(typeof(Signature), "MAC Protected string begin");
+			Logger.Debug(typeof(Signature), normalizedRequest.Replace("\n", System.Environment.NewLine));
+			Logger.Debug(typeof(Signature), "API Secret - Base64 " + Convert.ToBase64String(apiSecret));
+			Logger.Debug(typeof(Signature), "API Secret - Hex " + BitConverter.ToString(apiSecret).Replace("-", string.Empty));
+			Logger.Debug(typeof(Signature), "MAC Protected string end");
 
 			HMACSHA256 hmac = new HMACSHA256(apiSecret);
 			return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(normalizedRequest)));
@@ -225,7 +225,7 @@ namespace PPS.API.Common.Helpers
 						if (s.IndexOf('=') > -1)
 						{
 							string[] temp = s.Split('=');
-                            result.Add(new QueryParameter(temp[0], UrlDecode(temp[1])));
+							result.Add(new QueryParameter(temp[0], UrlDecode(temp[1])));
 						}
 						else
 						{
@@ -238,10 +238,10 @@ namespace PPS.API.Common.Helpers
 			return result;
 		}
 
-        public string UrlDecode(string value)
-        {
-            return System.Uri.UnescapeDataString(value);
-        }
+		public string UrlDecode(string value)
+		{
+			return System.Uri.UnescapeDataString(value);
+		}
 
 		/// <summary>
 		/// This is a different Url Encode implementation since the default .NET one outputs the percent encoding in lower case.
