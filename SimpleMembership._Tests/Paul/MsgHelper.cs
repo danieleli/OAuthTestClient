@@ -56,7 +56,7 @@ namespace MXM.API.Test.Controllers
             if (!isServerError)
             {
                 LOG.Error("Server Error: " + response.ReasonPhrase);
-                throw new ServerException("InternalServerError");
+                throw new ServerException("InternalServerError: '" + response.ReasonPhrase +"'");
             }
         }
     }

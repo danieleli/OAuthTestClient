@@ -1,38 +1,48 @@
 ﻿#region
 
 using System.Runtime.Remoting;
+using MXM.API.Test.Controllers;
 using NUnit.Framework;
 using log4net;
 
 #endregion
 
-namespace MXM.API.Test.Controllers
+namespace SimpleMembership._Tests.Paul.OAuth1
 {
     [TestFixture]
-    public class OAuth1Test
+    public class OAuth1CryptoFixture
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Test));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1CryptoFixture));
 
-/*
-   For example, the HTTP request:
 
-     POST /request?b5=%3D%253D&a3=a&c%40=&a2=r%20b HTTP/1.1
-     Host: example.com
-     Content-Type: application/x-www-form-urlencoded
-     Authorization: OAuth realm="Example",
-                    oauth_consumer_key="9djdj82h48djs9d2",
-                    oauth_token="kkk9d7dh3k39sjv7",
-                    oauth_signature_method="HMAC-SHA1",
-                    oauth_timestamp="137131201",
-                    oauth_nonce="7d8f3e4a",
-                    oauth_signature="bYT5CMsGcbgUdFHObYMEfcx6bsw%3D"
+        /*
+           For example, the HTTP request:
 
-     c2&a3=2+q
-*/
+             POST /request?b5=%3D%253D&a3=a&c%40=&a2=r%20b HTTP/1.1
+             Host: example.com
+             Content-Type: application/x-www-form-urlencoded
+             Authorization: OAuth realm="Example",
+                            oauth_consumer_key="9djdj82h48djs9d2",
+                            oauth_token="kkk9d7dh3k39sjv7",
+                            oauth_signature_method="HMAC-SHA1",
+                            oauth_timestamp="137131201",
+                            oauth_nonce="7d8f3e4a",
+                            oauth_signature="bYT5CMsGcbgUdFHObYMEfcx6bsw%3D"
+
+             c2&a3=2+q
+        */
+        
+
         [Test]
-        public void GenerateBaseSignatureString()
+        public void GetRequestToken()
         {
+            // Act
+            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
+            // Assert
+            Assert.IsNotNull(requestToken, "RequestToken");
+            Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
+            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
         }
 
         [Test] // Three leg has different consumer and user creds.
@@ -57,6 +67,17 @@ namespace MXM.API.Test.Controllers
             Assert.IsNotNull(accessToken, "AccessToken");
             Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
             Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
+        }
+
+
+        [Test, ExpectedException(ExpectedException = typeof(ServerException), ExpectedMessage = "something like: Auth header missing")]
+        public void MissingAuthHeader_Should_ThrowServerException_On_RequestToken()
+        {
+            // Act
+            var requestToken = OAuth1Helper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+
+            // Assert
+            Assert.Fail("Expected ServerException not thrown.");
         }
 
 

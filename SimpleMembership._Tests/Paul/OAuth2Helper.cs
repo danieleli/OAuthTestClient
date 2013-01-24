@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Script.Serialization;
+using MXM.API.Test.Controllers;
 
 #endregion
 
-namespace MXM.API.Test.Controllers
+namespace SimpleMembership._Tests.Paul
 {
     public static partial class OAuthRoutes
     {

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 
-namespace PPS.API.Constants
+namespace SimpleMembership._Tests.Paul
 {
+
     public static class Extensions
     {
         public static void AddIfNotNull(this IDictionary<string, string> dic, string key, string value)
@@ -31,9 +32,15 @@ namespace PPS.API.Constants
                 public const string VERSION = "oauth_version";
             }
 
-            public static IDictionary<string, string> GetOAuthParams(string callback, string consumerKey, string nonce, string signature, string signatureMethod, string timestamp, string token, string tokenSecret, string verifier, string oauthVersion)
+            public partial class Values
             {
-                var d = new Dictionary<string, string>();
+                public const string VERSION = "1.0";
+                public const string SIGNATURE_METHOD = "HMAC-SHA1";
+            }
+
+            public static SortedDictionary<string, string> GetOAuthParams(string callback, string consumerKey, string nonce, string signature, string timestamp, string token, string tokenSecret, string verifier, string signatureMethod = Values.SIGNATURE_METHOD, string oauthVersion = Values.VERSION)
+            {
+                var d = new SortedDictionary<string, string>();
 
                 d.AddIfNotNull(Keys.CALLBACK, callback);
                 d.AddIfNotNull(Keys.CONSUMER_KEY, consumerKey);
