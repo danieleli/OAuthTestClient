@@ -22,9 +22,9 @@ namespace PPS.API.Common.Helpers
         private static readonly ILog LOG = LogManager.GetLogger(typeof(Signature));                                                                                
         internal const string DELIMITER = "\n";
 
-        public static string GetSimpleSignature(HttpRequestMessage request, byte[] apiSecret, string token, string n, string ts)
+        public static string GetSimpleSignature(HttpRequestMessage request, byte[] apiSecret, string token, string nonce, string timestamp)
         {
-            string normalizedRequest = string.Join(DELIMITER, new string[] { token, ts, n });
+            string normalizedRequest = string.Join(DELIMITER, new string[] { token, timestamp, nonce });
 
             HMACSHA256 hmac = new HMACSHA256(apiSecret);
             return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(normalizedRequest)));
@@ -85,16 +85,16 @@ namespace PPS.API.Common.Helpers
             return string.Join(DELIMITER, values);
         }
 
-        public static string GetOAuth1ASignature(HttpRequestMessage request, string consumerKey, string consumerSecret, string accessToken, string accessSecret, string ts, string n, string callback, string verifier)
+        public static string GetOAuth1ASignature(HttpRequestMessage request, string consumerKey, string consumerSecret, string accessToken, string accessSecret, string timestamp, string nonce, string callback, string verifier)
         {
             OAuth1ASignature oauth = new OAuth1ASignature();
             string normalizedurl;
             string normalizedqueryparameters;
             string sig = oauth.GenerateSignature(request.RequestUri, consumerKey, consumerSecret, accessToken, accessSecret,
-                request.Method.ToString().ToUpper(), ts, n, OAuth1ASignature.SignatureTypes.HMACSHA1, callback, verifier, out normalizedurl, out normalizedqueryparameters);
+                request.Method.ToString().ToUpper(), timestamp, nonce, OAuth1ASignature.SignatureTypes.HMACSHA1, callback, verifier, out normalizedurl, out normalizedqueryparameters);
             
             //string sig = oauth.GenerateSignature(request.RequestUri.ChangeToExternalIfRerouted(), consumerKey, consumerSecret, accessToken, accessSecret,
-            //    request.Method.ToString().ToUpper(), ts, n, OAuth1ASignature.SignatureTypes.HMACSHA1, callback, verifier, out normalizedurl, out normalizedqueryparameters);
+            //    request.Method.ToString().ToUpper(), timestamp, nonce, OAuth1ASignature.SignatureTypes.HMACSHA1, callback, verifier, out normalizedurl, out normalizedqueryparameters);
             
             return sig;
         }
