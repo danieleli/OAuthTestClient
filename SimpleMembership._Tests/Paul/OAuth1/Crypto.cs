@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using MXM.API.Test.Controllers;
-using PPS.API.Common.Helpers;
+using SimpleMembership._Tests.Paul.Helpers;
 using log4net;
 
 #endregion

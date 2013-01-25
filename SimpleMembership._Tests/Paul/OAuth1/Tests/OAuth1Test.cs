@@ -2,7 +2,6 @@
 
 using System;
 using System.Net;
-using MXM.API.Test.Controllers;
 using NUnit.Framework;
 using log4net;
 
@@ -51,7 +50,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void TwoLegged_Success()
         {
             // Act            
-            var accessToken = Helper.GetThreeLegAccessToken(TestCreds.TwoLegUser, TestCreds.TwoLegUser, "oob");
+            var accessToken = Helper.GetThreeLegAccessToken(TestCreds.Dan.User, TestCreds.Dan.User, "oob");
 
             // Assert
             Assert.IsNotNull(accessToken, "AccessToken");

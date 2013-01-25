@@ -12,7 +12,7 @@ using log4net;
 
 #endregion
 
-namespace PPS.API.Common.Helpers
+namespace SimpleMembership._Tests.Paul.Helpers
 {
     public enum SignatureMethod
     {

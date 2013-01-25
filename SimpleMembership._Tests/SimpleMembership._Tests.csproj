@@ -141,6 +141,7 @@
     <Compile Include="Paul\OAuth2\OAuth2Helper.cs" />
     <Compile Include="Paul\OAuth1\Tests\OAuth1Test.cs" />
     <Compile Include="Paul\OAuthUtils.cs" />
+    <Compile Include="Paul\UnitTest1.cs" />
     <Compile Include="TestAuthConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />

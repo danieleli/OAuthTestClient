@@ -4,7 +4,7 @@ using System;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using MXM.API.Test.Controllers;
+using SimpleMembership._Tests.Paul.OAuth2;
 using log4net;
 
 #endregion

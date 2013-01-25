@@ -1,4 +1,4 @@
-﻿namespace MXM.API.Test.Controllers
+﻿namespace SimpleMembership._Tests.Paul
 {
     public class Creds
     {

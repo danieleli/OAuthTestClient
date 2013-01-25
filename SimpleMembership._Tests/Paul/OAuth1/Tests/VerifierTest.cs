@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using MXM.API.Test.Controllers;
 using NUnit.Framework;
 using log4net;
 

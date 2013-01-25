@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using MXM.API.Test.Controllers;
 using NUnit.Framework;
 using log4net;
 
@@ -17,6 +16,18 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         {
             // Act
             var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+
+            // Assert
+            Assert.IsNotNull(requestToken, "RequestToken");
+            Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
+            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
+        }
+
+        [Test]
+        public void GetRequestToken_WithPlusInUserName()
+        {
+            // Act
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.User, "oob");
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");

@@ -10,7 +10,7 @@ using log4net;
 
 #endregion
 
-namespace MXM.API.Test.Controllers
+namespace SimpleMembership._Tests.Paul
 {
     public static class MsgHelper
     {

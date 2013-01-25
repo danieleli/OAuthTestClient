@@ -1,12 +1,11 @@
 ﻿#region
 
 using NUnit.Framework;
-using SimpleMembership._Tests.Paul;
 using log4net;
 
 #endregion
 
-namespace MXM.API.Test.Controllers
+namespace SimpleMembership._Tests.Paul.OAuth2
 {
     [TestFixture]
     public class OAuth2Test
