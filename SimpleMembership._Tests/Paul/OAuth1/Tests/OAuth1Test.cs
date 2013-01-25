@@ -1,15 +1,14 @@
 ﻿#region
 
+using System;
 using System.Net;
-using System.Net.Http;
-using System.Runtime.Remoting;
 using MXM.API.Test.Controllers;
 using NUnit.Framework;
 using log4net;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1
+namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 {
     [TestFixture]
     public class OAuth1Test
@@ -34,34 +33,38 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         }
 
 
-        #region -- Request --
-
-        [Test]
-        public void GetRequestToken()
-        {
-            // Act
-            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
-
-            // Assert
-            Assert.IsNotNull(requestToken, "RequestToken");
-            Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
-            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
-        }
-
-        [Test]
-        public void MissingAuthHeader_Should_Return401()
-        {
-            // Act
-            var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
-            var response = MsgHelper.Send(msg);
-
-            // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
-        }
-
-        #endregion -- Request --
 
         #region -- Verifier --
+
+
+        [Test]
+        public void Authorize_Returns_StatusCodeOk()
+        {
+            // Arrange
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+
+            // Act
+            var response = OAuth1Helper.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
+                                       
+            // Assert
+            LOG.Debug("Response: " + response);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK),"HttpStatusCode");
+        }
+
+        [Test]
+        public void AuthorizeWithInvalidToken_Returns_BadRequest()
+        {
+            // Arrange
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            requestToken.Key = "xxxx";
+
+            // Act
+            var response = OAuth1Helper.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
+
+            // Assert
+            LOG.Debug("Response: " + response);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest), "HttpStatusCode");
+        }
 
         [Test]
         public void When_ActiveMxMerchantUserSession_AuthorizeToken_Displays_ApproveDenyView()
@@ -77,7 +80,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
             // Act
             var response = OAuth1Helper.VerifierTokenHelper
-                                       .GetAuthorizeResponse(requestToken, TestCreds.Dan.Consumer);
+                                       .GetAuthorizeResponse(requestToken);
 
             
             // Assert
@@ -101,18 +104,16 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             Assert.IsNotNullOrEmpty(verifier.Secret, "Verifier");
         }
 
-        [Test, ExpectedException(ExpectedException = typeof(ServerException))]
-        public void BadVerifier_Should_Return401()
+        [Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
+        public void BadVerifier_Returns_UnauthorizedStatusCode()
         {
             // Arrrange
-            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             // Act
-            var verifier = OAuth1Helper.VerifierTokenHelper.GetVerifierToken(requestToken, TestCreds.Dan.Consumer,
-                                                                             TestCreds.Dan.User);
 
             // Assert
-            Assert.Fail("Expected ServerException not thrown.");
+            Assert.Ignore("Not Implemented");
         }
 
         #endregion  -- Verifier --

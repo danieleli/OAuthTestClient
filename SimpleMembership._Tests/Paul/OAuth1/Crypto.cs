@@ -17,9 +17,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1
     /// </summary>
     public static class Crypto
     {
+        public const string AUTHORIZATION_HEADER = "Authorization";
         private static readonly ILog LOG = LogManager.GetLogger(typeof (Crypto));
 
-        private static string GetAuthHeader(Creds consumer, string callback, string nonce, string timestamp,
+        public static string GetAuthHeader(Creds consumer, string callback, string nonce, string timestamp,
                                             string signature, string token = null, string verifier = null)
         {
             var oauthParams = OAuth.V1.GetOAuthParams(callback, consumer.Key, nonce, null, timestamp, token, null,
@@ -67,7 +68,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 var authHeader = GetAuthHeader(consumer, callback, nonce, timestamp, signature);
 
-                msg.Headers.Add("Authorization", authHeader);
+                msg.Headers.Add(AUTHORIZATION_HEADER, authHeader);
                 return msg;
             }
         }

@@ -13,7 +13,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 {
     public static class OAuth1Helper
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Helper));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Helper));
 
         public static class AccessTokenHelper
         {
@@ -38,7 +38,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         {
             public static Creds GetRequstToken(Creds consumer, string returnUrl)
             {
-                LOG.Debug("-----------GetRequestToken-----------");
+                LOG.Debug("-----------GetRequestTokenTest-----------");
                 Util.LogCreds("Consumer", consumer);
                 Util.LogPair("ReturnUrl", returnUrl);
 
@@ -61,11 +61,9 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 if (result == null) throw new Exception("No Token Returned.");
 
-                var token = new Creds
-                    {
-                        Key = result[OAuth.V1.Keys.TOKEN],
-                        Secret = result[OAuth.V1.Keys.TOKEN_SECRET]
-                    };
+                var key = result[OAuth.V1.Keys.TOKEN];
+                var secret = result[OAuth.V1.Keys.TOKEN_SECRET];
+                var token = new Creds(key, secret);
 
                 return token;
             }
@@ -90,7 +88,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogCreds("Consumer", consumer);
                 Util.LogCreds("RequestToken", requestToken);
 
-                var response = GetAuthorizeResponse(requestToken, consumer);
+                var response = GetAuthorizeResponse(requestToken);
 
                 var verifier = ExtractVerifier(response);
                 LOG.Info("Verifier: " + verifier);
@@ -98,7 +96,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 return verifier;
             }
 
-            public static HttpResponseMessage GetAuthorizeResponse(Creds requestToken, Creds consumer)
+            public static HttpResponseMessage GetAuthorizeResponse(Creds requestToken)
             {
                 var url = OAuth.V1.Routes.GetAuthorizeTokenRoute(requestToken.Key);
                 var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Get);
@@ -110,6 +108,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
             private static Creds ExtractVerifier(HttpResponseMessage response)
             {
+                response.EnsureSuccessStatusCode();
                 NameValueCollection result = null;
                 if (response.Headers.Location == null)
                 {
@@ -120,11 +119,9 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                     result = response.Headers.Location.ParseQueryString();
                 }
 
-                var token = new Creds
-                    {
-                        Key = result[OAuth.V1.Keys.TOKEN],
-                        Secret = result[OAuth.V1.Keys.VERIFIER]
-                    };
+                var key = result[OAuth.V1.Keys.TOKEN];
+                var secret = result[OAuth.V1.Keys.VERIFIER];
+                var token = new Creds(key, secret);
 
                 return token;
             }

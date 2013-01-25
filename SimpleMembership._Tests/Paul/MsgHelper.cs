@@ -49,8 +49,13 @@ namespace MXM.API.Test.Controllers
 
         private static void ValidateResponse(HttpResponseMessage response)
         {
+            LOG.Debug("\n\n" + response + "\n");
             var isAuthorized = (response.StatusCode != HttpStatusCode.Unauthorized);
-            if (!isAuthorized) throw new UnauthorizedAccessException("Unauthorized");
+            if (!isAuthorized)
+            {
+                var msg = GetErrorDetails(response);
+                throw new UnauthorizedAccessException(msg);
+            }
 
             var isServerError = (response.StatusCode == HttpStatusCode.InternalServerError);
             if (isServerError)
@@ -62,6 +67,16 @@ namespace MXM.API.Test.Controllers
                 msg = string.Format(msg, response.ReasonPhrase, content, "det");
                 throw new ServerException(msg);
             }
+        }
+
+        private static string GetErrorDetails(HttpResponseMessage response)
+        {
+            var values = response.Content.ReadAsFormDataAsync().Result;
+            var errorCode = values["errorCode"];
+            var message = values["errorCode"];
+            var msg = string.Format("ErrorCode: {0}; Message: {1}", errorCode, message);
+
+            return msg;
         }
     }
 }

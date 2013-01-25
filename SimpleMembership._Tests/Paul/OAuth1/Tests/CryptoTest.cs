@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using log4net;
 
-namespace SimpleMembership._Tests.Paul.OAuth1
+namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 {
     [TestFixture]
     public class CryptoTest

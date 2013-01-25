@@ -14,7 +14,7 @@ namespace SimpleMembership._Tests.Paul
     {
         public static class V2
         {
-            public const string ROUTE = G.BASE_URL + "/OAuth/2/";
+            public const string ROUTE = G.BASE_API_URL + "/OAuth/2/";
 
             public const string ACCESS_TOKEN = ROUTE + "AccessToken";
 
