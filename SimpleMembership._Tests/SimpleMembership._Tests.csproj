@@ -131,11 +131,12 @@
     <Compile Include="Paul\OAuth1\Crypto.cs" />
     <Compile Include="Paul\Helpers\Signature.cs" />
     <Compile Include="Paul\OAuth1\CryptoTest.cs" />
-    <Compile Include="Paul\Oauth2Test.cs" />
+    <Compile Include="Paul\OAuth1\RoutesTest.cs" />
+    <Compile Include="Paul\OAuth2\Oauth2Test.cs" />
     <Compile Include="Paul\Creds.cs" />
     <Compile Include="Paul\MsgHelper.cs" />
     <Compile Include="Paul\OAuth1\OAuth1Helper.cs" />
-    <Compile Include="Paul\OAuth2Helper.cs" />
+    <Compile Include="Paul\OAuth2\OAuth2Helper.cs" />
     <Compile Include="Paul\OAuth1\OAuth1Test.cs" />
     <Compile Include="Paul\OAuthUtils.cs" />
     <Compile Include="TestAuthConfig.cs" />
@@ -155,7 +156,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Paul\OAuth2\" />
     <Folder Include="Paul\Originals\" />
     <Folder Include="Paul\Security\" />
   </ItemGroup>

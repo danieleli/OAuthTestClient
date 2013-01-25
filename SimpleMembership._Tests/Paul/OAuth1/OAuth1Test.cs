@@ -1,5 +1,7 @@
 ﻿#region
 
+using System.Net;
+using System.Net.Http;
 using System.Runtime.Remoting;
 using MXM.API.Test.Controllers;
 using NUnit.Framework;
@@ -46,21 +48,43 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
         }
 
-        [Test,
-         ExpectedException(ExpectedException = typeof(ServerException),
-             ExpectedMessage = "something like: Auth header missing")]
-        public void MissingAuthHeader_Should_ThrowServerException_On_RequestToken()
+        [Test]
+        public void MissingAuthHeader_Should_Return401()
         {
             // Act
-            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
+            var response = MsgHelper.Send(msg);
 
             // Assert
-            Assert.Fail("Expected ServerException not thrown.");
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
         }
 
         #endregion -- Request --
 
         #region -- Verifier --
+
+        [Test]
+        public void When_ActiveMxMerchantUserSession_AuthorizeToken_Displays_ApproveDenyView()
+        {
+            Assert.Ignore("Not Implemented");
+        }
+
+        [Test]
+        public void When_NoActiveUserSessionOnMxMerchant_AuthorizeToken_RedirectsToLogin()
+        {
+            // Arrange
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+
+            // Act
+            var response = OAuth1Helper.VerifierTokenHelper
+                                       .GetAuthorizeResponse(requestToken, TestCreds.Dan.Consumer);
+
+            
+            // Assert
+            LOG.Debug("Response: " + response);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Redirect), "Response.StatusCode");
+            Assert.That(response.Headers.Location, Contains.Substring("login"));
+        }
 
         [Test]
         public void GetVerifier()
@@ -78,7 +102,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         }
 
         [Test, ExpectedException(ExpectedException = typeof(ServerException))]
-        public void BadVerifier_Should_ThrowServerException_On_RequestVerifier()
+        public void BadVerifier_Should_Return401()
         {
             // Arrrange
             var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(TestCreds.ThreeLegConsumer, "oob");

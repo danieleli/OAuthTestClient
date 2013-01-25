@@ -64,16 +64,28 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
             public static class Routes
             {
-                public const string ROUTE = G.BASE_URL + "/OAuth/1a/";
+                public const string BASE_ROUTE = G.BASE_URL + "/OAuth/1a";
 
-                public const string REQUEST_TOKEN = ROUTE + "RequestToken";
-                public const string TOKEN_VERIFIER = ROUTE + "AuthorizeToken?token={0}&isAuthorized=true";
-                public const string ACCESS_TOKEN = ROUTE + "AccessToken";
+                
+                public const string REQUEST_TOKEN = BASE_ROUTE + "/RequestToken";
+                // public const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
+                public const string AUTHORIZE_TOKEN = "http://test.mxmerchant.com/oauth/authorize?oauth_token={0}";
+                public const string ACCESS_TOKEN = BASE_ROUTE + "/AccessToken";
 
-                public static string GetTokenVerifierRoute(string token)
+                public static string GetAuthorizeTokenRoute(string token)
                 {
-                    return string.Format(TOKEN_VERIFIER, token);
+                    var url = string.Format(AUTHORIZE_TOKEN, token);
+                    return url;
                 }
+
+                //public static string GetAuthorizeTokenWebView(string token)
+                //{
+                //    var url = string.Format(AUTHORIZE_TOKEN_WEB_VIEW, token);
+                //    url = url.Replace("https", "http");
+                //    url = url.Replace("/v1", "");
+                    
+                //    return url;
+                //}
             }
 
             public class Values

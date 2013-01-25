@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using MXM.API.Test.Controllers;
 using log4net;
 
@@ -89,15 +90,21 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogCreds("Consumer", consumer);
                 Util.LogCreds("RequestToken", requestToken);
 
-                var url = OAuth.V1.Routes.GetTokenVerifierRoute(requestToken.Key);
-                var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Post);
-                msg = Crypto.VerifierSigner.Sign(msg, consumer, requestToken);
-                var response = MsgHelper.Send(msg);
+                var response = GetAuthorizeResponse(requestToken, consumer);
 
                 var verifier = ExtractVerifier(response);
                 LOG.Info("Verifier: " + verifier);
 
                 return verifier;
+            }
+
+            public static HttpResponseMessage GetAuthorizeResponse(Creds requestToken, Creds consumer)
+            {
+                var url = OAuth.V1.Routes.GetAuthorizeTokenRoute(requestToken.Key);
+                var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Get);
+                var response = MsgHelper.Send(msg);
+                return response;
+
             }
 
 
