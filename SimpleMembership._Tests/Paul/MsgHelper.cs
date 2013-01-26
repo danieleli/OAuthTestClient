@@ -37,7 +37,7 @@ namespace SimpleMembership._Tests.Paul
 
         public static HttpResponseMessage Send(HttpRequestMessage msg)
         {
-            LOG.Debug("\n\n" + msg + "\n");
+            LOG.Debug("Message: \n" + msg + "\n");
 
             var httpClient = new HttpClient();
             var response = httpClient.SendAsync(msg).Result;
@@ -49,7 +49,7 @@ namespace SimpleMembership._Tests.Paul
 
         private static void ValidateResponse(HttpResponseMessage response)
         {
-            LOG.Debug("\n\n" + response + "\n");
+            LOG.Debug("Response: \n" + response + "\n");
             var isAuthorized = (response.StatusCode != HttpStatusCode.Unauthorized);
             if (!isAuthorized)
             {

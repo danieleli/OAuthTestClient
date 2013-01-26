@@ -200,8 +200,7 @@ namespace SimpleMembership._Tests.Controllers
           [Test]
           public void ExternalLoginConfirmation()
           {
-              log.Debug("tests");
-              Assert.Fail();
+              Assert.Ignore("Not Implemented.");
           }
 
     }
