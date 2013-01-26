@@ -63,6 +63,15 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         }
 
         [Test]
+        public void GetAccessToken_By_SimulatedUserLogin()
+        {
+            var passwordHash = "5ravvW12u10gQVQtfS4/rFuwVZM=";
+            var user = new Creds("dantest", passwordHash);
+            var accessToken = OAuth1Helper.UserTokenHelper.GetUserToken(user);
+        }
+
+
+        [Test]
         public void GetVerifier()
         {
             // Arrange

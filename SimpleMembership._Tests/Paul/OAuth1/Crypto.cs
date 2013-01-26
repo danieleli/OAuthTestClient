@@ -109,7 +109,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                                                               verifierToken.Key, null, timestamp, nonce,
                                                               null, verifierToken.Secret);
 
-                var authHeader = GetAuthHeader(consumer, null, nonce, timestamp, signature);
+                var authHeader = GetAuthHeader(consumer, null, nonce, timestamp, signature, verifierToken.Key);
 
                 msg.Headers.Add("Authorization", authHeader);
                 return msg;

@@ -67,8 +67,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 
                 public const string REQUEST_TOKEN = BASE_ROUTE + "/RequestToken";
-                // public const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
-                public const string AUTHORIZE_TOKEN = "http://test.mxmerchant.com/oauth/authorize?oauth_token={0}";
+                public const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}";
+                //public const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
                 public const string ACCESS_TOKEN = BASE_ROUTE + "/AccessToken";
 
                 public static string GetAuthorizeTokenRoute(string token)

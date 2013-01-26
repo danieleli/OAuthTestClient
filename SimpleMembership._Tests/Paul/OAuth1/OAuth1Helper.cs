@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Specialized;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Text;
 using SimpleMembership._Tests.Paul.OAuth2;
 using log4net;
 
@@ -19,7 +21,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         {
             public static Creds GetAccessToken(Creds consumer, Creds verifierToken)
             {
-                LOG.Debug("-----------GetAccessToken-----------");
+                LOG.Debug("-----------Begin: GetAccessToken-----------");
                 Util.LogCreds("Consumer", consumer);
                 Util.LogCreds("Verifier", verifierToken);
 
@@ -29,7 +31,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 var accessToken = Util.ExtractToken(response);
                 Util.LogCreds("AccessToken", accessToken);
-
+                LOG.Debug("-----------End: GetAccessToken-----------");
                 return accessToken;
             }
         }
@@ -38,7 +40,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         {
             public static Creds GetRequstToken(Creds consumer, string returnUrl)
             {
-                LOG.Debug("-----------GetRequestTokenTest-----------");
+                LOG.Debug("-----------Begin: GetRequestToken-----------");
                 Util.LogCreds("Consumer", consumer);
                 Util.LogPair("ReturnUrl", returnUrl);
 
@@ -49,6 +51,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 var requestToken = Util.ExtractToken(response);
 
                 Util.LogCreds("RequestToken", requestToken);
+                LOG.Debug("-----------End: GetRequestToken-----------");
                 return requestToken;
             }
         }
@@ -80,19 +83,52 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             }
         }
 
+        public static class UserTokenHelper
+        {
+            public static Creds GetUserToken(Creds user)
+            {
+                LOG.Debug("-----------Begin: GetUserToken-----------");
+                Util.LogCreds("User", user);
+
+                var requestToken = RequestTokenHelper.GetRequstToken(user, "oob");
+
+                // Use RequestToken as verifier after encoding secret.
+                var encodeTokenSecret = EncodeTo64(requestToken.Secret);
+                var verifier = new Creds(requestToken.Key, encodeTokenSecret);
+                Util.LogCreds("verifier", verifier);
+
+                var accessToken = AccessTokenHelper.GetAccessToken(user, verifier);
+
+                LOG.Debug("-----------End: GetUserToken-----------");
+                return accessToken;
+            }
+
+            public static string EncodeTo64(string toEncode)
+            {
+                byte[] toEncodeAsBytes
+                      = Encoding.UTF8.GetBytes(toEncode);
+                string returnValue
+                      = Convert.ToBase64String(toEncodeAsBytes);
+                return returnValue;
+            }
+        }
+
         public static class VerifierTokenHelper
         {
             public static Creds GetVerifierToken(Creds requestToken, Creds consumer, Creds user)
             {
-                LOG.Debug("-----------GetTokenVerifier-----------");
+                LOG.Debug("-----------Begin: GetTokenVerifier-----------");
                 Util.LogCreds("Consumer", consumer);
                 Util.LogCreds("RequestToken", requestToken);
 
                 var response = GetAuthorizeResponse(requestToken);
+                LOG.Debug("Response: " + response);
+                var content = response.Content.ReadAsStringAsync().Result;
+                LOG.Debug("Response Content: " + content);
 
                 var verifier = ExtractVerifier(response);
                 LOG.Info("Verifier: " + verifier);
-
+                LOG.Debug("-----------End: GetTokenVerifier-----------");
                 return verifier;
             }
 
@@ -110,8 +146,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             {
                 response.EnsureSuccessStatusCode();
                 NameValueCollection result = null;
+
                 if (response.Headers.Location == null)
                 {
+                    var formatter = new FormUrlEncodedMediaTypeFormatter();
                     result = response.Content.ReadAsFormDataAsync().Result;
                 }
                 else

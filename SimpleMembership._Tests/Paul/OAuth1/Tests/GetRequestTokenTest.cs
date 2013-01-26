@@ -44,7 +44,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
-        }
+        } 
 
 
         [Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
