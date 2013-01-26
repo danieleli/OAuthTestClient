@@ -20,7 +20,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             d.Add("somekey", "valuewithequal=");
 
             // Act
-            var result = Crypto.Stringify(d);
+            var result = Crypto.CryptoHelper.Stringify(d);
             LOG.Debug("Result: " + result);
 
             // Assert
@@ -39,7 +39,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 
 
             // Act
-            var result = Crypto.Stringify(d);
+            var result = Crypto.CryptoHelper.Stringify(d);
             LOG.Debug("Result: " + result);
 
             // Assert

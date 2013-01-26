@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 using NUnit.Framework;
 using log4net;
 
@@ -65,11 +66,27 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         [Test]
         public void GetAccessToken_By_SimulatedUserLogin()
         {
-            var passwordHash = "5ravvW12u10gQVQtfS4/rFuwVZM=";
-            var user = new Creds("dantest", passwordHash);
-            var accessToken = OAuth1Helper.UserTokenHelper.GetUserToken(user);
+            var passwordSha1 = "5ravvW12u10gQVQtfS4/rFuwVZM=";   // password1234
+            var user = new Creds("dantest", passwordSha1);
+
+            var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(user, "oob");
+
+            // Use RequestToken as verifier after encoding secret.
+            var verifier = new Creds(requestToken.Key, EncodeTo64(requestToken.Secret));
+            
+            var accessToken = OAuth1Helper.AccessTokenHelper.GetAccessToken(user, verifier);
+
+            Assert.IsNotNull(accessToken, "AccessToken");
         }
 
+        public static string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes
+                  = Encoding.UTF8.GetBytes(toEncode);
+            string returnValue
+                  = Convert.ToBase64String(toEncodeAsBytes);
+            return returnValue;
+        }
 
         [Test]
         public void GetVerifier()

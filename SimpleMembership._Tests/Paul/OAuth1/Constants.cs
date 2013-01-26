@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Collections.Generic;
 
 #endregion
@@ -19,6 +20,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1
     {
         public static class V1
         {
+            public const string AUTHORIZATION_HEADER = "Authorization";
+            public const string VERSION = "1.0";
+            public const string SIGNATURE_METHOD = "HMAC-SHA1";
+
             // List of know and used oauth parameters' names
             public static SortedDictionary<string, string> GetOAuthParams(string callback, 
                                                                             string consumerKey,
@@ -28,8 +33,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                                                                             string token,
                                                                             string tokenSecret, 
                                                                             string verifier,            
-                                                                            string oauthVersion = Values.VERSION,
-                                                                            string signatureMethod = Values.SIGNATURE_METHOD)
+                                                                            string oauthVersion = VERSION,
+                                                                            string signatureMethod = SIGNATURE_METHOD)
             {
                 var d = new SortedDictionary<string, string>();
 
@@ -63,35 +68,29 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
             public static class Routes
             {
-                public const string BASE_ROUTE = G.BASE_API_URL + "/OAuth/1a";
+                public const string BASE_ROUTE = G.BASE_API_URL + "/OAuth/1A";
 
                 
                 public const string REQUEST_TOKEN = BASE_ROUTE + "/RequestToken";
-                public const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}";
-                //public const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
+                private const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
                 public const string ACCESS_TOKEN = BASE_ROUTE + "/AccessToken";
 
                 public static string GetAuthorizeTokenRoute(string token)
                 {
-                    var url = string.Format(AUTHORIZE_TOKEN, token);
+                    var url = String.Format(AUTHORIZE_TOKEN, token);
                     return url;
                 }
 
-                //public static string GetAuthorizeTokenWebView(string token)
-                //{
-                //    var url = string.Format(AUTHORIZE_TOKEN_WEB_VIEW, token);
-                //    url = url.Replace("https", "http");
-                //    url = url.Replace("/v1", "");
-                    
-                //    return url;
-                //}
+                public static string GetAuthorizeTokenWebView(string token)
+                {
+                    var url = String.Format(AUTHORIZE_TOKEN, token);
+                    url = url.Replace("https", "http");
+                    url = url.Replace("/v1", "");
+
+                    return url;
+                }
             }
 
-            public class Values
-            {
-                public const string VERSION = "1.0";
-                public const string SIGNATURE_METHOD = "HMAC-SHA1";
-            }
         }
     }
 }

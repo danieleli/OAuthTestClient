@@ -85,8 +85,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             var timestamp = OAuthUtils.GenerateTimeStamp();
             var nonce = OAuthUtils.GenerateNonce();
 
-            var authHeader = Crypto.GetAuthHeader(TestCreds.Dan.Consumer, "oob", nonce, timestamp, badSignature);
-            requestMessage.Headers.Add(Crypto.AUTHORIZATION_HEADER, authHeader);
+            var authHeader = Crypto.CryptoHelper.GetAuthHeader(TestCreds.Dan.Consumer, "oob", nonce, timestamp, badSignature);
+            requestMessage.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
 
             // Act
             var response = MsgHelper.Send(requestMessage);
