@@ -17,7 +17,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Crypto
                                                           requestToken.Key, requestToken.Secret, timestamp, nonce,
                                                           null, null);
 
-            var authHeader = CryptoHelper.GetAuthHeader(consumer, null, nonce, timestamp, signature);
+            //var authHeader = AuthorizationHeaderFactory.C(consumer, null, nonce, timestamp, signature);
+            var authHeader = AuthorizationHeaderFactory.CreateVerifierHeader();
 
             msg.Headers.Add("Authorization", authHeader);
             return msg;

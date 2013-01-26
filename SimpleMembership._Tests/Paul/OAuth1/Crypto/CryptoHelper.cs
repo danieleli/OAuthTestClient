@@ -16,17 +16,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Crypto
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(CryptoHelper));
 
-        public static string GetAuthHeader(Creds consumer, string callback, string nonce, string timestamp,
-                                            string signature, string token = null, string verifier = null)
-        {
-            var oauthParams = OAuth.V1.GetOAuthParams(callback, consumer.Key, nonce, null, timestamp, token, null,
-                                                      verifier);
-            oauthParams.Add(OAuth.V1.Keys.SIGNATURE, signature);
-
-            var authHeader = "OAuth " + Stringify(oauthParams);
-            LOG.Debug("Authorization Header: \n\n\t" + authHeader.Replace(",", "\n\t") + "\n");
-            return authHeader;
-        }
+       
 
         public static string Stringify(SortedDictionary<string, string> paramz)
         {
@@ -46,6 +36,5 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Crypto
 
             return sb.ToString();
         }
-
-}
+    }
 }

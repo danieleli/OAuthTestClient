@@ -14,21 +14,25 @@ using log4net;
 
 namespace SimpleMembership._Tests.Paul.OAuth1
 {
+
+    
     public static class OAuth1Helper
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Helper));
 
-
         public static class RequestTokenHelper
         {
-            public static Creds GetRequstToken(Creds consumer, string returnUrl)
+            public static Creds GetRequstToken(RequestTokenSignatureInput input)
             {
                 LOG.Debug("-----------Begin: GetRequestToken-----------");
-                Util.LogCreds("Consumer", consumer);
-                Util.LogPair("ReturnUrl", returnUrl);
+                Util.LogCreds("Consumer", input.Consumer);
+                Util.LogPair("ReturnUrl", input.Callback);
 
-                var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
-                msg = RequestTokenSigner.Sign(msg, consumer, returnUrl);
+                var msg = MsgHelper.CreateRequestMessage(input);
+
+                var authHeader = AuthorizationHeaderFactory.CreateRequestTokenHeader(input);
+                msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+                
                 var response = MsgHelper.Send(msg);
 
                 var requestToken = Util.ExtractToken(response);
@@ -36,6 +40,12 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogCreds("RequestToken", requestToken);
                 LOG.Debug("-----------End: GetRequestToken-----------");
                 return requestToken;
+            }
+
+            public static Creds GetRequstToken(Creds consumer, string callback)
+            {
+                var input = new RequestTokenSignatureInput(consumer, callback);
+                return GetRequstToken(input);
             }
         }
 
@@ -102,7 +112,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogCreds("Verifier", verifierToken);
 
                 var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.ACCESS_TOKEN, HttpMethod.Get);
-                AccessTokenSigner.Sign(msg, consumer, verifierToken);
+               // AccessTokenSigner.Sign(msg, consumer, verifierToken);
                 var response = MsgHelper.Send(msg);
 
                 var accessToken = Util.ExtractToken(response);

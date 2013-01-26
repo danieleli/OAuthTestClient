@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using SimpleMembership._Tests.Paul.OAuth1.Crypto;
 using log4net;
 
 namespace SimpleMembership._Tests.Paul.OAuth1.Tests
@@ -81,11 +82,9 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             // Arrange
             var requestMessage = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
 
-            var badSignature = "xxxx";
-            var timestamp = OAuthUtils.GenerateTimeStamp();
-            var nonce = OAuthUtils.GenerateNonce();
+            var input = new RequestTokenSignatureInput(TestCreds.Dan.Consumer);
 
-            var authHeader = Crypto.CryptoHelper.GetAuthHeader(TestCreds.Dan.Consumer, "oob", nonce, timestamp, badSignature);
+            var authHeader = AuthorizationHeaderFactory.CreateRequestTokenHeader(input);
             requestMessage.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
 
             // Act

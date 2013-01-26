@@ -30,9 +30,9 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                                                                             string nonce, 
                                                                             string signature,
                                                                             string timestamp, 
-                                                                            string token,
-                                                                            string tokenSecret, 
-                                                                            string verifier,            
+                                                                            string token = null,
+                                                                            string tokenSecret = null, 
+                                                                            string verifier = null,            
                                                                             string oauthVersion = VERSION,
                                                                             string signatureMethod = SIGNATURE_METHOD)
             {

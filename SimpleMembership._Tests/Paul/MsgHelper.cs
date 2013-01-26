@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Runtime.Remoting;
+using SimpleMembership._Tests.Paul.OAuth1.Crypto;
 using log4net;
 
 #endregion
@@ -16,12 +17,19 @@ namespace SimpleMembership._Tests.Paul
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (MsgHelper));
 
-        public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod verb)
+        [Obsolete]
+        public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod method)
+        {
+            var input = new RequestTokenSignatureInput(null);
+            return CreateRequestMessage(input);
+        }
+
+        public static HttpRequestMessage CreateRequestMessage(RequestTokenSignatureInput input)
         {
             var msg = new HttpRequestMessage
                 {
-                    RequestUri = new Uri(url),
-                    Method = verb
+                    RequestUri = input.RequestUri,
+                    Method = input.HttpMethod
                 };
 
             AddMediaTypeHeader(msg);
