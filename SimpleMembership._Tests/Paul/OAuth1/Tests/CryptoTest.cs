@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SimpleMembership._Tests.Paul.OAuth1.Crypto;
 using log4net;
 
 namespace SimpleMembership._Tests.Paul.OAuth1.Tests
@@ -20,7 +21,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             d.Add("somekey", "valuewithequal=");
 
             // Act
-            var result = Crypto.CryptoHelper.Stringify(d);
+            var result = AuthorizationHeaderFactory.Stringify(d);
             LOG.Debug("Result: " + result);
 
             // Assert
@@ -39,7 +40,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 
 
             // Act
-            var result = Crypto.CryptoHelper.Stringify(d);
+            var result = AuthorizationHeaderFactory.Stringify(d);
             LOG.Debug("Result: " + result);
 
             // Assert

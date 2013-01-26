@@ -20,11 +20,11 @@ namespace SimpleMembership._Tests.Paul
         [Obsolete]
         public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod method)
         {
-            var input = new RequestTokenSignatureInput(null);
+            var input = new RequestTokenInput(null);
             return CreateRequestMessage(input);
         }
 
-        public static HttpRequestMessage CreateRequestMessage(RequestTokenSignatureInput input)
+        public static HttpRequestMessage CreateRequestMessage(RequestTokenInput input)
         {
             var msg = new HttpRequestMessage
                 {

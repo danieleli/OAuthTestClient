@@ -22,7 +22,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
         public static class RequestTokenHelper
         {
-            public static Creds GetRequstToken(RequestTokenSignatureInput input)
+            public static Creds GetRequstToken(RequestTokenInput input)
             {
                 LOG.Debug("-----------Begin: GetRequestToken-----------");
                 Util.LogCreds("Consumer", input.Consumer);
@@ -42,9 +42,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 return requestToken;
             }
 
+            [Obsolete]
             public static Creds GetRequstToken(Creds consumer, string callback)
             {
-                var input = new RequestTokenSignatureInput(consumer, callback);
+                var input = new RequestTokenInput(consumer, callback);
                 return GetRequstToken(input);
             }
         }

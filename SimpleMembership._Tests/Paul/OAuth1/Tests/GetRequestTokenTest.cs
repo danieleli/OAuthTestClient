@@ -82,7 +82,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             // Arrange
             var requestMessage = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
 
-            var input = new RequestTokenSignatureInput(TestCreds.Dan.Consumer);
+            var consumer = new Creds(TestCreds.Dan.Consumer.Key, "dsds");
+            var input = new RequestTokenInput(consumer);
 
             var authHeader = AuthorizationHeaderFactory.CreateRequestTokenHeader(input);
             requestMessage.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);

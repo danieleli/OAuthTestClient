@@ -128,11 +128,9 @@
     <Compile Include="MxClient_Tests.cs" />
     <Compile Include="OAuth\OAuth1a\MxClient_Tests.cs" />
     <Compile Include="Paul\OAuth1\Constants.cs" />
-    <Compile Include="Paul\OAuth1\Crypto\AccessTokenSigner.cs" />
-    <Compile Include="Paul\OAuth1\Crypto\CryptoHelper.cs" />
+    <Compile Include="Paul\OAuth1\Crypto\AuthorizationHeaderFactory.cs" />
     <Compile Include="Paul\Helpers\Signature.cs" />
-    <Compile Include="Paul\OAuth1\Crypto\RequestTokenSigner.cs" />
-    <Compile Include="Paul\OAuth1\Crypto\VerifierSigner.cs" />
+    <Compile Include="Paul\OAuth1\Crypto\OAuthInputBase.cs" />
     <Compile Include="Paul\OAuth1\Tests\CryptoTest.cs" />
     <Compile Include="Paul\OAuth1\Tests\GetRequestTokenTest.cs" />
     <Compile Include="Paul\OAuth1\Tests\RoutesTest.cs" />

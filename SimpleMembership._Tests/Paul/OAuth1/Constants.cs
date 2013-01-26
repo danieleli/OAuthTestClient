@@ -69,8 +69,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             public static class Routes
             {
                 public const string BASE_ROUTE = G.BASE_API_URL + "/OAuth/1A";
-
-                
                 public const string REQUEST_TOKEN = BASE_ROUTE + "/RequestToken";
                 private const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
                 public const string ACCESS_TOKEN = BASE_ROUTE + "/AccessToken";
