@@ -1,7 +1,5 @@
 ﻿#region
 
-using System;
-using System.Net;
 using NUnit.Framework;
 using log4net;
 
@@ -12,15 +10,15 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
     [TestFixture]
     public class OAuth1Test
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Test));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Test));
 
         public static class Helper
         {
             public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
             {
-                var requestToken = OAuth1Helper.RequestTokenHelper.GetRequstToken(consumer, returnUrl);
-                var verifier = OAuth1Helper.VerifierTokenHelper.GetVerifierToken(requestToken, consumer, user);
-                var accessToken = OAuth1Helper.AccessTokenHelper.GetAccessToken(consumer, verifier);
+                var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(consumer, returnUrl);
+                var verifier = RequestHelper.VerifierTokenHelper.GetVerifierToken(requestToken, consumer, user);
+                var accessToken = RequestHelper.AccessTokenHelper.GetAccessToken(consumer, verifier);
 
                 return accessToken;
             }
@@ -30,8 +28,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
                 GetThreeLegAccessToken(user, user, returnUrl);
             }
         }
-
-
 
 
         [Test] // Three leg has different consumer and user creds.
@@ -57,6 +53,5 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
             Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
         }
-
     }
 }

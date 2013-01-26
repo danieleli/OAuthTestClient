@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace SimpleMembership._Tests.Paul
 {
     public static class OAuthUtils
     {
+        private static readonly Random random = new Random();
 
-        private static Random random = new Random();
-        
         /// <summary>
-        /// Generate the timestamp for the signature        
+        ///     Generate the timestamp for the signature
         /// </summary>
         /// <returns></returns>
         public static string GenerateTimeStamp()
         {
             // Default implementation of UNIX time of the current UTC time
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
 
         /// <summary>
-        /// Generate a nonce
+        ///     Generate a nonce
         /// </summary>
         /// <returns></returns>
         public static string GenerateNonce()

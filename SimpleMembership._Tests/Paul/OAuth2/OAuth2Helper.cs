@@ -9,7 +9,7 @@ using System.Web.Script.Serialization;
 
 namespace SimpleMembership._Tests.Paul.OAuth2
 {
-    public static partial class OAuthRoutes
+    public static class OAuthRoutes
     {
         public static class V2
         {

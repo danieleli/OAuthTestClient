@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿#region
+
+using NUnit.Framework;
+
+#endregion
 
 namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 {

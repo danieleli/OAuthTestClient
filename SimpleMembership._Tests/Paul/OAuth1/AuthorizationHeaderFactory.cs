@@ -1,22 +1,28 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using SimpleMembership._Tests.Paul.Helpers;
 using log4net;
 
-namespace SimpleMembership._Tests.Paul.OAuth1.Crypto
+#endregion
+
+namespace SimpleMembership._Tests.Paul.OAuth1
 {
     public static class AuthorizationHeaderFactory
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(AuthorizationHeaderFactory));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (AuthorizationHeaderFactory));
 
         public static string CreateRequestTokenHeader(RequestTokenInput input)
         {
-            var signature = Signature.GetOAuth1ASignature(input.RequestUri, input.HttpMethod, input.Consumer.Key, input.Consumer.Secret,
+            var signature = Signature.GetOAuth1ASignature(input.RequestUri, input.HttpMethod, input.Consumer.Key,
+                                                          input.Consumer.Secret,
                                                           null, null, input.Timestamp, input.Nonce,
                                                           input.Callback, null);
 
-            var oauthParams = OAuth.V1.GetOAuthParams(input.Callback, input.Consumer.Key, input.Nonce, signature, input.Timestamp);
+            var oauthParams = OAuth.V1.GetOAuthParams(input.Callback, input.Consumer.Key, input.Nonce, signature,
+                                                      input.Timestamp);
             var header = "OAuth " + Stringify(oauthParams);
 
             return header;

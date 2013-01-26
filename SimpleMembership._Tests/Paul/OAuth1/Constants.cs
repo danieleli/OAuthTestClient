@@ -25,16 +25,16 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             public const string SIGNATURE_METHOD = "HMAC-SHA1";
 
             // List of know and used oauth parameters' names
-            public static SortedDictionary<string, string> GetOAuthParams(string callback, 
-                                                                            string consumerKey,
-                                                                            string nonce, 
-                                                                            string signature,
-                                                                            string timestamp, 
-                                                                            string token = null,
-                                                                            string tokenSecret = null, 
-                                                                            string verifier = null,            
-                                                                            string oauthVersion = VERSION,
-                                                                            string signatureMethod = SIGNATURE_METHOD)
+            public static SortedDictionary<string, string> GetOAuthParams(string callback,
+                                                                          string consumerKey,
+                                                                          string nonce,
+                                                                          string signature,
+                                                                          string timestamp,
+                                                                          string token = null,
+                                                                          string tokenSecret = null,
+                                                                          string verifier = null,
+                                                                          string oauthVersion = VERSION,
+                                                                          string signatureMethod = SIGNATURE_METHOD)
             {
                 var d = new SortedDictionary<string, string>();
 
@@ -88,7 +88,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                     return url;
                 }
             }
-
         }
     }
 }

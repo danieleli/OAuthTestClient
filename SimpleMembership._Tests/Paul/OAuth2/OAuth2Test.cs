@@ -15,7 +15,7 @@ namespace SimpleMembership._Tests.Paul.OAuth2
         public static Creds GetThreeLegAccessToken(Creds consumer, Creds user, string returnUrl)
         {
             var code = OAuth2Helper.GetAuthorizationCode(consumer, returnUrl).Content.ToString();
-            var token = OAuth2Helper.GetAccessToken( code,consumer);
+            var token = OAuth2Helper.GetAccessToken(code, consumer);
 
             return null; // accessToken;
         }

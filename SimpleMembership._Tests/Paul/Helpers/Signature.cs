@@ -103,13 +103,13 @@ namespace SimpleMembership._Tests.Paul.Helpers
                                                  string callback, string verifier)
         {
             return GetOAuth1ASignature(request.RequestUri, request.Method, consumerKey, consumerSecret, accessToken,
-                                accessSecret, timestamp, nonce, callback, verifier);
-            
+                                       accessSecret, timestamp, nonce, callback, verifier);
         }
 
-        public static string GetOAuth1ASignature(Uri requestUri, HttpMethod httpMethod, string consumerKey, string consumerSecret,
-                                         string accessToken, string accessSecret, string timestamp, string nonce,
-                                         string callback, string verifier)
+        public static string GetOAuth1ASignature(Uri requestUri, HttpMethod httpMethod, string consumerKey,
+                                                 string consumerSecret,
+                                                 string accessToken, string accessSecret, string timestamp, string nonce,
+                                                 string callback, string verifier)
         {
             var oauth = new OAuth1ASignature();
             string normalizedurl;
@@ -128,8 +128,6 @@ namespace SimpleMembership._Tests.Paul.Helpers
 
     public class OAuth1ASignature
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1ASignature));
-
         /// <summary>
         ///     Provides a predefined set of algorithms that are supported officially by the protocol
         /// </summary>
@@ -160,7 +158,8 @@ namespace SimpleMembership._Tests.Paul.Helpers
         protected const string HMACSHA1SignatureType = "HMAC-SHA1";
         protected const string PlainTextSignatureType = "PLAINTEXT";
         protected const string RSASHA1SignatureType = "RSA-SHA1";
-        
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1ASignature));
+
 
         protected Random random = new Random();
 

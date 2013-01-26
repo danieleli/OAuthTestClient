@@ -1,15 +1,18 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SimpleMembership._Tests.Paul.OAuth1.Crypto;
 using log4net;
+
+#endregion
 
 namespace SimpleMembership._Tests.Paul.OAuth1.Tests
 {
     [TestFixture]
-    public class CryptoTest
+    public class AuthorizationFactoryTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(CryptoTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (AuthorizationFactoryTest));
 
         [Test]
         public void StringifyParams_Should_EscapeValues()

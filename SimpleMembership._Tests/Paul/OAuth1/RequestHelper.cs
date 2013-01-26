@@ -4,21 +4,34 @@ using System;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
-using System.Text;
-using SimpleMembership._Tests.Paul.OAuth1.Crypto;
-using SimpleMembership._Tests.Paul.OAuth2;
 using log4net;
 
 #endregion
 
 namespace SimpleMembership._Tests.Paul.OAuth1
 {
-
-    
-    public static class OAuth1Helper
+    public static class RequestHelper
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuth1Helper));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (RequestHelper));
+
+        public static class AccessTokenHelper
+        {
+            public static Creds GetAccessToken(Creds consumer, Creds verifierToken)
+            {
+                LOG.Debug("-----------Begin: GetAccessToken-----------");
+                Util.LogCreds("Consumer", consumer);
+                Util.LogCreds("Verifier", verifierToken);
+
+                var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.ACCESS_TOKEN, HttpMethod.Get);
+                // AccessTokenSigner.Sign(msg, consumer, verifierToken);
+                var response = MsgHelper.Send(msg);
+
+                var accessToken = Util.ExtractToken(response);
+                Util.LogCreds("AccessToken", accessToken);
+                LOG.Debug("-----------End: GetAccessToken-----------");
+                return accessToken;
+            }
+        }
 
         public static class RequestTokenHelper
         {
@@ -32,7 +45,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 var authHeader = AuthorizationHeaderFactory.CreateRequestTokenHeader(input);
                 msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
-                
+
                 var response = MsgHelper.Send(msg);
 
                 var requestToken = Util.ExtractToken(response);
@@ -47,79 +60,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             {
                 var input = new RequestTokenInput(consumer, callback);
                 return GetRequstToken(input);
-            }
-        }
-
-
-        public static class VerifierTokenHelper
-        {
-            public static Creds GetVerifierToken(Creds requestToken, Creds consumer, Creds user)
-            {
-                LOG.Debug("-----------Begin: GetTokenVerifier-----------");
-                Util.LogCreds("Consumer", consumer);
-                Util.LogCreds("RequestToken", requestToken);
-
-                var response = GetAuthorizeResponse(requestToken);
-                LOG.Debug("Response: " + response);
-                var content = response.Content.ReadAsStringAsync().Result;
-                LOG.Debug("Response Content: " + content);
-
-                var verifier = ExtractVerifier(response);
-                LOG.Info("Verifier: " + verifier);
-                LOG.Debug("-----------End: GetTokenVerifier-----------");
-                return verifier;
-            }
-
-            public static HttpResponseMessage GetAuthorizeResponse(Creds requestToken)
-            {
-                var url = OAuth.V1.Routes.GetAuthorizeTokenRoute(requestToken.Key);
-                var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Get);
-                var response = MsgHelper.Send(msg);
-                return response;
-
-            }
-
-
-            private static Creds ExtractVerifier(HttpResponseMessage response)
-            {
-                response.EnsureSuccessStatusCode();
-                NameValueCollection result = null;
-
-                if (response.Headers.Location == null)
-                {
-                    var formatter = new FormUrlEncodedMediaTypeFormatter();
-                    result = response.Content.ReadAsFormDataAsync().Result;
-                }
-                else
-                {
-                    result = response.Headers.Location.ParseQueryString();
-                }
-
-                var key = result[OAuth.V1.Keys.TOKEN];
-                var secret = result[OAuth.V1.Keys.VERIFIER];
-                var token = new Creds(key, secret);
-
-                return token;
-            }
-        }
-
-
-        public static class AccessTokenHelper
-        {
-            public static Creds GetAccessToken(Creds consumer, Creds verifierToken)
-            {
-                LOG.Debug("-----------Begin: GetAccessToken-----------");
-                Util.LogCreds("Consumer", consumer);
-                Util.LogCreds("Verifier", verifierToken);
-
-                var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.ACCESS_TOKEN, HttpMethod.Get);
-               // AccessTokenSigner.Sign(msg, consumer, verifierToken);
-                var response = MsgHelper.Send(msg);
-
-                var accessToken = Util.ExtractToken(response);
-                Util.LogCreds("AccessToken", accessToken);
-                LOG.Debug("-----------End: GetAccessToken-----------");
-                return accessToken;
             }
         }
 
@@ -150,6 +90,55 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 LOG.Info(key + ": " + value);
             }
         }
-    }
 
+        public static class VerifierTokenHelper
+        {
+            public static Creds GetVerifierToken(Creds requestToken, Creds consumer, Creds user)
+            {
+                LOG.Debug("-----------Begin: GetTokenVerifier-----------");
+                Util.LogCreds("Consumer", consumer);
+                Util.LogCreds("RequestToken", requestToken);
+
+                var response = GetAuthorizeResponse(requestToken);
+                LOG.Debug("Response: " + response);
+                var content = response.Content.ReadAsStringAsync().Result;
+                LOG.Debug("Response Content: " + content);
+
+                var verifier = ExtractVerifier(response);
+                LOG.Info("Verifier: " + verifier);
+                LOG.Debug("-----------End: GetTokenVerifier-----------");
+                return verifier;
+            }
+
+            public static HttpResponseMessage GetAuthorizeResponse(Creds requestToken)
+            {
+                var url = OAuth.V1.Routes.GetAuthorizeTokenRoute(requestToken.Key);
+                var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Get);
+                var response = MsgHelper.Send(msg);
+                return response;
+            }
+
+            private static Creds ExtractVerifier(HttpResponseMessage response)
+            {
+                response.EnsureSuccessStatusCode();
+                NameValueCollection result = null;
+
+                if (response.Headers.Location == null)
+                {
+                    var formatter = new FormUrlEncodedMediaTypeFormatter();
+                    result = response.Content.ReadAsFormDataAsync().Result;
+                }
+                else
+                {
+                    result = response.Headers.Location.ParseQueryString();
+                }
+
+                var key = result[OAuth.V1.Keys.TOKEN];
+                var secret = result[OAuth.V1.Keys.VERIFIER];
+                var token = new Creds(key, secret);
+
+                return token;
+            }
+        }
+    }
 }

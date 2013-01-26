@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Runtime.Remoting;
-using SimpleMembership._Tests.Paul.OAuth1.Crypto;
+using SimpleMembership._Tests.Paul.OAuth1;
 using log4net;
 
 #endregion
