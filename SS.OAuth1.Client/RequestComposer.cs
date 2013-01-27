@@ -4,6 +4,7 @@ using System;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using SS.OAuth1.Client.Parameters;
 using log4net;
 
 #endregion

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SS.OAuth1.Client
+namespace SS.OAuth1.Client.Parameters
 {
     public static class Extensions
     {

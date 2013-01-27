@@ -1,11 +1,7 @@
-#region
-
 using System;
 using System.Net.Http;
 
-#endregion
-
-namespace SS.OAuth1.Client
+namespace SS.OAuth1.Client.Parameters
 {
     /// <summary>
     ///     Parameter Aggregator Pattern
@@ -71,60 +67,4 @@ namespace SS.OAuth1.Client
 
         #endregion -- Validation --
     }
-
-
-    public class RequestTokenParameters : OAuthParametersBase
-    {
-        public RequestTokenParameters(Creds consumer, string callback = "oob")
-            : base(consumer, HttpMethod.Post, OAuth.V1.Routes.REQUEST_TOKEN)
-        {
-            Callback = callback;
-        }
-
-        public string Callback { get; private set; }
-    }
-
-
-    public class VerifierTokenParameters : OAuthParametersBase
-    {
-        public VerifierTokenParameters(Creds consumer, string token)
-            : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(token))
-        {
-            
-        }
-
-    }
-
-
-    public class AccessTokenParameters : OAuthParametersBase
-    {
-        public AccessTokenParameters(Creds consumer, string verifier, string sessionHandle)
-            : base(consumer, HttpMethod.Post, OAuth.V1.Routes.ACCESS_TOKEN)
-        {
-            NullCheck(verifier, "oauth_verifier");
-
-            Verifier = verifier;
-            SessionHandle = sessionHandle;
-        }
-
-        public string Verifier { get; set; }
-        public string SessionHandle { get; set; }
-    }
-
-
-    //public class AuthorizeParameters : OAuthParametersBase
-    //{
-    //    public string Verifier { get; set; }
-
-    //    public AuthorizeParameters(Creds consumer, string token, string verifier)
-    //        : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(token))
-    //    {
-    //        NullCheck(token, "oauth_token");
-    //        NullCheck(verifier, "oauth_verifier");
-    //        Verifier = verifier;
-    //    }
-    //}
-
-
-    // List of know and used oauth parameters' names
 }
