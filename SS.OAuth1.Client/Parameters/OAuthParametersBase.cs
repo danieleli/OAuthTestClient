@@ -6,7 +6,7 @@ namespace SS.OAuth1.Client.Parameters
     /// <summary>
     ///     Parameter Aggregator Pattern
     /// </summary>
-    public abstract class OAuthParametersBase
+    public abstract class OAuthParametersBase : MessageParameters
     {
         private string _nonce;
         private string _timestamp;
@@ -15,18 +15,18 @@ namespace SS.OAuth1.Client.Parameters
 
         public const string SIGNATURE_METHOD = AuthParameterFactory.Values.SIGNATURE_METHOD;
         public const string VERSION = AuthParameterFactory.Values.VERSION;
-        public Uri RequestUri { get; private set; }
-        public Creds Consumer { get; private set; }
-        public HttpMethod HttpMethod { get; private set; }
+        
+        
+        public Creds Consumer { get; protected set; }
 
         public string Timestamp
         {
-            get { return _timestamp ?? (_timestamp = OAuthUtils.GenerateTimeStamp()); }
+            get { return _timestamp ?? (_timestamp = OAuthHelper.GenerateTimeStamp()); }
         }
 
         public string Nonce
         {
-            get { return _nonce ?? (_nonce = OAuthUtils.GenerateNonce()); }
+            get { return _nonce ?? (_nonce = OAuthHelper.GenerateNonce()); }
         }
 
         #endregion -- Properties --
@@ -66,5 +66,19 @@ namespace SS.OAuth1.Client.Parameters
         }
 
         #endregion -- Validation --
+    }
+
+    public class MessageParameters
+    {
+        public HttpMethod HttpMethod { get; protected set; }
+        public Uri RequestUri { get; protected set; }
+
+        protected MessageParameters(){ }
+
+        public MessageParameters(Uri requestUri, HttpMethod httpMethod)
+        {
+            RequestUri = requestUri;
+            HttpMethod = httpMethod;
+        }
     }
 }

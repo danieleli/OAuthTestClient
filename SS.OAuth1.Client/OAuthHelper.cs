@@ -6,14 +6,10 @@ using System;
 
 namespace SS.OAuth1.Client
 {
-    public static class OAuthUtils
+    public static class OAuthHelper
     {
         private static readonly Random random = new Random();
 
-        /// <summary>
-        ///     Generate the timestamp for the signature
-        /// </summary>
-        /// <returns></returns>
         public static string GenerateTimeStamp()
         {
             // Default implementation of UNIX time of the current UTC time
@@ -21,10 +17,6 @@ namespace SS.OAuth1.Client
             return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
 
-        /// <summary>
-        ///     Generate a nonce
-        /// </summary>
-        /// <returns></returns>
         public static string GenerateNonce()
         {
             // Just a simple implementation of a random number between 123400 and 9999999

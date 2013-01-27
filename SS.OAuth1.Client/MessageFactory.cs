@@ -22,7 +22,7 @@ namespace SS.OAuth1.Client
         //    return CreateRequestMessage(input);
         //}
 
-        public static HttpRequestMessage CreateRequestMessage(OAuthParametersBase parameters)
+        public static HttpRequestMessage CreateRequestMessage(MessageParameters parameters)
         {
             var msg = new HttpRequestMessage
                 {

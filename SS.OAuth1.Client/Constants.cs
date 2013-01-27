@@ -27,14 +27,6 @@ namespace SS.OAuth1.Client
                     return url;
                 }
 
-                //public static string GetAuthorizeTokenWebView(string token)
-                //{
-                //    var url = String.Format(AUTHORIZE_TOKEN, token);
-                //    url = url.Replace("https", "http");
-                //    url = url.Replace("/v1", "");
-
-                //    return url;
-                //}
             }
         }
     }

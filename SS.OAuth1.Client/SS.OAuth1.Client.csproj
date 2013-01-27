@@ -43,13 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationHeaderFactory.cs" />
+    <Compile Include="G.cs" />
     <Compile Include="Parameters\AuthParameterFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Creds.cs" />
     <Compile Include="MessageFactory.cs" />
     <Compile Include="MessageSender.cs" />
-    <Compile Include="OAuthUtils.cs" />
+    <Compile Include="OAuthHelper.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />
     <Compile Include="Parameters\VerifierTokenParameters.cs" />
