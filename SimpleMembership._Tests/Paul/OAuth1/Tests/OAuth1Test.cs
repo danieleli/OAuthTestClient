@@ -18,10 +18,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void TwoLegged_Success()
         {
             // Act            
-            var requestInput = new RequestTokenInput(TestCreds.Dan.Consumer);
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(requestInput);
+            var requestInput = new RequestTokenParameters(TestCreds.Dan.Consumer);
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(requestInput);
 
-            var accessToken = RequestHelper.AccessTokenHelper.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
+            var accessToken = RequestComposer.AccessTokenHelper.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
 
 
             // Assert

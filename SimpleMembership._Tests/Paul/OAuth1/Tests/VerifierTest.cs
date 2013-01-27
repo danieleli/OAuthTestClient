@@ -28,11 +28,11 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void AuthorizeWithInvalidToken_Returns_BadRequest()
         {
             // Arrange
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
             requestToken.Key = "xxxx";
 
             // Act
-            var response = RequestHelper.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
+            var response = RequestComposer.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
 
             // Assert
             LOG.Debug("Response: " + response);
@@ -43,10 +43,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void Authorize_Returns_StatusCodeOk()
         {
             // Arrange
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             // Act
-            var response = RequestHelper.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
+            var response = RequestComposer.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
 
             // Assert
             LOG.Debug("Response: " + response);
@@ -57,7 +57,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void BadVerifier_Returns_UnauthorizedStatusCode()
         {
             // Arrrange
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             // Act
 
@@ -71,12 +71,12 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             var passwordSha1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
             var user = new Creds("dantest", passwordSha1);
 
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(user, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(user, "oob");
 
             // Use RequestToken as verifier after encoding secret.
             var verifier = new Creds(requestToken.Key, EncodeTo64(requestToken.Secret));
 
-            var accessToken = RequestHelper.AccessTokenHelper.GetAccessToken(user, verifier);
+            var accessToken = RequestComposer.AccessTokenHelper.GetAccessToken(user, verifier);
 
             Assert.IsNotNull(accessToken, "AccessToken");
         }
@@ -85,10 +85,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void GetVerifier()
         {
             // Arrange
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             // Act
-            var verifier = RequestHelper.VerifierTokenHelper
+            var verifier = RequestComposer.VerifierTokenHelper
                                         .GetVerifierToken(requestToken, TestCreds.Dan.Consumer, TestCreds.Dan.User);
 
             // Assert
@@ -106,10 +106,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void When_NoActiveUserSessionOnMxMerchant_AuthorizeToken_RedirectsToLogin()
         {
             // Arrange
-            var requestToken = RequestHelper.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             // Act
-            var response = RequestHelper.VerifierTokenHelper
+            var response = RequestComposer.VerifierTokenHelper
                                         .GetAuthorizeResponse(requestToken);
 
 

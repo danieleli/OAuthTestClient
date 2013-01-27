@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Script.Serialization;
+using SimpleMembership._Tests.Paul.OAuth1;
 
 #endregion
 
@@ -37,22 +38,22 @@ namespace SimpleMembership._Tests.Paul.OAuth2
             var state = Guid.NewGuid().ToString();
             var url = string.Format(OAuthRoutes.V2.AUTHORIZATION_CODE, consumer.Key, state, returnUri);
 
-            var msg = MsgHelper.CreateRequestMessage(url, HttpMethod.Post);
-            var result = MsgHelper.Send(msg);
+            var msg = MessageFactory.CreateRequestMessage(url, HttpMethod.Post);
+            var result = MessageSender.Send(msg);
 
             return result;
         }
 
         public static object GetAccessToken(string code, Creds clientCreds)
         {
-            var msg = MsgHelper.CreateRequestMessage(OAuthRoutes.V2.ACCESS_TOKEN, HttpMethod.Post);
+            var msg = MessageFactory.CreateRequestMessage(OAuthRoutes.V2.ACCESS_TOKEN, HttpMethod.Post);
 
             var contentDic = GetContentDictionary(clientCreds, "", GrantType.AUTHORIZATION_CODE);
             contentDic.Add("code", code);
 
             msg.Content = new FormUrlEncodedContent(contentDic);
 
-            var response = MsgHelper.Send(msg);
+            var response = MessageSender.Send(msg);
             var result = response.Content.ReadAsStringAsync().Result;
 
             var rtn = new JavaScriptSerializer().DeserializeObject(result);
@@ -62,14 +63,14 @@ namespace SimpleMembership._Tests.Paul.OAuth2
 
         public static object RefreshToken(string refreshToken, Creds clientCreds, string redirectUri)
         {
-            var msg = MsgHelper.CreateRequestMessage(OAuthRoutes.V2.REFRESH_TOKEN, HttpMethod.Post);
+            var msg = MessageFactory.CreateRequestMessage(OAuthRoutes.V2.REFRESH_TOKEN, HttpMethod.Post);
 
             var contentDic = GetContentDictionary(clientCreds, redirectUri, GrantType.REFRESH_TOKEN);
             contentDic.Add("refresh_token", refreshToken);
 
             msg.Content = new FormUrlEncodedContent(contentDic);
 
-            var response = MsgHelper.Send(msg);
+            var response = MessageSender.Send(msg);
             var rtn = GetJsonObject(response);
 
             return rtn;

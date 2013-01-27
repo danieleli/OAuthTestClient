@@ -1,47 +1,14 @@
-﻿#region
-
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
 using System.Runtime.Remoting;
-using SimpleMembership._Tests.Paul.OAuth1;
 using log4net;
 
-#endregion
-
-namespace SimpleMembership._Tests.Paul
+namespace SimpleMembership._Tests.Paul.OAuth1
 {
-    public static class MsgHelper
+    public static class MessageSender
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (MsgHelper));
-
-        [Obsolete]
-        public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod method)
-        {
-            var input = new RequestTokenInput(null);
-            return CreateRequestMessage(input);
-        }
-
-        public static HttpRequestMessage CreateRequestMessage(RequestTokenInput input)
-        {
-            var msg = new HttpRequestMessage
-                {
-                    RequestUri = input.RequestUri,
-                    Method = input.HttpMethod
-                };
-
-            AddMediaTypeHeader(msg);
-
-            return msg;
-        }
-
-        private static void AddMediaTypeHeader(HttpRequestMessage msg)
-        {
-            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
-            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-        }
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(MessageSender));
 
         public static HttpResponseMessage Send(HttpRequestMessage msg)
         {
@@ -77,6 +44,7 @@ namespace SimpleMembership._Tests.Paul
             }
         }
 
+
         private static string GetErrorDetails(HttpResponseMessage response)
         {
             var values = response.Content.ReadAsFormDataAsync().Result;
@@ -86,5 +54,6 @@ namespace SimpleMembership._Tests.Paul
 
             return msg;
         }
+
     }
 }

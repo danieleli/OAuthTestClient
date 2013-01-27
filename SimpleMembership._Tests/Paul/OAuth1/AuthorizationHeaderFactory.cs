@@ -14,15 +14,15 @@ namespace SimpleMembership._Tests.Paul.OAuth1
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (AuthorizationHeaderFactory));
 
-        public static string CreateRequestTokenHeader(RequestTokenInput input)
+        public static string CreateRequestTokenHeader(RequestTokenParameters parameters)
         {
-            var signature = Signature.GetOAuth1ASignature(input.RequestUri, input.HttpMethod, input.Consumer.Key,
-                                                          input.Consumer.Secret,
-                                                          null, null, input.Timestamp, input.Nonce,
-                                                          input.Callback, null);
+            var signature = Signature.GetOAuth1ASignature(parameters.RequestUri, parameters.HttpMethod, parameters.Consumer.Key,
+                                                          parameters.Consumer.Secret,
+                                                          null, null, parameters.Timestamp, parameters.Nonce,
+                                                          parameters.Callback, null);
 
-            var oauthParams = OAuth.V1.GetOAuthParams(input.Consumer.Key, input.Nonce, signature,
-                                                      input.Timestamp, input.Callback);
+            var oauthParams = AuthParameterFactory.GetOAuthParams(parameters.Consumer.Key, parameters.Nonce, signature,
+                                                      parameters.Timestamp, parameters.Callback);
             var header = "OAuth " + Stringify(oauthParams);
 
             return header;
@@ -33,15 +33,15 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             throw new NotImplementedException();
         }
 
-        public static string CreateAccessTokenHeader(AccessTokenInput input)
+        public static string CreateAccessTokenHeader(AccessTokenParameters parameters)
         {
 
-            var signature = Signature.GetOAuth1ASignature(input.RequestUri, input.HttpMethod, input.Consumer.Key,
-                                                          input.Consumer.Secret, null, null, input.Timestamp,
-                                                          input.Nonce, "", input.Verifier);
+            var signature = Signature.GetOAuth1ASignature(parameters.RequestUri, parameters.HttpMethod, parameters.Consumer.Key,
+                                                          parameters.Consumer.Secret, null, null, parameters.Timestamp,
+                                                          parameters.Nonce, "", parameters.Verifier);
 
-            var oauthParams = OAuth.V1.GetOAuthParams(input.Consumer.Key, input.Nonce, signature, input.Timestamp, "",
-                                                      "", "", input.Verifier);
+            var oauthParams = AuthParameterFactory.GetOAuthParams(parameters.Consumer.Key, parameters.Nonce, signature, parameters.Timestamp, "",
+                                                      "", "", parameters.Verifier);
 
 
             var header = "OAuth " + Stringify(oauthParams);
