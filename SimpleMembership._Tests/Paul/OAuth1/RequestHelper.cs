@@ -23,7 +23,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 Util.LogCreds("Verifier", verifierToken);
 
                 var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.ACCESS_TOKEN, HttpMethod.Get);
-                // AccessTokenSigner.Sign(msg, consumer, verifierToken);
+                var authHeader = AuthorizationHeaderFactory.CreateAccessTokenHeader();
+                msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
                 var response = MsgHelper.Send(msg);
 
                 var accessToken = Util.ExtractToken(response);
@@ -50,7 +51,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
                 var requestToken = Util.ExtractToken(response);
 
-                Util.LogCreds("RequestToken", requestToken);
+                
                 LOG.Debug("-----------End: GetRequestToken-----------");
                 return requestToken;
             }
@@ -75,7 +76,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 var key = result[OAuth.V1.Keys.TOKEN];
                 var secret = result[OAuth.V1.Keys.TOKEN_SECRET];
                 var token = new Creds(key, secret);
-
+                
+                Util.LogCreds("Token", token);
                 return token;
             }
 

@@ -38,8 +38,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 {
                     sb.Append(",");
                 }
-                var key = Uri.EscapeDataString(p.Key);
-                var value = Uri.EscapeDataString(p.Value);
+                var key = Uri.EscapeUriString(p.Key);
+                var value = Uri.EscapeUriString(p.Value);
                 sb.Append(string.Format("{0}=\"{1}\"", key, value));
                 isFirstItem = false;
             }
@@ -49,11 +49,12 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
         public static string CreateVerifierHeader()
         {
-            return "";
+            throw new NotImplementedException();
         }
 
         public static string CreateAccessTokenHeader()
         {
+            throw new NotImplementedException();
             //var signature = Signature.GetOAuth1ASignature(msg.RequestUri, msg.Method, consumer.Key, verifierToken.Secret,
             //                                              verifierToken.Key, null, timestamp, nonce,
             //                                              null, verifierToken.Secret);
