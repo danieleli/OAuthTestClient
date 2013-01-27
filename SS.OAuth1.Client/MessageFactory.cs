@@ -13,15 +13,6 @@ namespace SS.OAuth1.Client
 {
     public static class MessageFactory
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (MessageFactory));
-
-        //[Obsolete]
-        //public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod method)
-        //{
-        //    var input = new RequestTokenParameters(null);
-        //    return CreateRequestMessage(input);
-        //}
-
         public static HttpRequestMessage CreateRequestMessage(MessageParameters parameters)
         {
             var msg = new HttpRequestMessage

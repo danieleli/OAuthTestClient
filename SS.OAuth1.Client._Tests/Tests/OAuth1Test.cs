@@ -1,6 +1,7 @@
 ﻿#region
 
 using NUnit.Framework;
+using SS.OAuth1.Client.Composers;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 
@@ -18,9 +19,9 @@ namespace SS.OAuth1.Client._Tests.Tests
         {
             // Act            
             var requestInput = new RequestTokenParameters(TestCreds.Dan.Consumer);
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(requestInput);
+            var requestToken = RequestTokenHelper.GetRequstToken(requestInput);
 
-            var accessToken = RequestComposer.AccessTokenHelper.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
+            var accessToken = AccessTokenHelper.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
 
 
             // Assert

@@ -43,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationHeaderFactory.cs" />
+    <Compile Include="Composers\AccessTokenHelper.cs" />
+    <Compile Include="Composers\RequestTokenHelper.cs" />
+    <Compile Include="Composers\VerifierTokenHelper.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Parameters\AuthParameterFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
@@ -55,7 +58,7 @@
     <Compile Include="Parameters\RequestTokenParameters.cs" />
     <Compile Include="Parameters\VerifierTokenParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestComposer.cs" />
+    <Compile Include="Composers\Util.cs" />
     <Compile Include="Signature.cs" />
   </ItemGroup>
   <ItemGroup>

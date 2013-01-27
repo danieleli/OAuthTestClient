@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using SS.OAuth1.Client.Composers;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 
@@ -25,7 +26,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenHelper.GetRequstToken(input);
 
             // Asset
             Assert.Fail("Exception not thrown.");
@@ -40,7 +41,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.Fail("Exception not thrown.");
@@ -57,7 +58,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.Fail("No Exception Thrown");
@@ -70,7 +71,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(TestCreds.Dan.Consumer);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
@@ -85,7 +86,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(TestCreds.Dan.User);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");

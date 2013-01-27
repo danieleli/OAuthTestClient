@@ -16,11 +16,12 @@ namespace SS.OAuth1.Client
 
         public static HttpResponseMessage Send(HttpRequestMessage msg)
         {
-            LOG.Debug("Message: \n" + msg + "\n");
+            LOG.Debug("Send Message: \n" + msg + "\n");
 
             var httpClient = new HttpClient();
             var response = httpClient.SendAsync(msg).Result;
-
+            
+            LOG.Debug("Message Response: \n" + response + "\n");
             ValidateResponse(response);
 
             return response;
@@ -28,7 +29,7 @@ namespace SS.OAuth1.Client
 
         private static void ValidateResponse(HttpResponseMessage response)
         {
-            LOG.Debug("Response: \n" + response + "\n");
+            
             var isAuthorized = (response.StatusCode != HttpStatusCode.Unauthorized);
             if (!isAuthorized)
             {
