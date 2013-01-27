@@ -9,8 +9,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 {
     public abstract class OAuthInputBase
     {
-        public const string SIGNATURE_METHOD = OAuth.V1.SIGNATURE_METHOD;
-        public const string VERSION = OAuth.V1.VERSION;
+        public const string SIGNATURE_METHOD = OAuth.V1.Values.SIGNATURE_METHOD;
+        public const string VERSION = OAuth.V1.Values.VERSION;
 
         private string _nonce;
         private string _timestamp;

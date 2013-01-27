@@ -21,8 +21,8 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                                                           null, null, input.Timestamp, input.Nonce,
                                                           input.Callback, null);
 
-            var oauthParams = OAuth.V1.GetOAuthParams(input.Callback, input.Consumer.Key, input.Nonce, signature,
-                                                      input.Timestamp);
+            var oauthParams = OAuth.V1.GetOAuthParams(input.Consumer.Key, input.Nonce, signature,
+                                                      input.Timestamp, input.Callback);
             var header = "OAuth " + Stringify(oauthParams);
 
             return header;

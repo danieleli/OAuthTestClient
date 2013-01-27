@@ -9,10 +9,12 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 {
     public static class Extensions
     {
-        public static void AddIfNotNull(this IDictionary<string, string> dic, string key, string value)
+        public static void AddIfNotNullOrEmpty(this IDictionary<string, string> dic, string key, string value)
         {
-            if (value == null) return;
-            dic.Add(key, value);
+            if (!string.IsNullOrEmpty(value))
+            {
+                dic.Add(key, value);    
+            }
         }
     }
 
@@ -21,33 +23,32 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         public static class V1
         {
             public const string AUTHORIZATION_HEADER = "Authorization";
-            public const string VERSION = "1.0";
-            public const string SIGNATURE_METHOD = "HMAC-SHA1";
+
 
             // List of know and used oauth parameters' names
-            public static SortedDictionary<string, string> GetOAuthParams(string callback,
-                                                                          string consumerKey,
+            public static SortedDictionary<string, string> GetOAuthParams(string consumerKey,
                                                                           string nonce,
                                                                           string signature,
                                                                           string timestamp,
-                                                                          string token = null,
-                                                                          string tokenSecret = null,
-                                                                          string verifier = null,
-                                                                          string oauthVersion = VERSION,
-                                                                          string signatureMethod = SIGNATURE_METHOD)
+                                                                          string callback = "",                                                          
+                                                                          string token = "",
+                                                                          string tokenSecret = "",
+                                                                          string verifier = "",
+                                                                          string oauthVersion = Values.VERSION,
+                                                                          string signatureMethod = Values.SIGNATURE_METHOD)
             {
                 var d = new SortedDictionary<string, string>();
 
-                d.AddIfNotNull(Keys.CALLBACK, callback);
-                d.AddIfNotNull(Keys.CONSUMER_KEY, consumerKey);
-                d.AddIfNotNull(Keys.NONCE, nonce);
-                d.AddIfNotNull(Keys.SIGNATURE, signature);
-                d.AddIfNotNull(Keys.SIGNATURE_METHOD, signatureMethod);
-                d.AddIfNotNull(Keys.TIMESTAMP, timestamp);
-                d.AddIfNotNull(Keys.TOKEN, token);
-                d.AddIfNotNull(Keys.TOKEN_SECRET, tokenSecret);
-                d.AddIfNotNull(Keys.VERIFIER, verifier);
-                d.AddIfNotNull(Keys.VERSION, oauthVersion);
+                d.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
+                d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, consumerKey);
+                d.AddIfNotNullOrEmpty(Keys.NONCE, nonce);
+                d.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
+                d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, signatureMethod);
+                d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, timestamp);
+                d.AddIfNotNullOrEmpty(Keys.TOKEN, token);
+                d.AddIfNotNullOrEmpty(Keys.TOKEN_SECRET, tokenSecret);
+                d.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
+                d.AddIfNotNullOrEmpty(Keys.VERSION, oauthVersion);
 
                 return d;
             }
@@ -66,12 +67,20 @@ namespace SimpleMembership._Tests.Paul.OAuth1
                 public const string VERSION = "oauth_version";
             }
 
+            public static class Values
+            {
+                public const string VERSION = "1.0";
+                public const string SIGNATURE_METHOD = "HMAC-SHA1";
+            }
+                
+
             public static class Routes
             {
                 public const string BASE_ROUTE = G.BASE_API_URL + "/OAuth/1A";
+
                 public const string REQUEST_TOKEN = BASE_ROUTE + "/RequestToken";
-                private const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
                 public const string ACCESS_TOKEN = BASE_ROUTE + "/AccessToken";
+                private const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
 
                 public static string GetAuthorizeTokenRoute(string token)
                 {
