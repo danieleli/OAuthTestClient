@@ -28,11 +28,11 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void AuthorizeWithInvalidToken_Returns_BadRequest()
         {
             //// Arrange
-            //var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(TestCreds.Dan.Consumer, "oob");
             //requestToken.Key = "xxxx";
 
             //// Act
-            //var response = RequestComposer.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
+            //var response = RequestComposer.VerifierTokenComposer.GetAuthorizeResponse(requestToken);
 
             //// Assert
             //LOG.Debug("Response: " + response);
@@ -43,10 +43,10 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void Authorize_Returns_StatusCodeOk()
         {
             //// Arrange
-            //var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             //// Act
-            //var response = RequestComposer.VerifierTokenHelper.GetAuthorizeResponse(requestToken);
+            //var response = RequestComposer.VerifierTokenComposer.GetAuthorizeResponse(requestToken);
 
             //// Assert
             //LOG.Debug("Response: " + response);
@@ -57,7 +57,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void BadVerifier_Returns_UnauthorizedStatusCode()
         {
             //// Arrrange
-            //var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             //// Act
 
@@ -71,12 +71,12 @@ namespace SS.OAuth1.Client._Tests.Tests
         //    var passwordSha1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
         //    var user = new Creds("dantest", passwordSha1);
 
-        //    var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(user, "oob");
+        //    var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(user, "oob");
 
         //    // Use RequestToken as verifier after encoding secret.
         //    var verifier = new Creds(requestToken.Key, EncodeTo64(requestToken.Secret));
 
-        //    var accessToken = RequestComposer.AccessTokenHelper.GetAccessToken(user, verifier);
+        //    var accessToken = RequestComposer.AccessTokenComposer.GetAccessToken(user, verifier);
 
         //    Assert.IsNotNull(accessToken, "AccessToken");
         }
@@ -85,10 +85,10 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void GetVerifier()
         {
             //// Arrange
-            //var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             //// Act
-            //var verifier = RequestComposer.VerifierTokenHelper
+            //var verifier = RequestComposer.VerifierTokenComposer
             //                            .GetVerifierToken(requestToken, TestCreds.Dan.Consumer, TestCreds.Dan.User);
 
             //// Assert
@@ -106,10 +106,10 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void When_NoActiveUserSessionOnMxMerchant_AuthorizeToken_RedirectsToLogin()
         {
             //// Arrange
-            //var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(TestCreds.Dan.Consumer, "oob");
 
             //// Act
-            //var response = RequestComposer.VerifierTokenHelper
+            //var response = RequestComposer.VerifierTokenComposer
             //                            .GetAuthorizeResponse(requestToken);
 
 

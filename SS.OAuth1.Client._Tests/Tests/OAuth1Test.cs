@@ -19,9 +19,9 @@ namespace SS.OAuth1.Client._Tests.Tests
         {
             // Act            
             var requestInput = new RequestTokenParameters(TestCreds.Dan.Consumer);
-            var requestToken = RequestTokenHelper.GetRequstToken(requestInput);
+            var requestToken = RequestTokenComposer.GetRequstToken(requestInput);
 
-            var accessToken = AccessTokenHelper.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
+            var accessToken = AccessTokenComposer.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
 
 
             // Assert

@@ -43,9 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationHeaderFactory.cs" />
-    <Compile Include="Composers\AccessTokenHelper.cs" />
-    <Compile Include="Composers\RequestTokenHelper.cs" />
-    <Compile Include="Composers\VerifierTokenHelper.cs" />
+    <Compile Include="Composers\AccessTokenComposer.cs" />
+    <Compile Include="Composers\RequestTokenComposer.cs" />
+    <Compile Include="Composers\VerifierTokenComposer.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Parameters\AuthParameterFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />

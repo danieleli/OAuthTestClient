@@ -26,7 +26,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenComposer.GetRequstToken(input);
 
             // Asset
             Assert.Fail("Exception not thrown.");
@@ -41,7 +41,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenComposer.GetRequstToken(input);
 
             // Assert
             Assert.Fail("Exception not thrown.");
@@ -58,7 +58,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenComposer.GetRequstToken(input);
 
             // Assert
             Assert.Fail("No Exception Thrown");
@@ -71,7 +71,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(TestCreds.Dan.Consumer);
 
             // Act
-            var requestToken = RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenComposer.GetRequstToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
@@ -86,7 +86,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(TestCreds.Dan.User);
 
             // Act
-            var requestToken = RequestTokenHelper.GetRequstToken(input);
+            var requestToken = RequestTokenComposer.GetRequstToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");

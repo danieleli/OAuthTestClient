@@ -5,10 +5,10 @@ using log4net;
 namespace SS.OAuth1.Client.Composers
 {
     /// Composer Pattern - Create msg, Insert Header, Send msg, Extract token
-    public static class AccessTokenHelper
+    public static class AccessTokenComposer
     {
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(AccessTokenHelper));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(AccessTokenComposer));
 
         [Obsolete]
         public static Creds GetAccessToken(Creds consumer, Creds verifier)

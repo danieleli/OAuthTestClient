@@ -4,9 +4,9 @@ using log4net;
 namespace SS.OAuth1.Client.Composers
 {
     // Composer Pattern - Create msg, Insert Header, Send msg, Extract token
-    public static class RequestTokenHelper
+    public static class RequestTokenComposer
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(RequestTokenHelper));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(RequestTokenComposer));
         public static Creds GetRequstToken(RequestTokenParameters parameters)
         {
             BeginLog(parameters);

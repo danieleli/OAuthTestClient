@@ -7,9 +7,9 @@ using log4net;
 namespace SS.OAuth1.Client.Composers
 {
     /// Composer Pattern - Create msg, Insert Header, Send msg, Extract token
-    public static class VerifierTokenHelper
+    public static class VerifierTokenComposer
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(VerifierTokenHelper));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(VerifierTokenComposer));
         public static Creds GetVerifierToken(Creds requestToken, Creds consumer, Creds user)
         {
             LOG.Debug("-----------Begin: GetTokenVerifier-----------");
