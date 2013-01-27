@@ -3,12 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SimpleMembership._Tests.Paul.Helpers;
 using log4net;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1
+namespace SS.OAuth1.Client
 {
     public static class AuthorizationHeaderFactory
     {
@@ -16,13 +15,17 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
         public static string CreateRequestTokenHeader(RequestTokenParameters parameters)
         {
-            var signature = Signature.GetOAuth1ASignature(parameters.RequestUri, parameters.HttpMethod, parameters.Consumer.Key,
+            var signature = Signature.GetOAuth1ASignature(parameters.RequestUri, parameters.HttpMethod,
+                                                          parameters.Consumer.Key,
                                                           parameters.Consumer.Secret,
                                                           null, null, parameters.Timestamp, parameters.Nonce,
                                                           parameters.Callback, null);
 
             var oauthParams = AuthParameterFactory.GetOAuthParams(parameters.Consumer.Key, parameters.Nonce, signature,
-                                                      parameters.Timestamp, parameters.Callback);
+                                                                  parameters.Timestamp, parameters.Callback);
+            var paramz = string.Join("\n", oauthParams);
+            LOG.Info("OAuth Params\n" + paramz);
+
             var header = "OAuth " + Stringify(oauthParams);
 
             return header;
@@ -35,20 +38,19 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
         public static string CreateAccessTokenHeader(AccessTokenParameters parameters)
         {
-
-            var signature = Signature.GetOAuth1ASignature(parameters.RequestUri, parameters.HttpMethod, parameters.Consumer.Key,
+            var signature = Signature.GetOAuth1ASignature(parameters.RequestUri, parameters.HttpMethod,
+                                                          parameters.Consumer.Key,
                                                           parameters.Consumer.Secret, null, null, parameters.Timestamp,
                                                           parameters.Nonce, "", parameters.Verifier);
 
-            var oauthParams = AuthParameterFactory.GetOAuthParams(parameters.Consumer.Key, parameters.Nonce, signature, parameters.Timestamp, "",
-                                                      "", "", parameters.Verifier);
+            var oauthParams = AuthParameterFactory.GetOAuthParams(parameters.Consumer.Key, parameters.Nonce, signature,
+                                                                  parameters.Timestamp, "",
+                                                                  "", "", parameters.Verifier);
 
 
             var header = "OAuth " + Stringify(oauthParams);
 
             return header;
-
-            
         }
 
         public static string Stringify(SortedDictionary<string, string> paramz)

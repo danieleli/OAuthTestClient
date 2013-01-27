@@ -1,23 +1,17 @@
 #region
 
 using System;
-using System.Collections.Generic;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1
+namespace SS.OAuth1.Client
 {
-
-
     public static class OAuth
     {
         public static class V1
         {
             public const string AUTHORIZATION_HEADER = "Authorization";
 
-
-       
-                
 
             public static class Routes
             {

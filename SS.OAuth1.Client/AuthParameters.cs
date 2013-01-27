@@ -5,10 +5,10 @@ using System.Net.Http;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1
+namespace SS.OAuth1.Client
 {
     /// <summary>
-    /// Parameter Aggregator Pattern
+    ///     Parameter Aggregator Pattern
     /// </summary>
     public abstract class OAuthParametersBase
     {
@@ -22,10 +22,12 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         public Uri RequestUri { get; private set; }
         public Creds Consumer { get; private set; }
         public HttpMethod HttpMethod { get; private set; }
+
         public string Timestamp
         {
             get { return _timestamp ?? (_timestamp = OAuthUtils.GenerateTimeStamp()); }
         }
+
         public string Nonce
         {
             get { return _nonce ?? (_nonce = OAuthUtils.GenerateNonce()); }
@@ -68,27 +70,34 @@ namespace SimpleMembership._Tests.Paul.OAuth1
         }
 
         #endregion -- Validation --
-
     }
 
 
     public class RequestTokenParameters : OAuthParametersBase
     {
-        public string Callback { get; private set; }
-
         public RequestTokenParameters(Creds consumer, string callback = "oob")
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.REQUEST_TOKEN)
         {
             Callback = callback;
         }
+
+        public string Callback { get; private set; }
+    }
+
+
+    public class VerifierTokenParameters : OAuthParametersBase
+    {
+        public VerifierTokenParameters(Creds consumer, string token)
+            : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(token))
+        {
+            
+        }
+
     }
 
 
     public class AccessTokenParameters : OAuthParametersBase
     {
-        public string Verifier { get; set; }
-        public string SessionHandle { get; set; }
-
         public AccessTokenParameters(Creds consumer, string verifier, string sessionHandle)
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.ACCESS_TOKEN)
         {
@@ -97,8 +106,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             Verifier = verifier;
             SessionHandle = sessionHandle;
         }
-    }
 
+        public string Verifier { get; set; }
+        public string SessionHandle { get; set; }
+    }
 
 
     //public class AuthorizeParameters : OAuthParametersBase
@@ -113,7 +124,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1
     //        Verifier = verifier;
     //    }
     //}
-
 
 
     // List of know and used oauth parameters' names

@@ -1,14 +1,18 @@
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting;
 using log4net;
 
-namespace SimpleMembership._Tests.Paul.OAuth1
+#endregion
+
+namespace SS.OAuth1.Client
 {
     public static class MessageSender
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(MessageSender));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (MessageSender));
 
         public static HttpResponseMessage Send(HttpRequestMessage msg)
         {
@@ -54,6 +58,5 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
             return msg;
         }
-
     }
 }

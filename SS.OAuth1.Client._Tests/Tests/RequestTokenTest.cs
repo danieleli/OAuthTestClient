@@ -8,7 +8,7 @@ using log4net;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1.Tests
+namespace SS.OAuth1.Client._Tests.Tests
 {
     [TestFixture]
     public class RequestTokenTest
@@ -21,9 +21,10 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         {
             // Arrange
             var consumer = new Creds("xxxx", TestCreds.Dan.Consumer.Secret);
+            var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
 
             // Asset
             Assert.Fail("Exception not thrown.");
@@ -34,10 +35,11 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void BadConsumerSecret_Throws_UnauthorizedException()
         {
             // Arrange
-            var consumer = new Creds(TestCreds.Dan.Consumer.Key, "xxxx");
+            var consumer = new Creds(TestCreds.Dan.Consumer.Key, "bad_secret");
+            var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.Fail("Exception not thrown.");
@@ -50,16 +52,11 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         public void BadSignature_Throws_UnauthorizedAccessException_With_InvalidSignatureContent()
         {
             // Arrange
-            var requestMessage = MessageFactory.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
-
             var consumer = new Creds(TestCreds.Dan.Consumer.Key, "dsds");
             var input = new RequestTokenParameters(consumer);
 
-            var authHeader = AuthorizationHeaderFactory.CreateRequestTokenHeader(input);
-            requestMessage.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
-
             // Act
-            var response = MessageSender.Send(requestMessage);
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.Fail("No Exception Thrown");
@@ -68,8 +65,11 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         [Test]
         public void GetRequestToken_Success()
         {
+            // Arrange
+            var input = new RequestTokenParameters(TestCreds.Dan.Consumer);
+
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.Consumer, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
@@ -80,8 +80,11 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         [Test]
         public void GetRequestToken_WithPlusInUserName()
         {
+            // Arrange
+            var input = new RequestTokenParameters(TestCreds.Dan.User);
+
             // Act
-            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(TestCreds.Dan.User, "oob");
+            var requestToken = RequestComposer.RequestTokenHelper.GetRequstToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
@@ -92,8 +95,11 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
         [Test]
         public void MissingAuthHeader_Returns_UnauthorizedStatusCode()
         {
+            // Arrange
+            var input = new RequestTokenParameters(TestCreds.Dan.Consumer);
+
             // Act
-            var msg = MessageFactory.CreateRequestMessage(OAuth.V1.Routes.REQUEST_TOKEN, HttpMethod.Post);
+            var msg = MessageFactory.CreateRequestMessage(input);
             var response = MessageSender.Send(msg);
 
             // Assert

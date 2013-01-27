@@ -4,25 +4,24 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using SimpleMembership._Tests.Paul.OAuth1;
 using log4net;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul
+namespace SS.OAuth1.Client
 {
     public static class MessageFactory
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (MessageFactory));
 
-        [Obsolete]
-        public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod method)
-        {
-            var input = new RequestTokenParameters(null);
-            return CreateRequestMessage(input);
-        }
+        //[Obsolete]
+        //public static HttpRequestMessage CreateRequestMessage(string url, HttpMethod method)
+        //{
+        //    var input = new RequestTokenParameters(null);
+        //    return CreateRequestMessage(input);
+        //}
 
-        public static HttpRequestMessage CreateRequestMessage(RequestTokenParameters parameters)
+        public static HttpRequestMessage CreateRequestMessage(OAuthParametersBase parameters)
         {
             var msg = new HttpRequestMessage
                 {
@@ -40,7 +39,5 @@ namespace SimpleMembership._Tests.Paul
             var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
             msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
         }
-
-        
     }
 }

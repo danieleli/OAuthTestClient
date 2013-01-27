@@ -1,8 +1,11 @@
+#region
+
 using System.Collections.Generic;
 
-namespace SimpleMembership._Tests.Paul.OAuth1
-{
+#endregion
 
+namespace SS.OAuth1.Client
+{
     public static class Extensions
     {
         public static void AddIfNotNullOrEmpty(this IDictionary<string, string> dic, string key, string value)

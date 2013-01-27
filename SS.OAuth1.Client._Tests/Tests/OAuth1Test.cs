@@ -5,14 +5,12 @@ using log4net;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1.Tests
+namespace SS.OAuth1.Client._Tests.Tests
 {
     [TestFixture]
     public class OAuth1Test
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Test));
-
-
 
         [Test] // Two leg is same as three leg but reuse consumer creds as user creds.
         public void TwoLegged_Success()

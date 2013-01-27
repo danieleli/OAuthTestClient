@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 #endregion
 
-namespace SimpleMembership._Tests.Paul.OAuth1.Tests
+namespace SS.OAuth1.Client._Tests.Tests
 {
     [TestFixture]
     public class RoutesTest

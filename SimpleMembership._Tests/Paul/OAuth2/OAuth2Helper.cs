@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Script.Serialization;
-using SimpleMembership._Tests.Paul.OAuth1;
+
 
 #endregion
 
@@ -33,48 +33,50 @@ namespace SimpleMembership._Tests.Paul.OAuth2
 
     public static class OAuth2Helper
     {
-        public static HttpResponseMessage GetAuthorizationCode(Creds consumer, string returnUri)
-        {
-            var state = Guid.NewGuid().ToString();
-            var url = string.Format(OAuthRoutes.V2.AUTHORIZATION_CODE, consumer.Key, state, returnUri);
+                public static HttpResponseMessage GetAuthorizationCode(Creds consumer, string returnUri)
+                {
+        //            var state = Guid.NewGuid().ToString();
+        //            var url = string.Format(OAuthRoutes.V2.AUTHORIZATION_CODE, consumer.Key, state, returnUri);
 
-            var msg = MessageFactory.CreateRequestMessage(url, HttpMethod.Post);
-            var result = MessageSender.Send(msg);
+        //            var msg = MessageFactory.CreateRequestMessage(url, HttpMethod.Post);
+        //            var result = MessageSender.Send(msg);
 
-            return result;
-        }
+        //            return result;
+                    return null;
+                }
 
-        public static object GetAccessToken(string code, Creds clientCreds)
-        {
-            var msg = MessageFactory.CreateRequestMessage(OAuthRoutes.V2.ACCESS_TOKEN, HttpMethod.Post);
+                public static object GetAccessToken(string code, Creds clientCreds)
+                {
+        //            var msg = MessageFactory.CreateRequestMessage(OAuthRoutes.V2.ACCESS_TOKEN, HttpMethod.Post);
 
-            var contentDic = GetContentDictionary(clientCreds, "", GrantType.AUTHORIZATION_CODE);
-            contentDic.Add("code", code);
+        //            var contentDic = GetContentDictionary(clientCreds, "", GrantType.AUTHORIZATION_CODE);
+        //            contentDic.Add("code", code);
 
-            msg.Content = new FormUrlEncodedContent(contentDic);
+        //            msg.Content = new FormUrlEncodedContent(contentDic);
 
-            var response = MessageSender.Send(msg);
-            var result = response.Content.ReadAsStringAsync().Result;
+        //            var response = MessageSender.Send(msg);
+        //            var result = response.Content.ReadAsStringAsync().Result;
 
-            var rtn = new JavaScriptSerializer().DeserializeObject(result);
+        //            var rtn = new JavaScriptSerializer().DeserializeObject(result);
 
-            return rtn;
-        }
+        //            return rtn;
+                    return null;
+                }
 
-        public static object RefreshToken(string refreshToken, Creds clientCreds, string redirectUri)
-        {
-            var msg = MessageFactory.CreateRequestMessage(OAuthRoutes.V2.REFRESH_TOKEN, HttpMethod.Post);
+        //        public static object RefreshToken(string refreshToken, Creds clientCreds, string redirectUri)
+        //        {
+        //            var msg = MessageFactory.CreateRequestMessage(OAuthRoutes.V2.REFRESH_TOKEN, HttpMethod.Post);
 
-            var contentDic = GetContentDictionary(clientCreds, redirectUri, GrantType.REFRESH_TOKEN);
-            contentDic.Add("refresh_token", refreshToken);
+        //            var contentDic = GetContentDictionary(clientCreds, redirectUri, GrantType.REFRESH_TOKEN);
+        //            contentDic.Add("refresh_token", refreshToken);
 
-            msg.Content = new FormUrlEncodedContent(contentDic);
+        //            msg.Content = new FormUrlEncodedContent(contentDic);
 
-            var response = MessageSender.Send(msg);
-            var rtn = GetJsonObject(response);
+        //            var response = MessageSender.Send(msg);
+        //            var rtn = GetJsonObject(response);
 
-            return rtn;
-        }
+        //            return rtn;
+        //        }
 
         private static Dictionary<string, string> GetContentDictionary(Creds clientCreds, string redirectUri,
                                                                        GrantType grantType)
