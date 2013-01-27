@@ -28,6 +28,29 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             return header;
         }
 
+        public static string CreateVerifierHeader()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string CreateAccessTokenHeader(AccessTokenInput input)
+        {
+
+            var signature = Signature.GetOAuth1ASignature(input.RequestUri, input.HttpMethod, input.Consumer.Key,
+                                                          input.Consumer.Secret, null, null, input.Timestamp,
+                                                          input.Nonce, "", input.Verifier);
+
+            var oauthParams = OAuth.V1.GetOAuthParams(input.Consumer.Key, input.Nonce, signature, input.Timestamp, "",
+                                                      "", "", input.Verifier);
+
+
+            var header = "OAuth " + Stringify(oauthParams);
+
+            return header;
+
+            
+        }
+
         public static string Stringify(SortedDictionary<string, string> paramz)
         {
             var sb = new StringBuilder();
@@ -45,28 +68,6 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             }
 
             return sb.ToString();
-        }
-
-        public static string CreateVerifierHeader()
-        {
-            throw new NotImplementedException();
-        }
-
-        public static string CreateAccessTokenHeader()
-        {
-            throw new NotImplementedException();
-            //var signature = Signature.GetOAuth1ASignature(msg.RequestUri, msg.Method, consumer.Key, verifierToken.Secret,
-            //                                              verifierToken.Key, null, timestamp, nonce,
-            //                                              null, verifierToken.Secret);
-
-            //var oauthParams = OAuth.V1.GetOAuthParams(input.Callback, input.Consumer.Key, input.Nonce, null, input.Timestamp);
-            //oauthParams.Add(OAuth.V1.Keys.SIGNATURE, "")//signature);
-
-            //var header = "OAuth " + CryptoHelper.Stringify(oauthParams);
-
-            //return header;
-
-            return "";
         }
     }
 }

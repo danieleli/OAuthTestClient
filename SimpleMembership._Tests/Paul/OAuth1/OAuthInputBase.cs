@@ -72,16 +72,15 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
     public class AccessTokenInput : OAuthInputBase
     {
-        public AccessTokenInput(Creds consumer, string token, string sessionHandle)
+        public AccessTokenInput(Creds consumer, string verifier, string sessionHandle)
             : base(consumer, HttpMethod.Post)
         {
-            Token = token;
+            Verifier = verifier;
             SessionHandle = sessionHandle;
-            var url = OAuth.V1.Routes.ACCESS_TOKEN;
-            RequestUri = new Uri(url);
+            RequestUri = new Uri(OAuth.V1.Routes.ACCESS_TOKEN);
         }
 
-        public string Token { get; set; }
+        public string Verifier { get; set; }
         public string SessionHandle { get; set; }
     }
 }

@@ -16,14 +16,21 @@ namespace SimpleMembership._Tests.Paul.OAuth1
 
         public static class AccessTokenHelper
         {
-            public static Creds GetAccessToken(Creds consumer, Creds verifierToken)
+            public static Creds GetAccessToken(Creds consumer, Creds verifier)
+            {
+
+                var input = new AccessTokenInput(consumer, verifier.Secret, "AAA");
+                return GetAccessToken(input);
+            }
+
+            public static Creds GetAccessToken(AccessTokenInput input)
             {
                 LOG.Debug("-----------Begin: GetAccessToken-----------");
-                Util.LogCreds("Consumer", consumer);
-                Util.LogCreds("Verifier", verifierToken);
+                Util.LogCreds("Consumer", input.Consumer);
+                Util.LogPair("Verifier", input.Verifier);
 
                 var msg = MsgHelper.CreateRequestMessage(OAuth.V1.Routes.ACCESS_TOKEN, HttpMethod.Get);
-                var authHeader = AuthorizationHeaderFactory.CreateAccessTokenHeader();
+                var authHeader = AuthorizationHeaderFactory.CreateAccessTokenHeader(input);
                 msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
                 var response = MsgHelper.Send(msg);
 
@@ -71,13 +78,13 @@ namespace SimpleMembership._Tests.Paul.OAuth1
             {
                 var result = response.Content.ReadAsFormDataAsync().Result;
 
-                if (result == null) throw new Exception("No Token Returned.");
+                if (result == null) throw new Exception("No Verifier Returned.");
 
                 var key = result[OAuth.V1.Keys.TOKEN];
                 var secret = result[OAuth.V1.Keys.TOKEN_SECRET];
                 var token = new Creds(key, secret);
                 
-                Util.LogCreds("Token", token);
+                Util.LogCreds("Verifier", token);
                 return token;
             }
 

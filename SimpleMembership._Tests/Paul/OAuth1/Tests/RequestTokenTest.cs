@@ -74,7 +74,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
             Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
-            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
+            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Verifier");
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace SimpleMembership._Tests.Paul.OAuth1.Tests
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
             Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
-            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Token");
+            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Verifier");
         }
 
         [Test]
