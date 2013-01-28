@@ -28,7 +28,7 @@ namespace SS.OAuth1.Client.Composers
 
         private static void AddAuthHeader(AccessTokenParameters parameters, HttpRequestMessage msg)
         {
-            var authHeader = AuthorizationHeaderFactory.CreateAccessTokenHeader(parameters);
+            var authHeader = parameters.GetAuthHeader();
             msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
         }
 

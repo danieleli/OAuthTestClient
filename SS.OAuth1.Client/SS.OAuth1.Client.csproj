@@ -42,7 +42,6 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizationHeaderFactory.cs" />
     <Compile Include="Composers\AccessTokenComposer.cs" />
     <Compile Include="Composers\RequestTokenComposer.cs" />
     <Compile Include="Composers\VerifierTokenComposer.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="MessageFactory.cs" />
     <Compile Include="MessageSender.cs" />
     <Compile Include="OAuthHelper.cs" />
+    <Compile Include="Parameters\Extensions.cs" />
     <Compile Include="Parameters\MessageParameters.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />

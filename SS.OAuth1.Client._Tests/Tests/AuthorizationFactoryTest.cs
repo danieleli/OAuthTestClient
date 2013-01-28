@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SS.OAuth1.Client.Parameters;
 using log4net;
 
 #endregion
@@ -24,7 +25,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             d.Add("somekey", "valuewithequal=");
 
             // Act
-            var result = AuthorizationHeaderFactory.Stringify(d);
+            var result = d.Stringify();
             LOG.Debug("Result: " + result);
 
             // Assert
@@ -43,7 +44,7 @@ namespace SS.OAuth1.Client._Tests.Tests
 
 
             // Act
-            var result = AuthorizationHeaderFactory.Stringify(d);
+            var result = d.Stringify();
             LOG.Debug("Result: " + result);
 
             // Assert

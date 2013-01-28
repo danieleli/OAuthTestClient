@@ -6,17 +6,6 @@ using System.Collections.Generic;
 
 namespace SS.OAuth1.Client.Parameters
 {
-    public static class Extensions
-    {
-        public static void AddIfNotNullOrEmpty(this IDictionary<string, string> dic, string key, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                dic.Add(key, value);
-            }
-        }
-    }
-
     public class AuthParameterFactory
     {
         public static SortedDictionary<string, string> GetOAuthParams(string consumerKey,

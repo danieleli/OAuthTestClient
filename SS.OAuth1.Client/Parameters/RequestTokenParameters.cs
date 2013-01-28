@@ -32,7 +32,7 @@ namespace SS.OAuth1.Client.Parameters
                                                                   this.Timestamp,
                                                                   this.Callback);
             
-            var header = "OAuth " + base.Stringify(oauthParams);
+            var header = "OAuth " + oauthParams.Stringify();
 
             return header;
         }
