@@ -30,13 +30,13 @@ namespace SS.OAuth1.Client.Composers
         private static void BeginLog(RequestTokenParameters parameters)
         {
             LOG.Debug("-----------Begin: GetRequestToken-----------");
-            Util.LogCreds("Consumer", parameters.Consumer);
-            Util.LogPair("ReturnUrl", parameters.Callback);
+            LOG.LogCreds("Consumer", parameters.Consumer);
+            LOG.LogPair("ReturnUrl", parameters.Callback);
         }
 
         private static void EndLog(Creds requestToken)
         {
-            Util.LogCreds("RequestToken", requestToken);
+            LOG.LogCreds("RequestToken", requestToken);
             LOG.Debug("-----------End: GetRequestToken-----------");
         }
 

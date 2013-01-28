@@ -36,7 +36,7 @@ namespace SS.OAuth1.Client.Composers
 
         private static void EndLog(Creds accessToken)
         {
-            Util.LogCreds("AccessToken", accessToken);
+            LOG.LogCreds("AccessToken", accessToken);
             LOG.Debug("-----------End: GetAccessToken-----------");
         }
 

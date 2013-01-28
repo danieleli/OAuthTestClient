@@ -4,11 +4,15 @@ namespace SS.OAuth1.Client.Parameters
 {
     public class RequestTokenParameters : OAuthParametersBase
     {
+        #region -- Constructor --
+
         public RequestTokenParameters(Creds consumer, string callback = "oob")
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.REQUEST_TOKEN)
         {
             Callback = callback;
         }
+
+        #endregion -- Constructor --
 
         public string Callback { get; private set; }
         

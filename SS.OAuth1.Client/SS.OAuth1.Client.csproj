@@ -51,7 +51,7 @@
     <Compile Include="OAuth.cs" />
     <Compile Include="Creds.cs" />
     <Compile Include="MessageSender.cs" />
-    <Compile Include="Parameters\Extensions.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Parameters\MessageParameters.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />

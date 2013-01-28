@@ -12,6 +12,8 @@ namespace SS.OAuth1.Client.Parameters
         public string RequestTokenSecret { get; set; }
         public string SessionHandle { get; set; }
 
+        #region -- Constructor --
+
         public AccessTokenParameters(Creds consumer, Creds token)
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.ACCESS_TOKEN)
         {
@@ -21,6 +23,8 @@ namespace SS.OAuth1.Client.Parameters
 
             Token = token;
         }
+
+        #endregion -- Constructor --
 
         public override string GetAuthHeader()
         {
@@ -48,5 +52,6 @@ namespace SS.OAuth1.Client.Parameters
             return header;
 
         }
+
     }
 }

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using log4net;
 
-namespace SS.OAuth1.Client.Parameters
+namespace SS.OAuth1.Client
 {
     public static class Extensions
     {
@@ -32,6 +33,18 @@ namespace SS.OAuth1.Client.Parameters
             {
                 dic.Add(key, value);
             }
+        }
+
+        public static void LogCreds(this ILog logger, string credType, Creds creds)
+        {
+            logger.Info(credType + ": " + creds.Key);
+            logger.Info(credType + "Secret: " + creds.Secret);
+        }
+
+
+        public static void LogPair(this ILog logger,string key, string value)
+        {
+            logger.Info(key + ": " + value);
         }
     }
 }

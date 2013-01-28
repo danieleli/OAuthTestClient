@@ -11,7 +11,6 @@ namespace SS.OAuth1.Client.Composers
 {
     public static class Util
     {
-
         private static readonly ILog LOG = LogManager.GetLogger(typeof(Util));
 
         public static Creds ExtractToken(HttpResponseMessage response)
@@ -24,20 +23,10 @@ namespace SS.OAuth1.Client.Composers
             var secret = result[AuthParameterFactory.Keys.TOKEN_SECRET];
             var token = new Creds(key, secret);
 
-            LogCreds("Verifier", token);
+            LOG.LogCreds("Response Token", token);
             return token;
         }
 
-        public static void LogCreds(string credType, Creds creds)
-        {
-            LOG.Info(credType + ": " + creds.Key);
-            LOG.Info(credType + "Secret: " + creds.Secret);
-        }
-
-        public static void LogPair(string key, string value)
-        {
-            LOG.Info(key + ": " + value);
-        }
     }
 
 }

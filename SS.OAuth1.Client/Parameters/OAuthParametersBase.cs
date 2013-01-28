@@ -50,31 +50,15 @@ namespace SS.OAuth1.Client.Parameters
 
         public HttpRequestMessage CreateRequestMessage()
         {
-            var msg = new HttpRequestMessage
-            {
-                RequestUri = this.RequestUri,
-                Method = this.HttpMethod
-            };
-
-            AddMediaTypeHeader(msg);
-
+            var msg = new HttpRequestMessage(this.HttpMethod, this.RequestUri);
+            
+            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
+            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+            
             return msg;
         }
 
-        private void AddMediaTypeHeader(HttpRequestMessage msg)
-        {
-            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
-            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-        }
-
         #region -- Validation --
-
-        private void ValidateInputs(Creds consumer, HttpMethod method, string url)
-        {
-            NullCheck(consumer, "consumer");
-            NullCheck(method, "httpMethod");
-            NullCheck(url, "url");
-        }
 
         protected void NullCheck(string s, string name)
         {
@@ -86,6 +70,13 @@ namespace SS.OAuth1.Client.Parameters
         {
             if (o == null)
                 throw new ArgumentNullException(name);
+        }
+
+        private void ValidateInputs(Creds consumer, HttpMethod method, string url)
+        {
+            NullCheck(consumer, "consumer");
+            NullCheck(method, "httpMethod");
+            NullCheck(url, "url");
         }
 
         #endregion -- Validation --

@@ -13,8 +13,8 @@ namespace SS.OAuth1.Client.Composers
         public static Creds GetVerifierToken(Creds requestToken, Creds consumer, Creds user)
         {
             LOG.Debug("-----------Begin: GetTokenVerifier-----------");
-            Util.LogCreds("Consumer", consumer);
-            Util.LogCreds("RequestToken", requestToken);
+            LOG.LogCreds("Consumer", consumer);
+            LOG.LogCreds("RequestToken", requestToken);
 
             var response = GetAuthorizeResponse(consumer, requestToken.Key);
             var content = response.Content.ReadAsStringAsync().Result;
