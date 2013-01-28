@@ -8,16 +8,22 @@ namespace SS.OAuth1.Client.Parameters
 {
     public class AccessTokenParameters : OAuthParametersBase
     {
-        public AccessTokenParameters(Creds consumer, string verifier, string sessionHandle)
+        public AccessTokenParameters(Creds consumer, Creds token)
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.ACCESS_TOKEN)
         {
-            NullCheck(verifier, "oauth_verifier");
+            NullCheck(token, "token");
+            NullCheck(token.Key, "requestToken");
+            NullCheck(token.Secret, "requestTokenSecret");
 
-            Verifier = verifier;
-            SessionHandle = sessionHandle;
+            Token = token;
         }
 
-        public string Verifier { get; set; }
+        public Creds Token { get; set; }
+        public string RequestTokenSecret { get; set; }
         public string SessionHandle { get; set; }
+        public override string GetAuthHeader()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

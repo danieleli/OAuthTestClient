@@ -54,6 +54,7 @@
     <Compile Include="MessageFactory.cs" />
     <Compile Include="MessageSender.cs" />
     <Compile Include="OAuthHelper.cs" />
+    <Compile Include="Parameters\MessageParameters.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />
     <Compile Include="Parameters\VerifierTokenParameters.cs" />

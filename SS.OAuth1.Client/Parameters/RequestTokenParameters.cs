@@ -11,5 +11,30 @@ namespace SS.OAuth1.Client.Parameters
         }
 
         public string Callback { get; private set; }
+        
+        public override string GetAuthHeader()
+        {
+
+            var signature = Signature.GetOAuth1ASignature(this.RequestUri,
+                                                          this.HttpMethod,
+                                                          this.Consumer.Key,
+                                                          this.Consumer.Secret,
+                                                          null,
+                                                          null,
+                                                          this.Timestamp,
+                                                          this.Nonce,
+                                                          this.Callback,
+                                                          null);
+
+            var oauthParams = AuthParameterFactory.GetOAuthParams(this.Consumer.Key,
+                                                                  this.Nonce,
+                                                                  signature,
+                                                                  this.Timestamp,
+                                                                  this.Callback);
+            
+            var header = "OAuth " + base.Stringify(oauthParams);
+
+            return header;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 
@@ -10,20 +11,12 @@ namespace SS.OAuth1.Client.Composers
 
         private static readonly ILog LOG = LogManager.GetLogger(typeof(AccessTokenComposer));
 
-        [Obsolete]
-        public static Creds GetAccessToken(Creds consumer, Creds verifier)
-        {
-            var input = new AccessTokenParameters(consumer, verifier.Secret, "AAA");
-            return GetAccessToken(input);
-        }
-
         public static Creds GetAccessToken(AccessTokenParameters parameters)
         {
-            BeginLog(parameters);
+            //BeginLog(parameters);
 
             var msg = MessageFactory.CreateRequestMessage(parameters);
-            var authHeader = AuthorizationHeaderFactory.CreateAccessTokenHeader(parameters);
-            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+            AddAuthHeader(parameters, msg);
             var response = MessageSender.Send(msg);
 
             var accessToken = Util.ExtractToken(response);
@@ -33,19 +26,18 @@ namespace SS.OAuth1.Client.Composers
             return accessToken;
         }
 
+        private static void AddAuthHeader(AccessTokenParameters parameters, HttpRequestMessage msg)
+        {
+            var authHeader = AuthorizationHeaderFactory.CreateAccessTokenHeader(parameters);
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+        }
+
         #region -- logging --
 
         private static void EndLog(Creds accessToken)
         {
             Util.LogCreds("AccessToken", accessToken);
             LOG.Debug("-----------End: GetAccessToken-----------");
-        }
-
-        private static void BeginLog(AccessTokenParameters parameters)
-        {
-            LOG.Debug("-----------Begin: GetAccessToken-----------");
-            Util.LogCreds("Consumer", parameters.Consumer);
-            Util.LogPair("Verifier", parameters.Verifier);
         }
 
         #endregion -- logging --

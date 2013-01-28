@@ -7,13 +7,14 @@ namespace SS.OAuth1.Client.Composers
     public static class RequestTokenComposer
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(RequestTokenComposer));
+
         public static Creds GetRequstToken(RequestTokenParameters parameters)
         {
             BeginLog(parameters);
 
             var msg = MessageFactory.CreateRequestMessage(parameters);
 
-            var authHeader = AuthorizationHeaderFactory.CreateRequestTokenHeader(parameters);
+            var authHeader = parameters.GetAuthHeader();
             msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
 
             var response = MessageSender.Send(msg);

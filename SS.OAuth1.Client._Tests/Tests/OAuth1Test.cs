@@ -13,16 +13,24 @@ namespace SS.OAuth1.Client._Tests.Tests
     public class OAuth1Test
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Test));
+        private const string PASSWORD_SHA1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
+        private readonly Creds _user;
 
-        [Test] // Two leg is same as three leg but reuse consumer creds as user creds.
+        public OAuth1Test()
+        {
+            _user = new Creds("dantest", PASSWORD_SHA1);
+        }
+
+        [Test] 
         public void TwoLegged_Success()
         {
-            // Act            
-            var requestInput = new RequestTokenParameters(TestCreds.Dan.Consumer);
+            // Arrange            
+            var requestInput = new RequestTokenParameters(_user);
             var requestToken = RequestTokenComposer.GetRequstToken(requestInput);
+            var input = new AccessTokenParameters(_user, requestToken);
 
-            var accessToken = AccessTokenComposer.GetAccessToken(TestCreds.Dan.Consumer, requestToken);
-
+            // Act
+            var accessToken = AccessTokenComposer.GetAccessToken(input);
 
             // Assert
             Assert.IsNotNull(accessToken, "AccessToken");

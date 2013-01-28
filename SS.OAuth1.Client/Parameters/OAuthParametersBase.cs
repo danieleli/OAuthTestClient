@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 
 namespace SS.OAuth1.Client.Parameters
 {
@@ -44,6 +46,27 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Constructor --
 
+        public abstract string GetAuthHeader();
+
+        public string Stringify(SortedDictionary<string, string> paramz)
+        {
+            var sb = new StringBuilder();
+            var isFirstItem = true;
+            foreach (var p in paramz)
+            {
+                if (!isFirstItem)
+                {
+                    sb.Append(",");
+                }
+                var key = Uri.EscapeUriString(p.Key);
+                var value = Uri.EscapeUriString(p.Value);
+                sb.Append(string.Format("{0}=\"{1}\"", key, value));
+                isFirstItem = false;
+            }
+
+            return sb.ToString();
+        }
+
         #region -- Validation --
 
         private void ValidateInputs(Creds consumer, HttpMethod method, string url)
@@ -66,19 +89,5 @@ namespace SS.OAuth1.Client.Parameters
         }
 
         #endregion -- Validation --
-    }
-
-    public class MessageParameters
-    {
-        public HttpMethod HttpMethod { get; protected set; }
-        public Uri RequestUri { get; protected set; }
-
-        protected MessageParameters(){ }
-
-        public MessageParameters(Uri requestUri, HttpMethod httpMethod)
-        {
-            RequestUri = requestUri;
-            HttpMethod = httpMethod;
-        }
     }
 }

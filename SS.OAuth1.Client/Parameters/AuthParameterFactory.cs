@@ -25,7 +25,6 @@ namespace SS.OAuth1.Client.Parameters
                                                                       string timestamp,
                                                                       string callback = "",
                                                                       string token = "",
-                                                                      string tokenSecret = "",
                                                                       string verifier = "",
                                                                       string oauthVersion = Values.VERSION,
                                                                       string signatureMethod = Values.SIGNATURE_METHOD)
@@ -39,7 +38,6 @@ namespace SS.OAuth1.Client.Parameters
             d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, signatureMethod);
             d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, timestamp);
             d.AddIfNotNullOrEmpty(Keys.TOKEN, token);
-            d.AddIfNotNullOrEmpty(Keys.TOKEN_SECRET, tokenSecret);
             d.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
             d.AddIfNotNullOrEmpty(Keys.VERSION, oauthVersion);
 

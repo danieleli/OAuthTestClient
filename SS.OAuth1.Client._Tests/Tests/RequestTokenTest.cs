@@ -17,6 +17,18 @@ namespace SS.OAuth1.Client._Tests.Tests
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (RequestTokenTest));
 
+        [Test]
+        public void CallbackPresent_Redirects_ToCallback()
+        {
+            // Arrange            
+            var requestInput = new RequestTokenParameters(TestCreds.Dan.Consumer, "http://www.google.com");
+            
+            // Act
+            var requestToken = RequestTokenComposer.GetRequstToken(requestInput);
+
+            // Assert
+            Assert.Ignore("Not Implemented");
+        }
 
         [Test, ExpectedException(ExpectedException = typeof (UnauthorizedAccessException))]
         public void BadConsumerKey_Throws_UnauthorizedException()
@@ -76,7 +88,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
             Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
-            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Verifier");
+            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Secret");
         }
 
         [Test]
@@ -91,7 +103,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
             Assert.IsNotNullOrEmpty(requestToken.Key, "RequestToken.Key");
-            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Verifier");
+            Assert.IsNotNullOrEmpty(requestToken.Secret, "RequestToken.Secret");
         }
 
         [Test]

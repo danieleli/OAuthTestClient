@@ -10,5 +10,9 @@ namespace SS.OAuth1.Client.Parameters
             
         }
 
+        public override string GetAuthHeader()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
