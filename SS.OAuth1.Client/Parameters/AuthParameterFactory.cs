@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace SS.OAuth1.Client.Parameters
 {
+    // todo: move to parameterBase class.  Include querystring params.
     public class AuthParameterFactory
     {
         public static SortedDictionary<string, string> GetOAuthParams(string consumerKey,

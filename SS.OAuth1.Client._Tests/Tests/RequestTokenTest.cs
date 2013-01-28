@@ -16,12 +16,14 @@ namespace SS.OAuth1.Client._Tests.Tests
     public class RequestTokenTest
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (RequestTokenTest));
+        private readonly Creds _user = G.TestCreds.DanUser;
+        private readonly Creds _consumer = G.TestCreds.DanApp;
 
         [Test]
         public void CallbackPresent_Redirects_ToCallback()
         {
             // Arrange            
-            var requestInput = new RequestTokenParameters(TestCreds.Dan.Consumer, "http://www.google.com");
+            var requestInput = new RequestTokenParameters(_consumer, "http://www.google.com");
             
             // Act
             var requestToken = RequestTokenComposer.GetRequstToken(requestInput);
@@ -34,7 +36,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void BadConsumerKey_Throws_UnauthorizedException()
         {
             // Arrange
-            var consumer = new Creds("xxxx", TestCreds.Dan.Consumer.Secret);
+            var consumer = new Creds("xxxx", _consumer.Secret);
             var input = new RequestTokenParameters(consumer);
 
             // Act
@@ -49,7 +51,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void BadConsumerSecret_Throws_UnauthorizedException()
         {
             // Arrange
-            var consumer = new Creds(TestCreds.Dan.Consumer.Key, "bad_secret");
+            var consumer = new Creds(_consumer.Key, "bad_secret");
             var input = new RequestTokenParameters(consumer);
 
             // Act
@@ -66,7 +68,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void BadSignature_Throws_UnauthorizedAccessException_With_InvalidSignatureContent()
         {
             // Arrange
-            var consumer = new Creds(TestCreds.Dan.Consumer.Key, "dsds");
+            var consumer = new Creds(_consumer.Key, "dsds");
             var input = new RequestTokenParameters(consumer);
 
             // Act
@@ -80,7 +82,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void GetRequestToken_Success()
         {
             // Arrange
-            var input = new RequestTokenParameters(TestCreds.Dan.Consumer);
+            var input = new RequestTokenParameters(_consumer);
 
             // Act
             var requestToken = RequestTokenComposer.GetRequstToken(input);
@@ -95,7 +97,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void GetRequestToken_WithPlusInUserName()
         {
             // Arrange
-            var input = new RequestTokenParameters(TestCreds.Dan.User);
+            var input = new RequestTokenParameters(_user);
 
             // Act
             var requestToken = RequestTokenComposer.GetRequstToken(input);
@@ -110,7 +112,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void MissingAuthHeader_Returns_UnauthorizedStatusCode()
         {
             // Arrange
-            var parameters = new RequestTokenParameters(TestCreds.Dan.Consumer);
+            var parameters = new RequestTokenParameters(_consumer);
 
             // Act
             var msg = parameters.CreateRequestMessage();

@@ -17,7 +17,9 @@ namespace SS.OAuth1.Client.Composers
         {
             var result = response.Content.ReadAsFormDataAsync().Result;
 
-            if (result == null) throw new Exception("No Verifier Returned.");
+            if (result == null) throw new Exception("No Verifier Returned. (No content in response.)");
+
+            LOG.Debug("Response Content: \n\n" + result + "\n" );
 
             var key = result[AuthParameterFactory.Keys.TOKEN];
             var secret = result[AuthParameterFactory.Keys.TOKEN_SECRET];
