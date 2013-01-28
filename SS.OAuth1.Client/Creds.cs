@@ -24,11 +24,7 @@
     }
 
     public static class TestCreds
-    {
-        //public static readonly Creds Consumer = new Creds("", "");
-        //public static readonly Creds ThreeLegUser = new Creds("", "");
-        //public static readonly Creds TwoLegUser = new Creds("", "");
-
+    {                                                                   
         public static ThreeLegCreds Dan = new ThreeLegCreds
             {
                 User = new Creds("dan+test", "cc2c0ef703029feddef7be3736aa8b53fc295ae7"),

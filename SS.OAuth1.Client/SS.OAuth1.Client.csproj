@@ -48,11 +48,9 @@
     <Compile Include="G.cs" />
     <Compile Include="Parameters\AuthParameterFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="OAuth.cs" />
     <Compile Include="Creds.cs" />
-    <Compile Include="MessageFactory.cs" />
     <Compile Include="MessageSender.cs" />
-    <Compile Include="OAuthHelper.cs" />
     <Compile Include="Parameters\Extensions.cs" />
     <Compile Include="Parameters\MessageParameters.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />

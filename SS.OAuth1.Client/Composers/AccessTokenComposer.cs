@@ -15,7 +15,7 @@ namespace SS.OAuth1.Client.Composers
         {
             //BeginLog(parameters);
 
-            var msg = MessageFactory.CreateRequestMessage(parameters);
+            var msg = parameters.CreateRequestMessage();
             AddAuthHeader(parameters, msg);
             var response = MessageSender.Send(msg);
 

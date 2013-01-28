@@ -27,8 +27,8 @@ namespace SS.OAuth1.Client.Composers
 
         public static HttpResponseMessage GetAuthorizeResponse(Creds consumer, string requestToken)
         {
-            var input = new VerifierTokenParameters(consumer, requestToken);
-            var msg = MessageFactory.CreateRequestMessage(input);
+            var parameters = new VerifierTokenParameters(consumer, requestToken);
+            var msg = parameters.CreateRequestMessage();
             var response = MessageSender.Send(msg);
             return response;
         }

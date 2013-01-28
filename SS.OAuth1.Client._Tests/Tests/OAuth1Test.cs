@@ -13,6 +13,7 @@ namespace SS.OAuth1.Client._Tests.Tests
     public class OAuth1Test
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (OAuth1Test));
+
         private const string PASSWORD_SHA1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
         private readonly Creds _user;
 

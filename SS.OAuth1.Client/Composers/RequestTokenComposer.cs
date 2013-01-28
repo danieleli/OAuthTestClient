@@ -12,7 +12,7 @@ namespace SS.OAuth1.Client.Composers
         {
             BeginLog(parameters);
 
-            var msg = MessageFactory.CreateRequestMessage(parameters);
+            var msg = parameters.CreateRequestMessage();
 
             var authHeader = parameters.GetAuthHeader();
             msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);

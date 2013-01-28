@@ -1,5 +1,7 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 
 namespace SS.OAuth1.Client.Parameters
 {
@@ -21,12 +23,12 @@ namespace SS.OAuth1.Client.Parameters
 
         public string Timestamp
         {
-            get { return _timestamp ?? (_timestamp = OAuthHelper.GenerateTimeStamp()); }
+            get { return _timestamp ?? (_timestamp = OAuth.GenerateTimeStamp()); }
         }
 
         public string Nonce
         {
-            get { return _nonce ?? (_nonce = OAuthHelper.GenerateNonce()); }
+            get { return _nonce ?? (_nonce = OAuth.GenerateNonce()); }
         }
 
         #endregion -- Properties --
@@ -45,6 +47,25 @@ namespace SS.OAuth1.Client.Parameters
         #endregion -- Constructor --
 
         public abstract string GetAuthHeader();
+
+        public HttpRequestMessage CreateRequestMessage()
+        {
+            var msg = new HttpRequestMessage
+            {
+                RequestUri = this.RequestUri,
+                Method = this.HttpMethod
+            };
+
+            AddMediaTypeHeader(msg);
+
+            return msg;
+        }
+
+        private void AddMediaTypeHeader(HttpRequestMessage msg)
+        {
+            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
+            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+        }
 
         #region -- Validation --
 

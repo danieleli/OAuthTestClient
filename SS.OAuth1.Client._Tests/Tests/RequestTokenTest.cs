@@ -110,10 +110,10 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void MissingAuthHeader_Returns_UnauthorizedStatusCode()
         {
             // Arrange
-            var input = new RequestTokenParameters(TestCreds.Dan.Consumer);
+            var parameters = new RequestTokenParameters(TestCreds.Dan.Consumer);
 
             // Act
-            var msg = MessageFactory.CreateRequestMessage(input);
+            var msg = parameters.CreateRequestMessage();
             var response = MessageSender.Send(msg);
 
             // Assert
