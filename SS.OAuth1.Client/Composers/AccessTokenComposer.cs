@@ -17,7 +17,8 @@ namespace SS.OAuth1.Client.Composers
 
             var msg = parameters.CreateRequestMessage();
             AddAuthHeader(parameters, msg);
-            var response = MessageSender.Send(msg);
+            var sender = new MessageSender();
+            var response = sender.Send(msg);
 
             var accessToken = Util.ExtractToken(response);
 

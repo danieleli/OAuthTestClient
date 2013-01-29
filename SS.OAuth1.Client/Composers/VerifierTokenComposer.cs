@@ -29,7 +29,8 @@ namespace SS.OAuth1.Client.Composers
         {
             var parameters = new VerifierTokenParameters(consumer, requestToken);
             var msg = parameters.CreateRequestMessage();
-            var response = MessageSender.Send(msg);
+            var sender = new MessageSender();
+            var response = sender.Send(msg);
             return response;
         }
 

@@ -1,14 +1,22 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 
 namespace SS.OAuth1.Client.Parameters
 {
+
+    public interface IMessageParameters
+    {
+        HttpMethod HttpMethod { get; }
+        Uri RequestUri { get; }
+    }
+
     /// <summary>
     ///     Parameter Aggregator Pattern
     /// </summary>
-    public abstract class OAuthParametersBase : MessageParameters
+    public abstract class OAuthParametersBase : IMessageParameters
     {
         private string _nonce;
         private string _timestamp;
@@ -31,6 +39,9 @@ namespace SS.OAuth1.Client.Parameters
             get { return _nonce ?? (_nonce = OAuth.GenerateNonce()); }
         }
 
+        public HttpMethod HttpMethod { get; private set; }
+        public Uri RequestUri { get; private set; }
+
         #endregion -- Properties --
 
         #region -- Constructor --
@@ -39,9 +50,9 @@ namespace SS.OAuth1.Client.Parameters
         {
             ValidateInputs(consumer, method, url);
 
-            Consumer = consumer;
-            HttpMethod = method;
-            RequestUri = new Uri(url);
+            this.Consumer = consumer;
+            this.HttpMethod = method;
+            this.RequestUri = new Uri(url);
         }
 
         #endregion -- Constructor --
@@ -80,5 +91,7 @@ namespace SS.OAuth1.Client.Parameters
         }
 
         #endregion -- Validation --
+
+
     }
 }

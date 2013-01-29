@@ -116,7 +116,8 @@ namespace SS.OAuth1.Client._Tests.Tests
 
             // Act
             var msg = parameters.CreateRequestMessage();
-            var response = MessageSender.Send(msg);
+            var sender = new MessageSender();
+            var response = sender.Send(msg);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));

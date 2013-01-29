@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace SS.OAuth1.Client.Parameters
@@ -35,10 +36,25 @@ namespace SS.OAuth1.Client.Parameters
                                                                   signature,
                                                                   this.Timestamp,
                                                                   this.Callback);
-            
+
             var header = "OAuth " + oauthParams.Stringify();
 
             return header;
+        }
+
+        private SortedDictionary<string, string> ToSortedDictionary()
+        {
+            var d =  new SortedDictionary<string, string>();
+             
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.CONSUMER_KEY,this.Consumer.Key);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.NONCE, this.Nonce);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.SIGNATURE_METHOD, SIGNATURE_METHOD);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.TIMESTAMP, this.Timestamp);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.VERSION, VERSION);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.CALLBACK, this.Callback);
+            return d;
+       
+        
         }
     }
 }

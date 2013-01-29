@@ -1,5 +1,6 @@
 #region
 
+using System.Collections.Generic;
 using System.Net.Http;
 
 #endregion
@@ -42,7 +43,7 @@ namespace SS.OAuth1.Client.Parameters
             var oauthParams = AuthParameterFactory.GetOAuthParams(this.Consumer.Key,
                                                                   this.Nonce,
                                                                   signature,
-                                                                  this.Timestamp,
+                                                                  this.Timestamp, 
                                                                   null,
                                                                   this.Token.Key);
 
@@ -53,5 +54,19 @@ namespace SS.OAuth1.Client.Parameters
 
         }
 
+
+        private SortedDictionary<string, string> ToSortedDictionary()
+        {
+            var d = new SortedDictionary<string, string>();
+
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.CONSUMER_KEY, this.Consumer.Key);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.NONCE, this.Nonce);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.SIGNATURE_METHOD, SIGNATURE_METHOD);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.TIMESTAMP, this.Timestamp);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.VERSION, VERSION);
+            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.TOKEN, this.Token.Key);
+
+            return d;
+        }
     }
 }
