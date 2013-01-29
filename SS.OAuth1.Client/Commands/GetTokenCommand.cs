@@ -32,7 +32,7 @@ namespace SS.OAuth1.Client.Commands
         {
             var result = response.Content.ReadAsFormDataAsync().Result;
 
-            if (result == null) throw new Exception("No content found.)");
+            if (result == null) throw new Exception("No content found.");
 
             var key = result[Keys.TOKEN];
             var secret = result[Keys.TOKEN_SECRET];
