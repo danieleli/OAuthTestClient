@@ -50,7 +50,7 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests\AuthorizationFactoryTest.cs" />
+    <Compile Include="Tests\ExtensionsTest.cs" />
     <Compile Include="Tests\OAuth1Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\RequestTokenTest.cs" />

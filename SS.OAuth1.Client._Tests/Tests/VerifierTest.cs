@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Text;
 using NUnit.Framework;
+using SS.OAuth1.Client.Models;
 using log4net;
 
 #endregion

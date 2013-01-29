@@ -42,20 +42,20 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Composers\GetTokenCommand.cs" />
-    <Compile Include="Composers\GetVerifierCommand.cs" />
+    <Compile Include="Commands\GetTokenCommand.cs" />
+    <Compile Include="Commands\GetVerifierCommand.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
-    <Compile Include="OAuth.cs" />
-    <Compile Include="Creds.cs" />
-    <Compile Include="MessageSender.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Helpers\OAuth.cs" />
+    <Compile Include="Models\Creds.cs" />
+    <Compile Include="Messages\MessageSender.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />
     <Compile Include="Parameters\VerifierTokenParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseValidator.cs" />
-    <Compile Include="Signature.cs" />
+    <Compile Include="Messages\ResponseValidator.cs" />
+    <Compile Include="Helpers\Signature.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

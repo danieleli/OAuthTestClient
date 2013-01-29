@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+using SS.OAuth1.Client.Messages;
+using SS.OAuth1.Client.Models;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 
-namespace SS.OAuth1.Client.Composers
+namespace SS.OAuth1.Client.Commands
 {
     public class GetTokenCommand
     {

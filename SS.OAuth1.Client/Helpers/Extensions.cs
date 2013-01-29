@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SS.OAuth1.Client.Models;
 using log4net;
 
-namespace SS.OAuth1.Client
+namespace SS.OAuth1.Client.Helpers
 {
     public static class Extensions
     {

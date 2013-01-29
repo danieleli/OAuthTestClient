@@ -12,7 +12,7 @@ using log4net;
 
 #endregion
 
-namespace SS.OAuth1.Client
+namespace SS.OAuth1.Client.Helpers
 {
     public enum SignatureMethod
     {

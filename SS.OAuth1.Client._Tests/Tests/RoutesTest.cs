@@ -1,6 +1,7 @@
 ﻿#region
 
 using NUnit.Framework;
+using SS.OAuth1.Client.Helpers;
 
 #endregion
 

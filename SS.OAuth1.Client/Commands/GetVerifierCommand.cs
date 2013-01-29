@@ -1,10 +1,10 @@
 using System.Collections.Specialized;
 using System.Net.Http;
-using System.Net.Http.Formatting;
+using SS.OAuth1.Client.Models;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 
-namespace SS.OAuth1.Client.Composers
+namespace SS.OAuth1.Client.Commands
 {
     /// Composer Pattern - Create msg, Insert Header, Send msg, Extract token
     public class GetVerifierCommand : GetTokenCommand

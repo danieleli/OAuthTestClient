@@ -1,7 +1,8 @@
 ﻿#region
 
 using NUnit.Framework;
-using SS.OAuth1.Client.Composers;
+using SS.OAuth1.Client.Commands;
+using SS.OAuth1.Client.Models;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 

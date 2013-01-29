@@ -1,4 +1,6 @@
-﻿namespace SS.OAuth1.Client
+﻿using SS.OAuth1.Client.Models;
+
+namespace SS.OAuth1.Client
 {
     public static class G
     {

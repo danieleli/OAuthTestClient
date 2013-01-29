@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SS.OAuth1.Client.Helpers;
 using log4net;
 
 #endregion
@@ -10,9 +11,9 @@ using log4net;
 namespace SS.OAuth1.Client._Tests.Tests
 {
     [TestFixture]
-    public class AuthorizationFactoryTest
+    public class ExtensionsTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (AuthorizationFactoryTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (ExtensionsTest));
 
         [Test]
         public void StringifyParams_Should_EscapeValues()

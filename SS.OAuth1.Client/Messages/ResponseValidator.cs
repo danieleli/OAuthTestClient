@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting;
 
-namespace SS.OAuth1.Client
+namespace SS.OAuth1.Client.Messages
 {
     public class ResponseValidator
     {

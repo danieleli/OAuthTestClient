@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace SS.OAuth1.Client
+namespace SS.OAuth1.Client.Helpers
 {
     public static class OAuth
     {

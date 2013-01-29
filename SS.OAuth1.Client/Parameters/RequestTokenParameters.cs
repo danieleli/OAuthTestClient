@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
+using SS.OAuth1.Client.Helpers;
+using SS.OAuth1.Client.Models;
 
 namespace SS.OAuth1.Client.Parameters
 {
