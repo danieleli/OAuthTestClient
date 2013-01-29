@@ -8,7 +8,7 @@ namespace SS.OAuth1.Client.Parameters
     public class RequestTokenParameters : OAuthParametersBase
     {
         public string Callback { get; private set; }
-        
+
         #region -- Constructor --
 
         public RequestTokenParameters(Creds consumer, string callback = "oob")
@@ -19,37 +19,30 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Constructor --
 
-        protected override void AddAuthHeader(HttpRequestMessage msg)
+        public override string GetOAuthHeader()
         {
-            var authHeader = this.GetAuthHeader();
-            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
-        }
+            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(this.Consumer.Key, this.Callback);
+            var signature = GetOAuth1ASignature();
+            oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
 
-        public string GetAuthHeader()
-        {
-
-            var signature = Signature.GetOAuth1ASignature(this.RequestUri,
-                                                          this.HttpMethod,
-                                                          this.Consumer.Key,
-                                                          this.Consumer.Secret,
-                                                          null,
-                                                          null,
-                                                          this.Timestamp,
-                                                          this.Nonce,
-                                                          this.Callback,
-                                                          null);
-
-            var oauthParams = base.GetOAuthParams(this.Consumer.Key,
-                                                                  this.Nonce,
-                                                                  signature,
-                                                                  this.Timestamp,
-                                                                  this.Callback);
-
-            var header = "OAuth " + oauthParams.Stringify();
+            var header = "OAuth " + oauthParamsDictionary.Stringify();
 
             return header;
         }
 
-
+        public override string GetOAuth1ASignature()
+        {
+            var signature = Signature.GetOAuth1ASignature(base.RequestUri,
+                                              base.HttpMethod,
+                                              base.Consumer.Key,
+                                              base.Consumer.Secret,
+                                              null,
+                                              null,
+                                              base.Timestamp,
+                                              base.Nonce,
+                                              this.Callback,
+                                              null);
+            return signature;
+        }
     }
 }

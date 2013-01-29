@@ -6,18 +6,17 @@ namespace SS.OAuth1.Client.Parameters
 {
     public class VerifierTokenParameters : OAuthParametersBase
     {
-        public VerifierTokenParameters(Creds consumer, string token)
-            : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(token)) { }
+        public VerifierTokenParameters(Creds consumer, string requestToken)
+            : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(requestToken)) { }
 
-        public string GetAuthHeader()
+        public override string GetOAuthHeader()
         {
             throw new System.NotImplementedException();
         }
 
-        protected override void AddAuthHeader(HttpRequestMessage msg)
+        public override string GetOAuth1ASignature()
         {
-            var authHeader = this.GetAuthHeader();
-            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+            throw new System.NotImplementedException();
         }
     }
 }

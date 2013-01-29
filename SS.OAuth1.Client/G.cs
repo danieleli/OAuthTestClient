@@ -9,8 +9,10 @@ namespace SS.OAuth1.Client
 
         public static class TestCreds
         {
-            public static Creds DanUser = new Creds("dan+test", "cc2c0ef703029feddef7be3736aa8b53fc295ae7");
-            public static Creds DanApp = new Creds("6rexu7a9ezawyss6krucyh9v", "oe793wU6pxvpSAUm7U1nF8Ol000=");
+            private const string PASSWORD_SHA1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
+            public static Creds DanUser = new Creds("dantest", PASSWORD_SHA1);
+            public static Creds DanPlusTestUser = new Creds("dan+test", "cc2c0ef703029feddef7be3736aa8b53fc295ae7");
+            public static Creds DanConsumer = new Creds("6rexu7a9ezawyss6krucyh9v", "oe793wU6pxvpSAUm7U1nF8Ol000=");
         }
 
     }

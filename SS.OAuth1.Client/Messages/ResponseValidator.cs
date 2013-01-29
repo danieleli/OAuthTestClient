@@ -23,6 +23,8 @@ namespace SS.OAuth1.Client.Messages
                 var ex = GetServerException(response);
                 throw ex;
             }
+
+            response.EnsureSuccessStatusCode();
         }
 
         private ServerException GetServerException(HttpResponseMessage response)

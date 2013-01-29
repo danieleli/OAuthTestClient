@@ -17,25 +17,26 @@ namespace SS.OAuth1.Client._Tests.Tests
     [TestFixture]
     public class RequestTokenTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (RequestTokenTest));
+        private const string INVALID_SIGNATURE_MESSAGE = "ErrorCode: InvalidSignature; Message: Invalid signature.";
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(RequestTokenTest));
         private readonly Creds _user = G.TestCreds.DanUser;
-        private readonly Creds _consumer = G.TestCreds.DanApp;
-        GetTokenCommand cmd = new GetTokenCommand();
+        private readonly Creds _consumer = G.TestCreds.DanConsumer;
+        GetTokenCommand _cmd = new GetTokenCommand();
 
         [Test]
         public void CallbackPresent_Redirects_ToCallback()
         {
             // Arrange            
             var requestInput = new RequestTokenParameters(_consumer, "http://www.google.com");
-            
+
             // Act
-            var requestToken = cmd.GetToken(requestInput);
+            var requestToken = _cmd.GetToken(requestInput);
 
             // Assert
             Assert.Ignore("Not Implemented");
         }
 
-        [Test, ExpectedException(ExpectedException = typeof (UnauthorizedAccessException))]
+        [Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
         public void BadConsumerKey_Throws_UnauthorizedException()
         {
             // Arrange
@@ -43,14 +44,14 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = cmd.GetToken(input);
+            var requestToken = _cmd.GetToken(input);
 
             // Asset
             Assert.Fail("Exception not thrown.");
         }
 
 
-        [Test, ExpectedException(ExpectedException = typeof (UnauthorizedAccessException))]
+        [Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
         public void BadConsumerSecret_Throws_UnauthorizedException()
         {
             // Arrange
@@ -58,7 +59,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = cmd.GetToken(input);
+            var requestToken = _cmd.GetToken(input);
 
             // Assert
             Assert.Fail("Exception not thrown.");
@@ -66,8 +67,8 @@ namespace SS.OAuth1.Client._Tests.Tests
 
 
         [Test,
-         ExpectedException(ExpectedException = typeof (UnauthorizedAccessException),
-             ExpectedMessage = "ErrorCode: InvalidSignature; Message: InvalidSignature")]
+            ExpectedException(ExpectedException = typeof(UnauthorizedAccessException),
+                ExpectedMessage = INVALID_SIGNATURE_MESSAGE)]
         public void BadSignature_Throws_UnauthorizedAccessException_With_InvalidSignatureContent()
         {
             // Arrange
@@ -75,7 +76,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = cmd.GetToken(input);
+            var requestToken = _cmd.GetToken(input);
 
             // Assert
             Assert.Fail("No Exception Thrown");
@@ -88,7 +89,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(_consumer);
 
             // Act
-            var requestToken = cmd.GetToken(input);
+            var requestToken = _cmd.GetToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
@@ -103,7 +104,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(_user);
 
             // Act
-            var requestToken = cmd.GetToken(input);
+            var requestToken = _cmd.GetToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");

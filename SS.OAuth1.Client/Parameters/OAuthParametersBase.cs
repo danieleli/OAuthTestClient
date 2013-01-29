@@ -83,7 +83,6 @@ namespace SS.OAuth1.Client.Parameters
         {
             var msg = new HttpRequestMessage(this.HttpMethod, this.RequestUri);
             AddMediaFormatter(msg);
-            AddAuthHeader(msg);
 
             return msg;
         }
@@ -94,34 +93,31 @@ namespace SS.OAuth1.Client.Parameters
             msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
         }
 
-        protected abstract void AddAuthHeader(HttpRequestMessage msg);
-
-        
-        protected SortedDictionary<string, string> GetOAuthParams(string consumerKey,
-                                                              string nonce,
-                                                              string signature,
-                                                              string timestamp,
-                                                              string callback = "",
-                                                              string token = "",
-                                                              string verifier = "",
-                                                              string oauthVersion = Values.VERSION,
-                                                              string signatureMethod = Values.SIGNATURE_METHOD)
+        protected SortedDictionary<string, string> GetOAuthParamsBase()
         {
             var d = new SortedDictionary<string, string>();
-
-            d.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
-            d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, consumerKey);
-            d.AddIfNotNullOrEmpty(Keys.NONCE, nonce);
-            d.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
-            d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, signatureMethod);
-            d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, timestamp);
-            d.AddIfNotNullOrEmpty(Keys.TOKEN, token);
-            d.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
-            d.AddIfNotNullOrEmpty(Keys.VERSION, oauthVersion);
-
+            d.AddIfNotNullOrEmpty(Keys.NONCE, this.Nonce);
+            d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
+            d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, this.Timestamp);
+            d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);
             return d;
         }
 
+        protected SortedDictionary<string, string> GetOAuthParamsNoSignature(string consumerKey, string callback = "", string token = "", string verifier = "")
+        {
+            var sortedDictionary = GetOAuthParamsBase();
+
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, consumerKey);
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.TOKEN, token);
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
+
+            return sortedDictionary;
+        }
+
+        public abstract string GetOAuthHeader();
+
+        public abstract string GetOAuth1ASignature();
 
 
         #region -- Validation --
@@ -147,6 +143,6 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Validation --
 
-
+        
     }
 }

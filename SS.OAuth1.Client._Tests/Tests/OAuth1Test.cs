@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.Generic;
 using NUnit.Framework;
 using SS.OAuth1.Client.Commands;
 using SS.OAuth1.Client.Models;
@@ -39,7 +40,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var requestToken = cmd.GetToken(requestInput);
 
             // Act
-            var input = new AccessTokenParameters(_user, requestToken);
+            var input = new AccessTokenParameters(_user, requestToken, null);
             var accessToken = cmd.GetToken(input);
 
             // Assert
@@ -47,5 +48,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
             Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
         }
+
+
     }
 }

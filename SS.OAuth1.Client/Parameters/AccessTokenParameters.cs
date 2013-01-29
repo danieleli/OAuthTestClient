@@ -11,14 +11,16 @@ namespace SS.OAuth1.Client.Parameters
 {
     public class AccessTokenParameters : OAuthParametersBase
     {
+        private readonly string _verifier;
         public Creds RequestToken { get; set; }
         public string SessionHandle { get; set; }
 
         #region -- Constructor --
 
-        public AccessTokenParameters(Creds consumer, Creds requestToken)
+        public AccessTokenParameters(Creds consumer, Creds requestToken, string verifier)
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.ACCESS_TOKEN)
         {
+            _verifier = verifier;
             NullCheck(requestToken, "requestToken");
             NullCheck(requestToken.Key, "requestToken.Key");
             NullCheck(requestToken.Secret, "requestToken.Secret");
@@ -28,38 +30,30 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Constructor --
 
-        protected override void AddAuthHeader(HttpRequestMessage msg)
+        public override string GetOAuthHeader()
         {
-            var authHeader = this.GetAuthHeader();
-            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
-        }
+            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(this.Consumer.Key, verifier:this._verifier, token:this.RequestToken.Key);
+            var signature = GetOAuth1ASignature();
+            oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
 
-        protected string GetAuthHeader()
-        {
-            var signature = Signature.GetOAuth1ASignature(this.RequestUri,
-                                              this.HttpMethod,
-                                              this.Consumer.Key,
-                                              this.Consumer.Secret,
-                                              this.RequestToken.Key,
-                                              this.RequestToken.Secret,
-                                              this.Timestamp,
-                                              this.Nonce,
-                                              null,
-                                              null);
-
-            var oauthParams = base.GetOAuthParams(this.Consumer.Key,
-                                                                  this.Nonce,
-                                                                  signature,
-                                                                  this.Timestamp, 
-                                                                  null,
-                                                                  this.RequestToken.Key);
-
-
-            var header = "OAuth " + oauthParams.Stringify();
+            var header = "OAuth " + oauthParamsDictionary.Stringify();
 
             return header;
-
         }
 
+        public override string GetOAuth1ASignature()
+        {
+            var signature = Signature.GetOAuth1ASignature(base.RequestUri,
+                                           base.HttpMethod,
+                                           base.Consumer.Key,
+                                           base.Consumer.Secret,
+                                           this.RequestToken.Key,
+                                           this.RequestToken.Secret,
+                                           base.Timestamp,
+                                           base.Nonce,
+                                           null,
+                                           _verifier);
+            return signature;
+        }
     }
 }

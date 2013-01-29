@@ -4,7 +4,9 @@ using System;
 using System.Net;
 using System.Text;
 using NUnit.Framework;
+using SS.OAuth1.Client.Commands;
 using SS.OAuth1.Client.Models;
+using SS.OAuth1.Client.Parameters;
 using log4net;
 
 #endregion
@@ -14,10 +16,17 @@ namespace SS.OAuth1.Client._Tests.Tests
     [TestFixture]
     public class VerifierTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (VerifierTest));
-        private readonly Creds _user = G.TestCreds.DanUser;
-        private readonly Creds _consumer = G.TestCreds.DanApp;
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(VerifierTest));
 
+        private readonly Creds _consumer = G.TestCreds.DanConsumer;
+        private const string PASSWORD_SHA1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
+        private readonly Creds _user;
+
+        public VerifierTest()
+        {
+            _user = new Creds("dantest", PASSWORD_SHA1);
+
+        }
         public static string EncodeTo64(string toEncode)
         {
             var toEncodeAsBytes
@@ -25,6 +34,25 @@ namespace SS.OAuth1.Client._Tests.Tests
             var returnValue
                 = Convert.ToBase64String(toEncodeAsBytes);
             return returnValue;
+        }
+
+        [Test]
+        public void Success()
+        {
+            // Arrange            
+            var requestTokenCmd = new GetTokenCommand();
+            var requestInput = new RequestTokenParameters(_consumer);
+            var requestToken = requestTokenCmd.GetToken(requestInput);
+            var input = new VerifierTokenParameters(_user, requestToken.Key);
+            var verifierCmd = new GetVerifierCommand();
+            
+            // Act
+            var verifierToken = verifierCmd.GetToken(input);
+
+            // Assert
+            Assert.IsNotNull(verifierToken, "AccessToken");
+            Assert.IsNotNullOrEmpty(verifierToken.Key, "oauth_token");
+            Assert.IsNotNullOrEmpty(verifierToken.Secret, "oauth_token_secret");
         }
 
         [Test]
