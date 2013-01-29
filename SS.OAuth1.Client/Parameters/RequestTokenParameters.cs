@@ -5,6 +5,8 @@ namespace SS.OAuth1.Client.Parameters
 {
     public class RequestTokenParameters : OAuthParametersBase
     {
+        public string Callback { get; private set; }
+        
         #region -- Constructor --
 
         public RequestTokenParameters(Creds consumer, string callback = "oob")
@@ -15,9 +17,13 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Constructor --
 
-        public string Callback { get; private set; }
-        
-        public override string GetAuthHeader()
+        protected override void AddAuthHeader(HttpRequestMessage msg)
+        {
+            var authHeader = this.GetAuthHeader();
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+        }
+
+        public string GetAuthHeader()
         {
 
             var signature = Signature.GetOAuth1ASignature(this.RequestUri,
@@ -31,7 +37,7 @@ namespace SS.OAuth1.Client.Parameters
                                                           this.Callback,
                                                           null);
 
-            var oauthParams = AuthParameterFactory.GetOAuthParams(this.Consumer.Key,
+            var oauthParams = base.GetOAuthParams(this.Consumer.Key,
                                                                   this.Nonce,
                                                                   signature,
                                                                   this.Timestamp,
@@ -42,19 +48,6 @@ namespace SS.OAuth1.Client.Parameters
             return header;
         }
 
-        private SortedDictionary<string, string> ToSortedDictionary()
-        {
-            var d =  new SortedDictionary<string, string>();
-             
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.CONSUMER_KEY,this.Consumer.Key);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.NONCE, this.Nonce);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.SIGNATURE_METHOD, SIGNATURE_METHOD);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.TIMESTAMP, this.Timestamp);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.VERSION, VERSION);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.CALLBACK, this.Callback);
-            return d;
-       
-        
-        }
+
     }
 }

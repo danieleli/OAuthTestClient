@@ -9,43 +9,48 @@ namespace SS.OAuth1.Client.Parameters
 {
     public class AccessTokenParameters : OAuthParametersBase
     {
-        public Creds Token { get; set; }
-        public string RequestTokenSecret { get; set; }
+        public Creds RequestToken { get; set; }
         public string SessionHandle { get; set; }
 
         #region -- Constructor --
 
-        public AccessTokenParameters(Creds consumer, Creds token)
+        public AccessTokenParameters(Creds consumer, Creds requestToken)
             : base(consumer, HttpMethod.Post, OAuth.V1.Routes.ACCESS_TOKEN)
         {
-            NullCheck(token, "token");
-            NullCheck(token.Key, "requestToken");
-            NullCheck(token.Secret, "requestTokenSecret");
+            NullCheck(requestToken, "requestToken");
+            NullCheck(requestToken.Key, "requestToken.Key");
+            NullCheck(requestToken.Secret, "requestToken.Secret");
 
-            Token = token;
+            RequestToken = requestToken;
         }
 
         #endregion -- Constructor --
 
-        public override string GetAuthHeader()
+        protected override void AddAuthHeader(HttpRequestMessage msg)
+        {
+            var authHeader = this.GetAuthHeader();
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+        }
+
+        protected string GetAuthHeader()
         {
             var signature = Signature.GetOAuth1ASignature(this.RequestUri,
                                               this.HttpMethod,
                                               this.Consumer.Key,
                                               this.Consumer.Secret,
-                                              this.Token.Key,
-                                              this.Token.Secret,
+                                              this.RequestToken.Key,
+                                              this.RequestToken.Secret,
                                               this.Timestamp,
                                               this.Nonce,
                                               null,
                                               null);
 
-            var oauthParams = AuthParameterFactory.GetOAuthParams(this.Consumer.Key,
+            var oauthParams = base.GetOAuthParams(this.Consumer.Key,
                                                                   this.Nonce,
                                                                   signature,
                                                                   this.Timestamp, 
                                                                   null,
-                                                                  this.Token.Key);
+                                                                  this.RequestToken.Key);
 
 
             var header = "OAuth " + oauthParams.Stringify();
@@ -54,19 +59,5 @@ namespace SS.OAuth1.Client.Parameters
 
         }
 
-
-        private SortedDictionary<string, string> ToSortedDictionary()
-        {
-            var d = new SortedDictionary<string, string>();
-
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.CONSUMER_KEY, this.Consumer.Key);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.NONCE, this.Nonce);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.SIGNATURE_METHOD, SIGNATURE_METHOD);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.TIMESTAMP, this.Timestamp);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.VERSION, VERSION);
-            d.AddIfNotNullOrEmpty(AuthParameterFactory.Keys.TOKEN, this.Token.Key);
-
-            return d;
-        }
     }
 }

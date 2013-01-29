@@ -34,7 +34,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             //requestToken.Key = "xxxx";
 
             //// Act
-            //var response = RequestComposer.VerifierTokenComposer.GetAuthorizeResponse(requestToken);
+            //var response = RequestComposer.GetVerifierCommand.GetAuthorizeResponse(requestToken);
 
             //// Assert
             //LOG.Debug("Response: " + response);
@@ -48,7 +48,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 
             //// Act
-            //var response = RequestComposer.VerifierTokenComposer.GetAuthorizeResponse(requestToken);
+            //var response = RequestComposer.GetVerifierCommand.GetAuthorizeResponse(requestToken);
 
             //// Assert
             //LOG.Debug("Response: " + response);
@@ -90,7 +90,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 
             //// Act
-            //var verifier = RequestComposer.VerifierTokenComposer
+            //var verifier = RequestComposer.GetVerifierCommand
             //                            .GetVerifierToken(requestToken, _consumer, _user);
 
             //// Assert
@@ -111,7 +111,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 
             //// Act
-            //var response = RequestComposer.VerifierTokenComposer
+            //var response = RequestComposer.GetVerifierCommand
             //                            .GetAuthorizeResponse(requestToken);
 
 

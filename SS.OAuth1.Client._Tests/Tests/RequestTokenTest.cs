@@ -18,6 +18,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         private static readonly ILog LOG = LogManager.GetLogger(typeof (RequestTokenTest));
         private readonly Creds _user = G.TestCreds.DanUser;
         private readonly Creds _consumer = G.TestCreds.DanApp;
+        GetTokenCommand cmd = new GetTokenCommand();
 
         [Test]
         public void CallbackPresent_Redirects_ToCallback()
@@ -26,7 +27,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var requestInput = new RequestTokenParameters(_consumer, "http://www.google.com");
             
             // Act
-            var requestToken = RequestTokenComposer.GetRequstToken(requestInput);
+            var requestToken = cmd.GetToken(requestInput);
 
             // Assert
             Assert.Ignore("Not Implemented");
@@ -40,7 +41,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestTokenComposer.GetRequstToken(input);
+            var requestToken = cmd.GetToken(input);
 
             // Asset
             Assert.Fail("Exception not thrown.");
@@ -55,7 +56,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestTokenComposer.GetRequstToken(input);
+            var requestToken = cmd.GetToken(input);
 
             // Assert
             Assert.Fail("Exception not thrown.");
@@ -72,7 +73,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(consumer);
 
             // Act
-            var requestToken = RequestTokenComposer.GetRequstToken(input);
+            var requestToken = cmd.GetToken(input);
 
             // Assert
             Assert.Fail("No Exception Thrown");
@@ -85,7 +86,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(_consumer);
 
             // Act
-            var requestToken = RequestTokenComposer.GetRequstToken(input);
+            var requestToken = cmd.GetToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");
@@ -100,7 +101,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var input = new RequestTokenParameters(_user);
 
             // Act
-            var requestToken = RequestTokenComposer.GetRequstToken(input);
+            var requestToken = cmd.GetToken(input);
 
             // Assert
             Assert.IsNotNull(requestToken, "RequestToken");

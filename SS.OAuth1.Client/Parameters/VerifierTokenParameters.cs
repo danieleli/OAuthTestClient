@@ -7,9 +7,15 @@ namespace SS.OAuth1.Client.Parameters
         public VerifierTokenParameters(Creds consumer, string token)
             : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(token)) { }
 
-        public override string GetAuthHeader()
+        public string GetAuthHeader()
         {
             throw new System.NotImplementedException();
+        }
+
+        protected override void AddAuthHeader(HttpRequestMessage msg)
+        {
+            var authHeader = this.GetAuthHeader();
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
         }
     }
 }

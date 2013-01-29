@@ -20,18 +20,26 @@ namespace SS.OAuth1.Client._Tests.Tests
         public OAuth1Test()
         {
             _user = new Creds("dantest", PASSWORD_SHA1);
+
+        }
+
+        [Test]
+        public void Temp()
+        {
+
         }
 
         [Test] 
         public void TwoLegged_Success()
         {
             // Arrange            
+            var cmd = new GetTokenCommand();
             var requestInput = new RequestTokenParameters(_user);
-            var requestToken = RequestTokenComposer.GetRequstToken(requestInput);
-            var input = new AccessTokenParameters(_user, requestToken);
+            var requestToken = cmd.GetToken(requestInput);
 
             // Act
-            var accessToken = AccessTokenComposer.GetAccessToken(input);
+            var input = new AccessTokenParameters(_user, requestToken);
+            var accessToken = cmd.GetToken(input);
 
             // Assert
             Assert.IsNotNull(accessToken, "AccessToken");
