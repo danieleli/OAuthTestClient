@@ -12,7 +12,7 @@ namespace SS.OAuth1.Client.Commands
         private static readonly ILog LOG = LogManager.GetLogger(typeof(GetTokenCommand));
         private MessageSender _messageSender;
         private MessageFactory _messageFactory;
-        
+
         public MessageFactory MessageFactory
         {
             get { return _messageFactory ?? (_messageFactory = new MessageFactory()); }
@@ -28,7 +28,7 @@ namespace SS.OAuth1.Client.Commands
         {
             var msg = this.MessageFactory.Create(parameters);
             var authHeader = parameters.GetOAuthHeader();
-            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, "OAuth " + authHeader);
             var response = this.MessageSender.Send(msg);
             
             var token = ExtractToken(response);

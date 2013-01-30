@@ -29,20 +29,9 @@ namespace SS.OAuth1.Client.Parameters
 
         public override string GetOAuthHeader()
         {
-            var oauthParamsDictionary = base.OAuthParser.GetOAuthParamsNoSignature(this, verifier: Verifier, token: this.RequestToken.Key);
-            
-            var header = CreateHeader(oauthParamsDictionary);
-
+            var header = base.OAuthParser.CreateHeader(this, this.RequestToken, this.Verifier);
             return header;
         }
 
-        private string CreateHeader(SortedDictionary<string, string> oauthParamsDictionary)
-        {
-            var signature = base.GetOAuth1ASignature(this.RequestToken, Verifier);
-            oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
-
-            var header = "OAuth " + oauthParamsDictionary.Stringify();
-            return header;
-        }
     }
 }

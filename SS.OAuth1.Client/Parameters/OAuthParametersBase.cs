@@ -16,25 +16,6 @@ namespace SS.OAuth1.Client.Parameters
     }
 
 
-    public class Keys
-    {
-        public const string CALLBACK = "oauth_callback";
-        public const string CONSUMER_KEY = "oauth_consumer_key";
-        public const string NONCE = "oauth_nonce";
-        public const string SIGNATURE = "oauth_signature";
-        public const string SIGNATURE_METHOD = "oauth_signature_method";
-        public const string TIMESTAMP = "oauth_timestamp";
-        public const string TOKEN = "oauth_token";
-        public const string TOKEN_SECRET = "oauth_token_secret";
-        public const string VERIFIER = "oauth_verifier";
-        public const string VERSION = "oauth_version";
-    }
-
-    public static class Values
-    {
-        public const string VERSION = "1.0";
-        public const string SIGNATURE_METHOD = "HMAC-SHA1";
-    }
 
     /// <summary>
     ///     Parameter Aggregator Pattern
@@ -46,7 +27,7 @@ namespace SS.OAuth1.Client.Parameters
         private string _nonce;
         private string _timestamp;
         private OAuthParser _oAuthParser;
-        
+
         public const string SIGNATURE_METHOD = Values.SIGNATURE_METHOD;
         public const string VERSION = Values.VERSION;
 
@@ -87,33 +68,6 @@ namespace SS.OAuth1.Client.Parameters
 
         public abstract string GetOAuthHeader();
 
-        //protected abstract SortedDictionary<string, string> GetOAuthParamsNoSignature();
-        //protected abstract string GetOAuthSignature();
-
-        protected SortedDictionary<string, string> GetOAuthParamsNoSignature(string callback = "", string token = "", string verifier = null)
-        {
-            var sortedDictionary = OAuthParser.GetOAuthParamsNoSignature(this, callback, token, verifier);
-
-            return sortedDictionary;
-        }
-
-        protected string GetOAuth1ASignature(Creds requestToken, string callback = "", string verifier = null)
-        {
-            if (requestToken == null) requestToken = new Creds("", "");
-
-            var signature = Signature.GetOAuth1ASignature(this.RequestUri,
-                                                            this.HttpMethod,
-                                                            this.Consumer.Key,
-                                                            this.Consumer.Secret,
-                                                            requestToken.Key,
-                                                            requestToken.Secret,
-                                                            this.Timestamp,
-                                                            this.Nonce,
-                                                            callback,
-                                                            verifier);
-            return signature;
-        }
-
         #region -- Validation --
 
         protected void NullCheck(string s, string name)
@@ -138,4 +92,6 @@ namespace SS.OAuth1.Client.Parameters
         #endregion -- Validation --
 
     }
+
+
 }
