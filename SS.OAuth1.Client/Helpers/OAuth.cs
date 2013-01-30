@@ -34,7 +34,7 @@ namespace SS.OAuth1.Client.Helpers
 
                 public const string REQUEST_TOKEN = BASE_ROUTE + "/RequestToken";
                 public const string ACCESS_TOKEN = BASE_ROUTE + "/AccessToken";
-                private const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?requestToken={0}&isAuthorized=true";
+                private const string AUTHORIZE_TOKEN = BASE_ROUTE + "/AuthorizeToken?token={0}&isAuthorized=true";
 
                 public static string GetAuthorizeTokenRoute(string token)
                 {

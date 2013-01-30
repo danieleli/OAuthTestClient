@@ -41,7 +41,7 @@ namespace SS.OAuth1.Client.Parameters
             return header;
         }
 
-        public override string GetOAuth1ASignature()
+        public string GetOAuth1ASignature()
         {
             var signature = Signature.GetOAuth1ASignature(base.RequestUri,
                                            base.HttpMethod,

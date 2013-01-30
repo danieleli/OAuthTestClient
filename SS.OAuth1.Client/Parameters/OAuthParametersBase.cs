@@ -117,7 +117,7 @@ namespace SS.OAuth1.Client.Parameters
 
         public abstract string GetOAuthHeader();
 
-        public abstract string GetOAuth1ASignature();
+        
 
 
         #region -- Validation --

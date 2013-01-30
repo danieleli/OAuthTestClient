@@ -43,7 +43,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             var requestTokenCmd = new GetTokenCommand();
             var requestInput = new RequestTokenParameters(_consumer);
             var requestToken = requestTokenCmd.GetToken(requestInput);
-            var input = new VerifierTokenParameters(_user, requestToken.Key);
+            var input = new VerifierTokenParameters(_user, requestToken);
             var verifierCmd = new GetVerifierCommand();
             
             // Act
