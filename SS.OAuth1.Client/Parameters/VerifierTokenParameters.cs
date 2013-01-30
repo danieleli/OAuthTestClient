@@ -16,7 +16,7 @@ namespace SS.OAuth1.Client.Parameters
 
         public override string GetOAuthHeader()
         {
-            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(token: this.RequestToken.Key);
+            var oauthParamsDictionary = base.OAuthParser.GetOAuthParamsNoSignature(this, token: this.RequestToken.Key);
             var signature = GetOAuth1ASignature();
             oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
 

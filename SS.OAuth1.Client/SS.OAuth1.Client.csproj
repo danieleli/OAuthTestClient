@@ -52,6 +52,7 @@
     <Compile Include="Messages\MessageSender.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
+    <Compile Include="Helpers\OAuthParser.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />
     <Compile Include="Parameters\VerifierTokenParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
