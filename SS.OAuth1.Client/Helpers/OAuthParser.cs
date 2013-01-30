@@ -64,29 +64,37 @@ namespace SS.OAuth1.Client.Helpers
             return oauthParamDictionary.Stringify();
         }
 
-        private string CreateSignature(SortedDictionary<string, string> oauthParamsNoSignature,
-                                                                string consumerSecret,
-                                                                string requestTokenSecret = null)
-        {
-            throw new NotImplementedException();
-        }
-
         private string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = "", string verifier = null)
         {
-            if (requestToken == null) requestToken = new Creds("", "");
+            string requestTokenKey = null;
+            string requestTokenSecret  = null;
+
+            if (requestToken != null)
+            {
+                requestTokenKey = requestToken.Key;
+                requestTokenSecret = requestToken.Secret;
+            }
 
             var signature = Signature.GetOAuth1ASignature(paramz.RequestUri,
                                                             paramz.HttpMethod,
                                                             paramz.Consumer.Key,
                                                             paramz.Consumer.Secret,
-                                                            requestToken.Key,
-                                                            requestToken.Secret,
+                                                            requestTokenKey,
+                                                            requestTokenSecret,
                                                             paramz.Timestamp,
                                                             paramz.Nonce,
                                                             callback,
                                                             verifier);
             return signature;
 
+        }
+
+        private string CreateSignature(SortedDictionary<string, string> oauthParamsNoSignature,
+                                                        string consumerSecret,
+                                                        string requestTokenSecret = null)
+        {
+            // todo: create clean implementation of signature feature.
+            throw new NotImplementedException();
         }
     }
 }

@@ -19,14 +19,9 @@ namespace SS.OAuth1.Client._Tests.Tests
         private static readonly ILog LOG = LogManager.GetLogger(typeof(VerifierTest));
 
         private readonly Creds _consumer = G.TestCreds.DanConsumer;
-        private const string PASSWORD_SHA1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
-        private readonly Creds _user;
+        private readonly Creds _user = G.TestCreds.DanUser;
 
-        public VerifierTest()
-        {
-            _user = new Creds("dantest", PASSWORD_SHA1);
 
-        }
         public static string EncodeTo64(string toEncode)
         {
             var toEncodeAsBytes
@@ -43,11 +38,12 @@ namespace SS.OAuth1.Client._Tests.Tests
             var requestTokenCmd = new GetTokenCommand();
             var requestInput = new RequestTokenParameters(_consumer);
             var requestToken = requestTokenCmd.GetToken(requestInput);
-            var input = new VerifierTokenParameters(_user, requestToken);
+            var verifierParams = new VerifierTokenParameters(_consumer, requestToken);
             var verifierCmd = new GetVerifierCommand();
+
             
             // Act
-            var verifierToken = verifierCmd.GetToken(input);
+            var verifierToken = verifierCmd.GetToken(verifierParams);
 
             // Assert
             Assert.IsNotNull(verifierToken, "AccessToken");

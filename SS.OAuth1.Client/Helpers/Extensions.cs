@@ -21,6 +21,7 @@ namespace SS.OAuth1.Client.Helpers
                 var key = Uri.EscapeUriString(entry.Key);
                 var value = Uri.EscapeUriString(entry.Value);
                 sb.Append(string.Format("{0}=\"{1}\"", key, value));
+                //sb.Append(string.Format("{0}={1}", key, value));
                 isFirstItem = false;
             }
 
