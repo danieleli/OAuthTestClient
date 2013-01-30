@@ -25,11 +25,6 @@ namespace SS.OAuth1.Client._Tests.Tests
 
         }
 
-        [Test]
-        public void Temp()
-        {
-
-        }
 
         [Test] 
         public void TwoLegged_Success()

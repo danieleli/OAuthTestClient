@@ -45,6 +45,7 @@
     <Compile Include="Commands\GetTokenCommand.cs" />
     <Compile Include="Commands\GetVerifierCommand.cs" />
     <Compile Include="G.cs" />
+    <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
     <Compile Include="Helpers\OAuth.cs" />
     <Compile Include="Models\Creds.cs" />

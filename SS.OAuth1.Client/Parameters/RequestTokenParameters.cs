@@ -9,20 +9,16 @@ namespace SS.OAuth1.Client.Parameters
     {
         public string Callback { get; private set; }
 
-        #region -- Constructor --
-
         public RequestTokenParameters(Creds consumer, string callback = "oob")
-            : base(consumer, HttpMethod.Post, OAuth.V1.Routes.REQUEST_TOKEN)
+            : base(consumer, HttpMethod.Get, OAuth.V1.Routes.REQUEST_TOKEN)
         {
             Callback = callback;
         }
 
-        #endregion -- Constructor --
-
         public override string GetOAuthHeader()
         {
             var oauthParamsDictionary = base.GetOAuthParamsNoSignature(this.Consumer.Key, this.Callback);
-            var signature = GetOAuth1ASignature();
+            var signature = base.GetOAuth1ASignature(null, this.Callback);
             oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
 
             var header = "OAuth " + oauthParamsDictionary.Stringify();
@@ -30,19 +26,5 @@ namespace SS.OAuth1.Client.Parameters
             return header;
         }
 
-        public string GetOAuth1ASignature()
-        {
-            var signature = Signature.GetOAuth1ASignature(base.RequestUri,
-                                              base.HttpMethod,
-                                              base.Consumer.Key,
-                                              base.Consumer.Secret,
-                                              null,
-                                              null,
-                                              base.Timestamp,
-                                              base.Nonce,
-                                              this.Callback,
-                                              null);
-            return signature;
-        }
     }
 }

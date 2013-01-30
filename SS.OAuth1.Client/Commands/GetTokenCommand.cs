@@ -12,6 +12,12 @@ namespace SS.OAuth1.Client.Commands
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(GetTokenCommand));
         private MessageSender _messageSender;
+        private MessageFactory _messageFactory;
+        
+        public MessageFactory MessageFactory
+        {
+            get { return _messageFactory ?? (_messageFactory = new MessageFactory()); }
+        }
 
         public MessageSender MessageSender
         {
@@ -21,16 +27,15 @@ namespace SS.OAuth1.Client.Commands
 
         public Creds GetToken(OAuthParametersBase parameters)
         {
-            var msg = parameters.CreateRequestMessage();
+            var msg = this.MessageFactory.Create(parameters);
             var authHeader = parameters.GetOAuthHeader();
             msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, authHeader);
             var response = this.MessageSender.Send(msg);
             
-            var accessToken = ExtractToken(response);
+            var token = ExtractToken(response);
 
-            return accessToken;
+            return token;
         }
-
 
         protected virtual Creds ExtractToken(HttpResponseMessage response)
         {

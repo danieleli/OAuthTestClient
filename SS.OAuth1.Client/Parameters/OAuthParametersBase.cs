@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using SS.OAuth1.Client.Helpers;
+using SS.OAuth1.Client.Messages;
 using SS.OAuth1.Client.Models;
 
 namespace SS.OAuth1.Client.Parameters
@@ -41,15 +42,17 @@ namespace SS.OAuth1.Client.Parameters
     /// </summary>
     public abstract class OAuthParametersBase : IMessageParameters
     {
+        #region -- Properties --
+
         private string _nonce;
         private string _timestamp;
-
-        #region -- Public Properties --
-
+        
         public const string SIGNATURE_METHOD = Values.SIGNATURE_METHOD;
         public const string VERSION = Values.VERSION;
-        
+
         public Creds Consumer { get; protected set; }
+        public HttpMethod HttpMethod { get; private set; }
+        public Uri RequestUri { get; private set; }
 
         public string Timestamp
         {
@@ -60,9 +63,6 @@ namespace SS.OAuth1.Client.Parameters
         {
             get { return _nonce ?? (_nonce = OAuth.GenerateNonce()); }
         }
-
-        public HttpMethod HttpMethod { get; private set; }
-        public Uri RequestUri { get; private set; }
 
         #endregion -- Properties --
 
@@ -79,19 +79,7 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Constructor --
 
-        public HttpRequestMessage CreateRequestMessage()
-        {
-            var msg = new HttpRequestMessage(this.HttpMethod, this.RequestUri);
-            AddMediaFormatter(msg);
-
-            return msg;
-        }
-
-        protected virtual void AddMediaFormatter(HttpRequestMessage msg)
-        {
-            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
-            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-        }
+        public abstract string GetOAuthHeader();
 
         protected SortedDictionary<string, string> GetOAuthParamsBase()
         {
@@ -115,10 +103,22 @@ namespace SS.OAuth1.Client.Parameters
             return sortedDictionary;
         }
 
-        public abstract string GetOAuthHeader();
+        protected string GetOAuth1ASignature(Creds requestToken, string callback = "", string verifier = null)
+        {
+            if (requestToken == null) requestToken = new Creds("", "");
 
-        
-
+            var signature = Signature.GetOAuth1ASignature(this.RequestUri,
+                                                            this.HttpMethod,
+                                                            this.Consumer.Key,
+                                                            this.Consumer.Secret,
+                                                            requestToken.Key,
+                                                            requestToken.Secret,
+                                                            this.Timestamp,
+                                                            this.Nonce,
+                                                            callback,
+                                                            verifier);
+            return signature;
+        }
 
         #region -- Validation --
 
@@ -143,6 +143,6 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Validation --
 
-        
+
     }
 }

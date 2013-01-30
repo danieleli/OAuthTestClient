@@ -14,6 +14,8 @@ namespace SS.OAuth1.Client.Messages
 
     public class MessageSender : IMessageSender
     {
+        #region -- Properties --
+
         private static readonly ILog LOG = LogManager.GetLogger(typeof (MessageSender));
         private HttpClient _httpClient;
         private ResponseValidator _validator;
@@ -29,6 +31,8 @@ namespace SS.OAuth1.Client.Messages
             get { return _httpClient ?? (_httpClient = new HttpClient()); }
             set { _httpClient = value; }
         }
+
+        #endregion -- Properties --
 
         public HttpResponseMessage Send(HttpRequestMessage msg)
         {

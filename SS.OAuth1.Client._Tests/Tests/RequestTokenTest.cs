@@ -117,10 +117,11 @@ namespace SS.OAuth1.Client._Tests.Tests
         {
             // Arrange
             var parameters = new RequestTokenParameters(_consumer);
+            var factory = new MessageFactory();
+            var msg = factory.Create(parameters);
+            var sender = new MessageSender();
 
             // Act
-            var msg = parameters.CreateRequestMessage();
-            var sender = new MessageSender();
             var response = sender.Send(msg);
 
             // Assert
