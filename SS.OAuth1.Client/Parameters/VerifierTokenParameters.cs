@@ -1,6 +1,5 @@
 using System.Net.Http;
 using SS.OAuth1.Client.Helpers;
-using SS.OAuth1.Client.Models;
 
 namespace SS.OAuth1.Client.Parameters
 {
@@ -17,7 +16,7 @@ namespace SS.OAuth1.Client.Parameters
 
         public override string GetOAuthHeader()
         {
-            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(this.Consumer.Key, token: this.RequestToken.Key);
+            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(token: this.RequestToken.Key);
             var signature = GetOAuth1ASignature();
             oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
 

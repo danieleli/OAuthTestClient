@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using SS.OAuth1.Client.Messages;
-using SS.OAuth1.Client.Models;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
 using log4net;

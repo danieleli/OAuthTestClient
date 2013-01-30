@@ -5,7 +5,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Messages;
-using SS.OAuth1.Client.Models;
 
 namespace SS.OAuth1.Client.Parameters
 {
@@ -46,6 +45,7 @@ namespace SS.OAuth1.Client.Parameters
 
         private string _nonce;
         private string _timestamp;
+        private OAuthParser _oAuthParser;
         
         public const string SIGNATURE_METHOD = Values.SIGNATURE_METHOD;
         public const string VERSION = Values.VERSION;
@@ -62,6 +62,12 @@ namespace SS.OAuth1.Client.Parameters
         public string Nonce
         {
             get { return _nonce ?? (_nonce = OAuth.GenerateNonce()); }
+        }
+
+        public OAuthParser OAuthParser
+        {
+            get { return _oAuthParser ?? (_oAuthParser = new OAuthParser()); }
+            set { _oAuthParser = value; }
         }
 
         #endregion -- Properties --
@@ -91,12 +97,11 @@ namespace SS.OAuth1.Client.Parameters
             return d;
         }
 
-        protected SortedDictionary<string, string> GetOAuthParamsNoSignature(string consumerKey, string callback = "", string token = "", string verifier = "")
+        protected SortedDictionary<string, string> GetOAuthParamsNoSignature(string callback = "", string token = "", string verifier = "")
         {
             var sortedDictionary = GetOAuthParamsBase();
 
             sortedDictionary.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
-            sortedDictionary.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, consumerKey);
             sortedDictionary.AddIfNotNullOrEmpty(Keys.TOKEN, token);
             sortedDictionary.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
 
@@ -143,6 +148,30 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Validation --
 
+    }
 
+    public class OAuthParser
+    {
+        public SortedDictionary<string, string> GetOAuthParamsCore(OAuthParametersBase p)
+        {
+            var d = new SortedDictionary<string, string>();
+            d.AddIfNotNullOrEmpty(Keys.NONCE, p.Nonce);
+            d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
+            d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, p.Timestamp);
+            d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);
+            d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, p.Consumer.Key);
+            return d;
+        }
+
+        public SortedDictionary<string, string> GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = "", string token = "", string verifier = "")
+        {
+            var sortedDictionary = this.GetOAuthParamsCore(paramz);
+
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.TOKEN, token);
+            sortedDictionary.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
+
+            return sortedDictionary;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SS.OAuth1.Client.Models
+﻿namespace SS.OAuth1.Client.Helpers
 {
     public class Creds
     {

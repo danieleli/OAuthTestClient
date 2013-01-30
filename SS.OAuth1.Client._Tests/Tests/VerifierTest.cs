@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using NUnit.Framework;
 using SS.OAuth1.Client.Commands;
-using SS.OAuth1.Client.Models;
+using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 

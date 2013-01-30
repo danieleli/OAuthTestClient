@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using SS.OAuth1.Client.Helpers;
-using SS.OAuth1.Client.Models;
 
 #endregion
 
@@ -30,7 +29,7 @@ namespace SS.OAuth1.Client.Parameters
 
         public override string GetOAuthHeader()
         {
-            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(this.Consumer.Key, Verifier, token:this.RequestToken.Key);
+            var oauthParamsDictionary = base.GetOAuthParamsNoSignature(callback: Verifier, token: this.RequestToken.Key);
             var signature = base.GetOAuth1ASignature(this.RequestToken, Verifier);
             oauthParamsDictionary.AddIfNotNullOrEmpty(Keys.SIGNATURE, signature);
 

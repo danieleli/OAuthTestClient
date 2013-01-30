@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 using System.Net.Http;
-using SS.OAuth1.Client.Models;
+using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
 using log4net;
 

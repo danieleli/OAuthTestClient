@@ -1,4 +1,4 @@
-﻿using SS.OAuth1.Client.Models;
+﻿using SS.OAuth1.Client.Helpers;
 
 namespace SS.OAuth1.Client
 {

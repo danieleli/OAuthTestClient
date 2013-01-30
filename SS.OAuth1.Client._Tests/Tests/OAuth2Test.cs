@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SS.OAuth1.Client.Helpers;
-using SS.OAuth1.Client.Models;
 
 namespace SS.OAuth1.Client._Tests.Tests
 {
