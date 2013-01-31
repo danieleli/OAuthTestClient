@@ -27,13 +27,21 @@ namespace SS.OAuth1.Client.Commands
         public Creds GetToken(OAuthParametersBase parameters)
         {
             var msg = this.MessageFactory.Create(parameters);
-            var authHeader = parameters.GetOAuthHeader();
-            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, "OAuth " + authHeader);
+            AddOAuthHeader(parameters, msg);
             var response = this.MessageSender.Send(msg);
             
             var token = ExtractToken(response);
 
             return token;
+        }
+
+        private static void AddOAuthHeader(OAuthParametersBase parameters, HttpRequestMessage msg)
+        {
+            var authHeader = parameters.GetOAuthHeader();
+            if (!string.IsNullOrEmpty(authHeader))
+            {
+                msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, "OAuth " + authHeader);    
+            }
         }
 
         protected virtual Creds ExtractToken(HttpResponseMessage response)
