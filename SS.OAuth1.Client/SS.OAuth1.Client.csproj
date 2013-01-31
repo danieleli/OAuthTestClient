@@ -44,13 +44,15 @@
   <ItemGroup>
     <Compile Include="Commands\GetTokenCommand.cs" />
     <Compile Include="Commands\GetVerifierCommand.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="G.cs" />
+    <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
     <Compile Include="Helpers\OAuth.cs" />
     <Compile Include="Helpers\Creds.cs" />
     <Compile Include="Messages\MessageSender.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Parameters\OAuthParametersBase.cs" />
     <Compile Include="Helpers\OAuthParser.cs" />
     <Compile Include="Parameters\RequestTokenParameters.cs" />

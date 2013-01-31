@@ -51,8 +51,9 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tests\ExtensionsTest.cs" />
+    <Compile Include="Tests\Extensions\NameValueCollectionTest.cs" />
     <Compile Include="Tests\Helpers\OAuthParserTest.cs" />
+    <Compile Include="Tests\Parameters\ParameterBaseTest.cs" />
     <Compile Include="Tests\TwoLegTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\OAuth2Test.cs" />

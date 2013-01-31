@@ -16,7 +16,6 @@ namespace SS.OAuth1.Client.Parameters
     }
 
 
-
     /// <summary>
     ///     Parameter Aggregator Pattern
     /// </summary>
@@ -34,6 +33,7 @@ namespace SS.OAuth1.Client.Parameters
         public Creds Consumer { get; protected set; }
         public HttpMethod HttpMethod { get; private set; }
         public Uri RequestUri { get; private set; }
+        public string Authority { get; private set; }
 
         public string Timestamp
         {
@@ -53,18 +53,16 @@ namespace SS.OAuth1.Client.Parameters
 
         #endregion -- Properties --
 
-        #region -- Constructor --
-
-        protected OAuthParametersBase(Creds consumer, HttpMethod method, string url)
+        // Constructor
+        protected OAuthParametersBase(Creds consumer, HttpMethod method, string url, string authority = null)
         {
             ValidateInputs(consumer, method, url);
 
             this.Consumer = consumer;
             this.HttpMethod = method;
+            this.Authority = authority;
             this.RequestUri = new Uri(url);
         }
-
-        #endregion -- Constructor --
 
         public abstract string GetOAuthHeader();
 

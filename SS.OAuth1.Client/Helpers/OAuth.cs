@@ -1,12 +1,15 @@
 #region
 
 using System;
+using System.Text;
 
 #endregion
 
 namespace SS.OAuth1.Client.Helpers
 {
-    public static class OAuth
+
+
+    public static partial class OAuth
     {
         private static readonly Random random = new Random();
 
@@ -22,7 +25,10 @@ namespace SS.OAuth1.Client.Helpers
             // Just a simple implementation of a random number between 123400 and 9999999
             return random.Next(123400, 9999999).ToString();
         }
+    }
 
+    public static partial class OAuth
+    {
         public static class V1
         {
             public const string AUTHORIZATION_HEADER = "Authorization";

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using SS.OAuth1.Client.Commands;
+using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
 using log4net;

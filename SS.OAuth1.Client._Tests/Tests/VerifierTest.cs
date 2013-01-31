@@ -1,11 +1,16 @@
 ﻿#region
 
 using System;
+using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
 using SS.OAuth1.Client.Commands;
+using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
 using log4net;
@@ -39,7 +44,8 @@ namespace SS.OAuth1.Client._Tests.Tests
             var requestToken = GetRequestToken(_consumer);
             HitWebView(requestToken.Key);
             var twoLegAccessToken = GetTwoLegAccessToken(_user);
-            var fuckedToken = new Creds(twoLegAccessToken.Key, requestToken.Secret);
+            var fuckedToken = new Creds(twoLegAccessToken.Key, GetSha1(requestToken.Secret));
+            //var fuckedToken = new Creds(twoLegAccessToken.Key, requestToken.Secret);
 
             
 
@@ -59,6 +65,44 @@ namespace SS.OAuth1.Client._Tests.Tests
             LOG.LogCreds("verifierToken", verifierToken);
         }
 
+        private string GetSha1(string secret)
+        {
+            var bytes = Encoding.UTF8.GetBytes(secret);
+            var hmac = new HMACSHA256(bytes);
+            return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(secret)));
+        }
+
+        public string GetTokenVerifier(NameValueCollection rt, string token, string consumerKey = null, string consumerSecret = null)
+        {
+            //48200
+            //100001320
+            //string requestURL = baseAddress + "/OAuth/1A/AuthorizeToken?token=" + (token ?? rt["oauth_token"]) + "&isAuthorized=true";
+            //"https://test.api.mxmerchant.com/v1/OAuth/1A/AuthorizeToken?token=" + (token ?? rt["oauth_token"]) + "&isAuthorized=true";
+            var requestUrl = OAuth.V1.Routes.GetAuthorizeTokenRoute(token);
+
+            
+            var authRequest = new HttpRequestMessage
+            {
+                RequestUri = new Uri(requestUrl),
+                Method = HttpMethod.Post
+            };
+
+            string mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
+            authRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+         //   authRequest.Sign(SignatureMethod.OAuth1A, consumerKey, consumerSecret, rt["oauth_token"], rt["oauth_token_secret"], null, null, null);
+
+            HttpClient httpClient = new HttpClient();
+            var result = httpClient.SendAsync(authRequest);
+
+            HttpResponseMessage authResponse = result.Result;
+
+            if (authResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return null;
+            if (authResponse.Headers.Location == null)
+                return authResponse.Content.ReadAsFormDataAsync().Result["oauth_verifier"];
+            else
+                return authResponse.Headers.Location.ParseQueryString()["oauth_verifier"];
+        }
 
         private static void HitWebView(string token)
         {

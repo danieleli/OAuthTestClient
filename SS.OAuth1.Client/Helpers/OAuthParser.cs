@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Parameters;
+
 
 namespace SS.OAuth1.Client.Helpers
 {
@@ -28,9 +31,9 @@ namespace SS.OAuth1.Client.Helpers
 
     public class OAuthParser
     {
-        private SortedDictionary<string, string> GetOAuthParamsCore(OAuthParametersBase p)
+        private NameValueCollection GetOAuthParamsCore(OAuthParametersBase p)
         {
-            var d = new SortedDictionary<string, string>();
+            var d = new NameValueCollection();
             d.AddIfNotNullOrEmpty(Keys.NONCE, p.Nonce);
             d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
             d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, p.Timestamp);
@@ -40,7 +43,7 @@ namespace SS.OAuth1.Client.Helpers
         }
 
 
-        private SortedDictionary<string, string> GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = "", string token = "", string verifier = "")
+        private NameValueCollection GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
         {
             var sortedDictionary = this.GetOAuthParamsCore(paramz);
 
@@ -51,8 +54,53 @@ namespace SS.OAuth1.Client.Helpers
             return sortedDictionary;
         }
 
-        public string CreateHeader(OAuthParametersBase paramz, Creds requestToken, string callback = "",
-                                      string verifier = null)
+
+        public string GetSignatureBase(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
+        {
+            /*
+               http://tools.ietf.org/html/rfc5849#section-3.4.1
+            
+               3.4.1.  Signature Base String - 
+
+               The signature base string is a consistent, reproducible concatenation
+               of several of the HTTP request elements into a single string.  The
+               string is used as an input to the "HMAC-SHA1" and "RSA-SHA1"
+               signature methods.
+
+               The signature base string includes the following components of the
+               HTTP request:
+
+               o  The HTTP request method (e.g., "GET", "POST", etc.).
+
+               o  The authority as declared by the HTTP "Host" request header field.
+
+               o  The path and query components of the request resource URI.
+
+               o  The protocol parameters excluding the "oauth_signature".
+
+               o  Parameters included in the request entity-body if they comply with
+                  the strict restrictions defined in Section 3.4.1.3.
+                  http://tools.ietf.org/html/rfc5849#section-3.4.1.3
+
+               The signature base string does not cover the entire HTTP request.
+               Most notably, it does not include the entity-body in most requests,
+               nor does it include most HTTP entity-headers.  It is important to
+               note that the server cannot verify the authenticity of the excluded
+               request components without using additional protections such as SSL/
+               TLS or other methods.
+            */
+
+            var method = paramz.HttpMethod.ToString().ToUpper();
+            var authority = paramz.RequestUri.Authority;
+            var uri = paramz.RequestUri.ToString().UrlEncodeForOAuth();
+            var oauthParams = this.GetOAuthParamsNoSignature(paramz, callback, token, verifier).Stringify();
+            var bodyParams = "";
+
+            return method + "&" + uri + "&" + oauthParams + "&" + bodyParams;
+        }
+
+
+        public string CreateHeader(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
         {
             requestToken = requestToken ?? new Creds(null, null);
 
@@ -64,7 +112,8 @@ namespace SS.OAuth1.Client.Helpers
             return oauthParamDictionary.Stringify();
         }
 
-        private string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = "", string verifier = null)
+
+        private string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
         {
             string requestTokenKey = null;
             string requestTokenSecret  = null;
