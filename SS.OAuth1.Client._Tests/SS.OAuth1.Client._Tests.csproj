@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Tests\Extensions\NameValueCollectionTest.cs" />
     <Compile Include="Tests\Extensions\UriExTest.cs" />
+    <Compile Include="Tests\Helpers\NormalizedParametersTest.cs" />
     <Compile Include="Tests\Helpers\OAuthParserTest.cs" />
     <Compile Include="Tests\Parameters\ParameterBaseTest.cs" />
     <Compile Include="Tests\TwoLegTest.cs" />

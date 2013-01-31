@@ -7,8 +7,6 @@ using SS.OAuth1.Client.Parameters;
 
 namespace SS.OAuth1.Client.Helpers
 {
-
-
     public class Keys
     {
         public const string CALLBACK = "oauth_callback";
@@ -43,7 +41,7 @@ namespace SS.OAuth1.Client.Helpers
         }
 
 
-        private NameValueCollection GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
+        public NameValueCollection GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
         {
             var paramPairs = this.GetOAuthParamsCore(paramz);
 
@@ -64,55 +62,40 @@ namespace SS.OAuth1.Client.Helpers
             return NameValueCollectionEx.Stringify(pairs);
         }
 
+
         public string GetSignatureBase(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
         {
             /*
-               http://tools.ietf.org/html/rfc5849#section-3.4.1
-            
-               3.4.1.  Signature Base String - 
+               http://tools.ietf.org/html/rfc5849#section-3.4.1.1
+              
+               1.  The HTTP request method in uppercase.  For example: "HEAD",
+                   "GET", "POST", etc.  If the request uses a custom HTTP method, it
+                   MUST be encoded (Section 3.6).
 
-               The signature base string is a consistent, reproducible concatenation
-               of several of the HTTP request elements into a single string.  The
-               string is used as an input to the "HMAC-SHA1" and "RSA-SHA1"
-               signature methods.
+               2.  An "&" character (ASCII code 38).
 
-               The signature base string includes the following components of the
-               HTTP request:
+               3.  The base string URI from Section 3.4.1.2, after being encoded
+                   (Section 3.6).
 
-               o  The HTTP request method (e.g., "GET", "POST", etc.).
+               4.  An "&" character (ASCII code 38).
 
-               o  The authority as declared by the HTTP "Host" request header field.
-
-               o  The path and query components of the request resource URI.
-
-               o  The protocol parameters excluding the "oauth_signature".
-
-               o  Parameters included in the request entity-body if they comply with
-                  the strict restrictions defined in Section 3.4.1.3.
-                  http://tools.ietf.org/html/rfc5849#section-3.4.1.3
-
-               The signature base string does not cover the entire HTTP request.
-               Most notably, it does not include the entity-body in most requests,
-               nor does it include most HTTP entity-headers.  It is important to
-               note that the server cannot verify the authenticity of the excluded
-               request components without using additional protections such as SSL/
-               TLS or other methods.
+               5.  The request parameters as normalized in Section 3.4.1.3.2, after
+                   being encoded (Section 3.6).              
             */
 
             var method = paramz.HttpMethod.ToString().ToUpper();
-            var authority = paramz.RequestUri.Authority;
-            var baseStringUri = GetBaseStringUri(paramz.RequestUri);
+            var baseStringUri = paramz.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
             var oauthPairs = this.GetOAuthParamsNoSignature(paramz, callback, token, verifier);
             var oauthParams = Stringify(oauthPairs);
             var bodyParams = "";
 
+            var normalizedRequestParams = "";
+
+            var rtn = string.Format("{0}&{1}&{2}", method, baseStringUri, normalizedRequestParams);
+
             return method + "&" + baseStringUri + "&" + oauthParams + "&" + bodyParams;
         }
 
-        private object GetBaseStringUri(Uri requestUri)
-        {
-            throw new NotImplementedException();
-        }
 
 
         public string CreateHeader(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
@@ -131,7 +114,7 @@ namespace SS.OAuth1.Client.Helpers
         private string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
         {
             string requestTokenKey = null;
-            string requestTokenSecret  = null;
+            string requestTokenSecret = null;
 
             if (requestToken != null)
             {
