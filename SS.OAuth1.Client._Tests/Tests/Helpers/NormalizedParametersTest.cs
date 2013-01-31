@@ -3,6 +3,7 @@ using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
+using SS.OAuth1.Client._Tests.Helpers;
 using SS.OAuth1.Client._Tests.Tests.Parameters;
 using log4net;
 
@@ -31,11 +32,11 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
         }
 
         [Test]
-        public void NormalizedRequestParameters_Include_QueryStringParams()
+        public void Include_QueryStringParams()
         {
             var normalizedRequestParams = GetNormalizedRequestParameters(_testParam);
 
-            LOG.Debug("normalizedRequestParams: " + normalizedRequestParams);
+            LOG.Debug("normal params: " + normalizedRequestParams);
 
             Assert.That(normalizedRequestParams, Is.Not.Null, "normalizedRequestParams");
 
@@ -50,18 +51,18 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
         }
 
         [Test]
-        public void NormalizedRequestParameters_Includes_ItemWithName_ConsumerKey()
+        public void Includes_ItemWithName_ConsumerKey()
         {
             var normalizedRequestParams = GetNormalizedRequestParameters(_testParam);
 
-            LOG.Debug("normalizedRequestParams: " + normalizedRequestParams);
+            LOG.Debug("normal params: " + normalizedRequestParams);
 
             var values = normalizedRequestParams.GetValues(Keys.CONSUMER_KEY);
             Assert.That(values, Is.Not.Null, "oauthConsumerTokenKey_Values");
             Assert.That(values.Length, Is.EqualTo(1), "Count of RequestParams Named " + Keys.CONSUMER_KEY);
 
 
-            LOG.Debug("normalizedRequestParams.Stringify: " + normalizedRequestParams.Stringify());
+            LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
 
         }
 
