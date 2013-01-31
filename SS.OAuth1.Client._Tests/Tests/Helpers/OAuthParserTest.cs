@@ -21,7 +21,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             var parser = new OAuthParser();
 
             // Act
-            var header = parser.CreateHeader(param, null);
+            var header = OAuthParser.CreateHeader(param, null);
 
             // Assert
             LOG.Info(header);

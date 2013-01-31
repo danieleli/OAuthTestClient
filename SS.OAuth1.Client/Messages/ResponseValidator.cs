@@ -9,7 +9,7 @@ namespace SS.OAuth1.Client.Messages
     {
         public void ValidateResponse(HttpResponseMessage response)
         {
-            
+
             var isAuthorized = (response.StatusCode != HttpStatusCode.Unauthorized);
             if (!isAuthorized)
             {
@@ -40,11 +40,21 @@ namespace SS.OAuth1.Client.Messages
         private UnauthorizedAccessException GetUnauthorizedException(HttpResponseMessage response)
         {
             var values = response.Content.ReadAsFormDataAsync().Result;
-            var errorCode = values["errorCode"];
-            var message = values["message"];
-            var msg = string.Format("ErrorCode: {0}; Message: {1}", errorCode, message);
+            var msg = "";
+
+            try
+            {
+                var errorCode = values["errorCode"];
+                var message = values["message"];
+                msg = string.Format("ErrorCode: {0}; Message: {1}", errorCode, message);
+            }
+            catch (Exception e)
+            {
+                msg = "No Message Found";
+            }
+
             return new UnauthorizedAccessException(msg);
-       
+
         }
     }
 }

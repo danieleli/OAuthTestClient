@@ -31,7 +31,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Parameters
             var param = new VerifierTokenParameters(consumer, requestToken, "");
 
             // Act
-            var header = param.GetOAuthHeader();
+            var header =  param.GetOAuthHeader();
 
             // Assert
             LOG.Info(header);

@@ -25,14 +25,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Parameters
             _testParam = new TestParameter(consumer, method, url, authority);
 
         }
-        
-        [Test]
-        public void GetSignatureBase()
-        {
-            var sigBase = _testParam.GetSignatureBase();
-            LOG.Debug("SigBase: " + sigBase);
 
-        }
 
   
     }

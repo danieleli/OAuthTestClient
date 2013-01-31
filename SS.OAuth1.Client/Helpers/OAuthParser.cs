@@ -29,28 +29,6 @@ namespace SS.OAuth1.Client.Helpers
 
     public class OAuthParser
     {
-        private NameValueCollection GetOAuthParamsCore(OAuthParametersBase p)
-        {
-            var d = new NameValueCollection();
-            d.AddIfNotNullOrEmpty(Keys.NONCE, p.Nonce);
-            d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
-            d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, p.Timestamp);
-            d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);
-            d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, p.Consumer.Key);
-            return d;
-        }
-
-
-        public NameValueCollection GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
-        {
-            var paramPairs = this.GetOAuthParamsCore(paramz);
-
-            paramPairs.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
-            paramPairs.AddIfNotNullOrEmpty(Keys.TOKEN, token);
-            paramPairs.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
-
-            return paramPairs;
-        }
 
         protected string Encode(string s)
         {
@@ -85,33 +63,31 @@ namespace SS.OAuth1.Client.Helpers
 
             var method = paramz.HttpMethod.ToString().ToUpper();
             var baseStringUri = paramz.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
-            var oauthPairs = this.GetOAuthParamsNoSignature(paramz, callback, token, verifier);
-            var oauthParams = Stringify(oauthPairs);
-            var bodyParams = "";
 
-            var normalizedRequestParams = "";
+
+            var normalizedRequestParams = ""; 
 
             var rtn = string.Format("{0}&{1}&{2}", method, baseStringUri, normalizedRequestParams);
 
-            return method + "&" + baseStringUri + "&" + oauthParams + "&" + bodyParams;
+            return rtn;
         }
 
 
-
-        public string CreateHeader(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
+        public static string CreateHeader(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
         {
             requestToken = requestToken ?? new Creds(null, null);
 
-            var oauthParamDictionary = this.GetOAuthParamsNoSignature(paramz, callback, requestToken.Key, verifier);
+            var oauthParamDictionary = paramz.GetOAuthParams();
 
-            var sig = this.CreateSignature(paramz, requestToken, callback, verifier);
+            var sig = CreateSignature(paramz, requestToken, callback, verifier);
+
             oauthParamDictionary.Add(Keys.SIGNATURE, sig);
 
             return oauthParamDictionary.Stringify();
         }
 
 
-        private string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
+        private static string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
         {
             string requestTokenKey = null;
             string requestTokenSecret = null;

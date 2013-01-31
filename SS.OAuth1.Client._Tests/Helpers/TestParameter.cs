@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Net.Http;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
@@ -9,14 +10,15 @@ namespace SS.OAuth1.Client._Tests.Helpers
     {
         public TestParameter(Creds consumer, HttpMethod method, string url, string authority=null) : base(consumer, method, url, authority) {}
 
-        public override string GetOAuthHeader()
+
+        public override NameValueCollection GetOAuthParams()
         {
-            throw new NotImplementedException();
+            return base.GetOAuthParamsCore();
         }
 
-        public string GetSignatureBase()
+        public override string GetOAuthHeader()
         {
-            return this.OAuthParser.GetSignatureBase(this);
+            return OAuthParser.CreateHeader(this, null);
         }
     }
 }

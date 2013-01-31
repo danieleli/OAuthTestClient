@@ -24,10 +24,10 @@ namespace SS.OAuth1.Client.Commands
             set { _messageSender = value; }
         }
 
-        public Creds GetToken(OAuthParametersBase parameters)
+        public Creds GetToken(OAuthParametersBase paramz)
         {
-            var msg = this.MessageFactory.Create(parameters);
-            AddOAuthHeader(parameters, msg);
+            var msg = this.MessageFactory.Create(paramz);
+            AddOAuthHeader(paramz, msg);
             var response = this.MessageSender.Send(msg);
             
             var token = ExtractToken(response);
@@ -40,7 +40,7 @@ namespace SS.OAuth1.Client.Commands
             var authHeader = parameters.GetOAuthHeader();
             if (!string.IsNullOrEmpty(authHeader))
             {
-                msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, "OAuth " + authHeader);    
+                msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, "OAuth " + authHeader);
             }
         }
 

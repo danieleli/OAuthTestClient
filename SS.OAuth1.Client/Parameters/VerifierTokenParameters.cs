@@ -1,4 +1,6 @@
+using System.Collections.Specialized;
 using System.Net.Http;
+using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
 
 namespace SS.OAuth1.Client.Parameters
@@ -14,11 +16,17 @@ namespace SS.OAuth1.Client.Parameters
             RequestToken = requestToken;
         }
 
-        public override string GetOAuthHeader()
+        public override NameValueCollection GetOAuthParams()
         {
-            var header = base.OAuthParser.CreateHeader(this, this.RequestToken);
-            return header;
+            var paramPairs = base.GetOAuthParamsCore();
+            paramPairs.AddIfNotNullOrEmpty(Keys.TOKEN, this.RequestToken.Key);
+            
+            return paramPairs;
         }
 
+        public override string GetOAuthHeader()
+        {
+            return OAuthParser.CreateHeader(this, this.RequestToken);
+        }
     }
 }

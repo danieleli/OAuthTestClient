@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth1.Client.Extensions;
@@ -63,14 +64,19 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
 
 
             LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
+        }
 
+        [Test]
+        public void Includes_EntityBody()
+        {
+         throw new NotImplementedException();
         }
 
         public NameValueCollection GetNormalizedRequestParameters(TestParameter p)
         {
             var rtnCollection = p.RequestUri.ParseQueryString();
             
-            var oauthParams = _parser.GetOAuthParamsNoSignature(p);
+            var oauthParams = p.GetOAuthParams();
             rtnCollection.Add(oauthParams);
 
             return rtnCollection;

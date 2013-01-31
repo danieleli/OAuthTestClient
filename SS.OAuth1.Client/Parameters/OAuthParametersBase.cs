@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -26,7 +27,6 @@ namespace SS.OAuth1.Client.Parameters
 
         private string _nonce;
         private string _timestamp;
-        private OAuthParser _oAuthParser;
 
         public const string SIGNATURE_METHOD = Values.SIGNATURE_METHOD;
         public const string VERSION = Values.VERSION;
@@ -46,12 +46,6 @@ namespace SS.OAuth1.Client.Parameters
             get { return _nonce ?? (_nonce = OAuth.GenerateNonce()); }
         }
 
-        public OAuthParser OAuthParser
-        {
-            get { return _oAuthParser ?? (_oAuthParser = new OAuthParser()); }
-            set { _oAuthParser = value; }
-        }
-
         #endregion -- Properties --
 
         // Constructor
@@ -65,9 +59,22 @@ namespace SS.OAuth1.Client.Parameters
             this.RequestUri = new Uri(url);
         }
 
+        public abstract NameValueCollection GetOAuthParams();
+
         public abstract string GetOAuthHeader();
 
-        
+        protected NameValueCollection GetOAuthParamsCore()
+        {
+            var d = new NameValueCollection();
+            d.AddIfNotNullOrEmpty(Keys.NONCE, this.Nonce);
+            d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, this.Timestamp);
+            d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, this.Consumer.Key);
+            
+            d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);
+            d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
+
+            return d;
+        }
 
         #region -- Validation --
 

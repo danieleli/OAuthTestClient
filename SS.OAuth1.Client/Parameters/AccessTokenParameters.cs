@@ -1,7 +1,9 @@
 #region
 
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net.Http;
+using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
 
 #endregion
@@ -27,11 +29,18 @@ namespace SS.OAuth1.Client.Parameters
             Verifier = verifier;
         }
 
-        public override string GetOAuthHeader()
+        public override NameValueCollection GetOAuthParams()
         {
-            var header = base.OAuthParser.CreateHeader(this, this.RequestToken, this.Verifier);
-            return header;
+            var paramPairs = base.GetOAuthParamsCore();
+            paramPairs.AddIfNotNullOrEmpty(Keys.TOKEN, this.RequestToken.Key);
+            paramPairs.AddIfNotNullOrEmpty(Keys.VERIFIER, this.Verifier);
+
+            return paramPairs;
         }
 
+        public override string GetOAuthHeader()
+        {
+            return OAuthParser.CreateHeader(this, this.RequestToken, this.Verifier);
+        }
     }
 }
