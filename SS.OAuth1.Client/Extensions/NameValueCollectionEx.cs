@@ -7,9 +7,9 @@ using log4net;
 
 namespace SS.OAuth1.Client.Extensions
 {
-    public static class NameValueCollectionExtensions
+    public static class NameValueCollectionEx
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(NameValueCollectionExtensions));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(NameValueCollectionEx));
 
         public static string Stringify(this NameValueCollection collection)
         {

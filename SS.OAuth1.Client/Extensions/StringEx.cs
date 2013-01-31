@@ -2,7 +2,7 @@ using System.Text;
 
 namespace SS.OAuth1.Client.Extensions
 {
-    public static class StringExtensions
+    public static class StringEx
     {
         public const string UNRESERVED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 

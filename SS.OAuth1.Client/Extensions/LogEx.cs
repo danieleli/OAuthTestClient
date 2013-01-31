@@ -3,7 +3,7 @@ using log4net;
 
 namespace SS.OAuth1.Client.Extensions
 {
-    public static class LogExtensions
+    public static class LogEx
     {
         public static void LogCreds(this ILog logger, string credType, Creds creds)
         {

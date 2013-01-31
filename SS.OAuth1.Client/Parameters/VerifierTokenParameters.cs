@@ -8,8 +8,8 @@ namespace SS.OAuth1.Client.Parameters
         public Creds RequestToken { get; set; }
 
         // Constructor
-        public VerifierTokenParameters(Creds consumer, Creds requestToken)
-            : base(consumer, HttpMethod.Get, OAuth.V1.Routes.GetAuthorizeTokenRoute(requestToken.Key))
+        public VerifierTokenParameters(Creds consumer, Creds requestToken, string userToken)
+            : base(consumer, HttpMethod.Post, OAuth.V1.Routes.GetAuthorizeTokenRoute(userToken))
         {
             RequestToken = requestToken;
         }

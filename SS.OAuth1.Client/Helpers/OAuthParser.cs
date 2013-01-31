@@ -45,15 +45,24 @@ namespace SS.OAuth1.Client.Helpers
 
         private NameValueCollection GetOAuthParamsNoSignature(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
         {
-            var sortedDictionary = this.GetOAuthParamsCore(paramz);
+            var paramPairs = this.GetOAuthParamsCore(paramz);
 
-            sortedDictionary.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
-            sortedDictionary.AddIfNotNullOrEmpty(Keys.TOKEN, token);
-            sortedDictionary.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
+            paramPairs.AddIfNotNullOrEmpty(Keys.CALLBACK, callback);
+            paramPairs.AddIfNotNullOrEmpty(Keys.TOKEN, token);
+            paramPairs.AddIfNotNullOrEmpty(Keys.VERIFIER, verifier);
 
-            return sortedDictionary;
+            return paramPairs;
         }
 
+        protected string Encode(string s)
+        {
+            return StringEx.UrlEncodeForOAuth(s);
+        }
+
+        protected string Stringify(NameValueCollection pairs)
+        {
+            return NameValueCollectionEx.Stringify(pairs);
+        }
 
         public string GetSignatureBase(OAuthParametersBase paramz, string callback = null, string token = null, string verifier = null)
         {
@@ -92,11 +101,17 @@ namespace SS.OAuth1.Client.Helpers
 
             var method = paramz.HttpMethod.ToString().ToUpper();
             var authority = paramz.RequestUri.Authority;
-            var uri = paramz.RequestUri.ToString().UrlEncodeForOAuth();
-            var oauthParams = this.GetOAuthParamsNoSignature(paramz, callback, token, verifier).Stringify();
+            var baseStringUri = GetBaseStringUri(paramz.RequestUri);
+            var oauthPairs = this.GetOAuthParamsNoSignature(paramz, callback, token, verifier);
+            var oauthParams = Stringify(oauthPairs);
             var bodyParams = "";
 
-            return method + "&" + uri + "&" + oauthParams + "&" + bodyParams;
+            return method + "&" + baseStringUri + "&" + oauthParams + "&" + bodyParams;
+        }
+
+        private object GetBaseStringUri(Uri requestUri)
+        {
+            throw new NotImplementedException();
         }
 
 

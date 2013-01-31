@@ -111,8 +111,9 @@ namespace MXM.API.Test.Controllers
             //48200
             //100001320
             //string requestURL = baseAddress + "/OAuth/1A/AuthorizeToken?token=" + (token ?? rt["oauth_token"]) + "&isAuthorized=true";
-            string requestURL = "https://test.api.mxmerchant.com/v1/OAuth/1A/AuthorizeToken?token=" + (token ?? rt["oauth_token"]) + "&isAuthorized=true";
-
+            string requestURL = "https://test.api.mxmerchant.com/v1/OAuth/1A/AuthorizeToken?token=" + (userToken) + "&isAuthorized=true";
+            authRequest.Sign(consumerKey, consumerSecret, requestTokenKey, requestTokenSecret, null, null, null);
+            
             HttpRequestMessage authRequest = new HttpRequestMessage
             {
                 RequestUri = new Uri(requestURL),
@@ -121,8 +122,11 @@ namespace MXM.API.Test.Controllers
 
             string mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
             authRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-            authRequest.Sign(SignatureMethod.OAuth1A, consumerKey ?? base.consumerKey, consumerSecret ?? base.consumerSecret, rt["oauth_token"], rt["oauth_token_secret"], null, null, null);
+            
+            authRequest.Sign(consumerKey, consumerSecret, requestTokenKey, requestTokenSecret, null, null, null);
 
+            authRequest.Sign(SignatureMethod.OAuth1A, consumerKey ?? base.consumerKey, consumerSecret ?? base.consumerSecret, rt["oauth_token"], rt["oauth_token_secret"], null, null, null);
+            authRequest.Sign(consumerKey, consumerSecret, requestTokenKey, requestTokenSecret, null, null, null);
             HttpClient httpClient = new HttpClient();
             var result = httpClient.SendAsync(authRequest);
 

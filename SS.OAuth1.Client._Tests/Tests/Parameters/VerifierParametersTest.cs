@@ -28,7 +28,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Parameters
             const string rSecret = "requestTokenSecret";
             var requestToken = new Creds(rKey, rSecret);
 
-            var param = new VerifierTokenParameters(consumer, requestToken);
+            var param = new VerifierTokenParameters(consumer, requestToken, "");
 
             // Act
             var header = param.GetOAuthHeader();
