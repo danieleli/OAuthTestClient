@@ -2,6 +2,7 @@
 
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using NUnit.Framework;
 using SS.OAuth1.Client.Commands;
@@ -35,25 +36,64 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void Success()
         {
             // Arrange            
-            var requestTokenCmd = new GetTokenCommand();
-            var requestInput = new RequestTokenParameters(_consumer);
-            var requestToken = requestTokenCmd.GetToken(requestInput);
-            var verifierParams = new VerifierTokenParameters(_consumer, requestToken);
+            var requestToken = GetRequestToken(_consumer);
+            HitWebView(requestToken.Key);
+            var twoLegAccessToken = GetTwoLegAccessToken(_user);
+            var fuckedToken = new Creds(twoLegAccessToken.Key, requestToken.Secret);
+
+            
+
+            // todo: use two leg to get access token like the user signed on to mxmerchant site
+            var verifierParams = new VerifierTokenParameters(_consumer, fuckedToken);
             var verifierCmd = new GetVerifierCommand();
 
             
             // Act
             var verifierToken = verifierCmd.GetToken(verifierParams);
 
+
             // Assert
             Assert.IsNotNull(verifierToken, "AccessToken");
             Assert.IsNotNullOrEmpty(verifierToken.Key, "oauth_token");
             Assert.IsNotNullOrEmpty(verifierToken.Secret, "oauth_token_secret");
+            LOG.LogCreds("verifierToken", verifierToken);
+        }
+
+
+        private static void HitWebView(string token)
+        {
+            var webClient = new HttpClient();
+            var url = OAuth.V1.Routes.WebViews.GetAuthorizeRoute(token);
+            var uri = new Uri(url);
+            var msg = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = webClient.SendAsync(msg).Result;
+            LOG.Debug("Response: " + response);
+        }
+
+        private static Creds GetTwoLegAccessToken(Creds user)
+        {
+            var requestToken = GetRequestToken(user);
+            var input = new AccessTokenParameters(user, requestToken, null);
+            var cmd = new GetTokenCommand();
+            var accessToken = cmd.GetToken(input);
+
+            return accessToken;
+        }
+
+        private static Creds GetRequestToken(Creds consumer)
+        {
+            var requestTokenCmd = new GetTokenCommand();
+            LOG.LogCreds("consumer", consumer);
+            var requestInput = new RequestTokenParameters(consumer);
+            var requestToken = requestTokenCmd.GetToken(requestInput);
+            LOG.LogCreds("requestToken", requestToken);
+            return requestToken;
         }
 
         [Test]
         public void AuthorizeWithInvalidToken_Returns_BadRequest()
         {
+            throw new NotImplementedException();
             //// Arrange
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
             //requestToken.Key = "xxxx";
@@ -69,6 +109,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         [Test]
         public void Authorize_Returns_StatusCodeOk()
         {
+            throw new NotImplementedException();
             //// Arrange
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 
@@ -83,6 +124,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         [Test, ExpectedException(ExpectedException = typeof (UnauthorizedAccessException))]
         public void BadVerifier_Returns_UnauthorizedStatusCode()
         {
+            throw new NotImplementedException();
             //// Arrrange
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 
@@ -95,6 +137,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         [Test]
         public void GetAccessToken_By_SimulatedUserLogin()
         {
+            throw new NotImplementedException();
         //    var passwordSha1 = "5ravvW12u10gQVQtfS4/rFuwVZM="; // password1234
         //    var user = new Creds("dantest", passwordSha1);
 
@@ -111,6 +154,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         [Test]
         public void GetVerifier()
         {
+            throw new NotImplementedException();
             //// Arrange
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 
@@ -126,12 +170,14 @@ namespace SS.OAuth1.Client._Tests.Tests
         [Test]
         public void When_ActiveMxMerchantUserSession_AuthorizeToken_Displays_ApproveDenyView()
         {
+            throw new NotImplementedException();
             //Assert.Ignore("Not Implemented");
         }
 
         [Test]
         public void When_NoActiveUserSessionOnMxMerchant_AuthorizeToken_RedirectsToLogin()
         {
+            throw new NotImplementedException();
             //// Arrange
             //var requestToken = RequestComposer.RequestTokenComposer.GetRequstToken(_consumer, "oob");
 

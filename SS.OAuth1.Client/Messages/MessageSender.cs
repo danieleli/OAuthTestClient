@@ -36,8 +36,6 @@ namespace SS.OAuth1.Client.Messages
 
         public HttpResponseMessage Send(HttpRequestMessage msg)
         {
-            LOG.Debug("Send Message: \n" + msg + "\n");
-
             var response = this.HttpClient.SendAsync(msg).Result;
             
             LOG.Debug("Message Response: \n" + response + "\n");

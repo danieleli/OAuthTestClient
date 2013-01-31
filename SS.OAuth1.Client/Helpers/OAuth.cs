@@ -42,6 +42,17 @@ namespace SS.OAuth1.Client.Helpers
                     return url;
                 }
 
+                public static class WebViews
+                {
+                    private const string AUTHORIZE = G.BASE_SITE_URL + "/oauth/authorize?oauth_token={0}";
+
+                    public static string GetAuthorizeRoute(string token)
+                    {
+                        var url = String.Format(AUTHORIZE, token);
+                        return url;
+                    }    
+                }
+
             }
         }
     }

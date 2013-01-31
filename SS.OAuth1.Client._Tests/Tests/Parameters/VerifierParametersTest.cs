@@ -17,7 +17,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Parameters
         private static readonly ILog LOG = LogManager.GetLogger(typeof(VerifierParametersTest));
 
         [Test]
-        public void CreateHeader()
+        public void CreateHeader_Contains_ConsumerKeyAndRequestToken()
         {
             // Arrange
             const string cKey = "consumerKey";
