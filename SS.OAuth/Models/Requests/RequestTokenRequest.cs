@@ -25,20 +25,20 @@ namespace SS.OAuth.Models.Requests
         {
             var method = _msg.Method.ToString().ToUpper();
             var baseUri = _msg.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
-            var paramz = GetAllRequestParameters();
+            var paramz = GetAllRequestParameters().Normalize().UrlEncodeForOAuth();
 
             var rtn = string.Format("{0}&{1}&{2}", method, baseUri, paramz);
 
             return rtn;
         }
 
-        private NameValueCollection GetAllRequestParameters()
+        public NameValueCollection GetAllRequestParameters()
         {
-            
+
             var rtnCollection = new NameValueCollection();
             var oauthParams = _paramz.GetOAuthParams();
             rtnCollection.Add(oauthParams);
-            
+
             //httpContent = _msg.Content;
             //if (httpContent != null)
             //{
@@ -47,8 +47,24 @@ namespace SS.OAuth.Models.Requests
 
             //var queryParams = _msg.RequestUri.ParseQueryString();
             //rtnCollection.Add(queryParams);
-            
+
             return rtnCollection;
         }
+
+        public string GetSignature()
+        {
+            var sigBase = GetSignatureBase();
+            var sigKey = _paramz.GetSignatureKey();
+            var sig = GetSig(sigBase, sigKey);
+
+            return sig;
+        }
+
+        public string GetSig(string sigBase, string sigKey)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

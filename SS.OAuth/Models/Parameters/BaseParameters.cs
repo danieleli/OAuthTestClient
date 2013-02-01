@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using SS.OAuth.Extensions;
 using SS.OAuth.Misc;
 
 namespace SS.OAuth.Models.Parameters
@@ -37,7 +38,6 @@ namespace SS.OAuth.Models.Parameters
             Realm = realm;
         }
 
-
         public virtual NameValueCollection GetOAuthParams()
         {
             var collection = new NameValueCollection();
@@ -53,6 +53,23 @@ namespace SS.OAuth.Models.Parameters
             }
 
             return collection;
+        }
+
+        public virtual string GetSignatureKey()
+        {
+            return this.Consumer.Secret;
+        }
+
+        public virtual string GetOAuthHeader(string signature)
+        {
+            var col = new NameValueCollection();
+            var oauthParams = GetOAuthParams();
+
+            col.Add(oauthParams);
+            col.Add(V1.Keys.SIGNATURE, signature);
+
+            return "OAuth " + col.Stringify();
+
         }
     }
 
