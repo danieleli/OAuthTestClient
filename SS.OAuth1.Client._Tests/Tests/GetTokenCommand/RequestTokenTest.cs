@@ -125,5 +125,24 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
         }
+
+        [Test]
+        public void CreateHeader_Contains_ConsumerKey()
+        {
+            // Arrange
+            const string key = "keyABC";
+            const string secret = "secretDEF";
+            var consumer = new Creds(key, secret);
+            var param = new RequestTokenParameters(consumer);
+
+            // Act
+            var header = param.GetOAuthHeader();
+
+            // Assert
+            LOG.Info(header);
+            Assert.IsNotNullOrEmpty(header, "header");
+            Assert.That(header, Contains.Substring(key), "consumer key");
+            Assert.That(header, Is.Not.ContainsSubstring(secret), "consumer secret");
+        }
     }
 }

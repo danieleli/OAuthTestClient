@@ -15,7 +15,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
     [TestFixture]
     public class NormalizedParametersTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(OAuthParserTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizedParametersTest));
         private readonly TestParameter _testParam;
 
         public NormalizedParametersTest()
