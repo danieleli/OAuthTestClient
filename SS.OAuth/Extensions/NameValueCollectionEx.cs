@@ -5,11 +5,6 @@ using System.Text;
 
 namespace SS.OAuth.Extensions
 {
-    public static class MiscEx
-    {
-
-    }
-
     public static class NameValueCollectionEx
     {
         /*
@@ -79,7 +74,12 @@ namespace SS.OAuth.Extensions
             return sb.ToString().TrimEnd(",".ToCharArray());
         }
 
-        public static IEnumerable<string> GetSortedKeys(this NameObjectCollectionBase.KeysCollection keys)
+        public static string Normalize(this NameValueCollection collection)
+        {
+            return collection.Stringify(false, "&");
+        }
+
+        private static IEnumerable<string> GetSortedKeys(this NameObjectCollectionBase.KeysCollection keys)
         {
             var sortedList = new SortedSet<string>();
             foreach (var key in keys)
@@ -88,11 +88,5 @@ namespace SS.OAuth.Extensions
             }
             return sortedList;
         }
-
-        public static string Normalize(this NameValueCollection collection)
-        {
-            return collection.Stringify(false, "&");
-        }
-
     }
 }
