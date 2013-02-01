@@ -1,8 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
+using SS.OAuth.Extensions;
 using log4net;
 
-namespace SS.OAuth.Extensions
+namespace SS.OAuth.Tests.Extensions
 {
     [TestFixture]
     public class UriExTest

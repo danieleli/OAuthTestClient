@@ -2,11 +2,12 @@
 
 using System.Collections.Specialized;
 using NUnit.Framework;
+using SS.OAuth.Extensions;
 using log4net;
 
 #endregion
 
-namespace SS.OAuth.Extensions
+namespace SS.OAuth.Tests.Extensions
 {
     [TestFixture]
     public class NameValueCollectionTest

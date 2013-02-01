@@ -47,9 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Extensions\NameValueCollectionTest.cs" />
-    <Compile Include="Extensions\UriExTest.cs" />
+    <Compile Include="Tests\Extensions\NameValueCollectionTest.cs" />
+    <Compile Include="Tests\Extensions\UriExTest.cs" />
+    <Compile Include="Helpers\TestParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +61,7 @@
       <Name>SS.OAuth</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

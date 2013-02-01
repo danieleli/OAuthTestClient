@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Globalization;
+﻿using System.Collections.Specialized;
+using SS.OAuth.Misc;
 
 namespace SS.OAuth.Models.Parameters
 {
     public class BaseParameter
     {
-        private static readonly Random _Random = new Random();
+
 
         #region -- Properties --
 
@@ -22,12 +21,12 @@ namespace SS.OAuth.Models.Parameters
 
         public virtual string Timestamp
         {
-            get { return _timestamp ?? (_timestamp = GenerateTimeStamp()); }
+            get { return _timestamp ?? (_timestamp = Utils.GenerateTimeStamp()); }
         }
 
         public virtual string Nonce
         {
-            get { return _nonce ?? (_nonce = GenerateNonce()); }
+            get { return _nonce ?? (_nonce = Utils.GenerateNonce()); }
         }
 
         #endregion -- Properties --
@@ -40,35 +39,27 @@ namespace SS.OAuth.Models.Parameters
             Realm = realm;
         }
 
-        public static string GenerateTimeStamp()
-        {
-            // Default implementation of UNIX time of the current UTC time
-            var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalSeconds).ToString(CultureInfo.InvariantCulture);
-        }
-
-        public static string GenerateNonce()
-        {
-            // Just a simple implementation of a random number between 123400 and 9999999
-            return _Random.Next(123400, 9999999).ToString(CultureInfo.InvariantCulture);
-        }
-
         protected NameValueCollection GetOAuthParamsCore()
         {
-            var d = new NameValueCollection();
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
+            var collection = new NameValueCollection();
+            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
+            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
+            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
+            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
+            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
 
             if (_includeVersion)
             {
-                d.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
+                collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
             }
 
-            return d;
-        } 
+            return collection;
+        }
+
+        public virtual NameValueCollection GetOAuthParams()
+        {
+            return this.GetOAuthParamsCore();
+        }
     }
 
     public static class Extensions
