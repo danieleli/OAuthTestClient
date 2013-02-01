@@ -65,14 +65,17 @@ namespace SS.OAuth1.Client.Extensions
             foreach (var key in sortedKeys)
             {
                 var values = collection.GetValues(key) ?? new string[] {null};
-                var orderValues = values.OrderBy(s => s);
-                foreach (var orderValue in orderValues)
+                var orderedValues = values.OrderBy(s => s);
+                foreach (var val in orderedValues)
                 {
                     if (!isFirstItem)
                     {
                         sb.Append(",");
                     }
-                    sb.Append(string.Format("{0}=\"{1}\"", key.UrlEncodeForOAuth(), orderValue.UrlEncodeForOAuth()));
+
+                    var value = val ?? "";
+
+                    sb.Append(string.Format("{0}=\"{1}\"", key.UrlEncodeForOAuth(), value.UrlEncodeForOAuth()));
                     isFirstItem = false;   
                 }
                 
@@ -81,6 +84,39 @@ namespace SS.OAuth1.Client.Extensions
             return sb.ToString();
         }
 
+        public static string Normalize(this NameValueCollection collection)
+        {
+            /*
+             
+            */
+
+            var sb = new StringBuilder();
+            var isFirstItem = true;
+
+            var sortedKeys = SortKeys(collection.Keys);
+
+
+            foreach (var key in sortedKeys)
+            {
+                var values = collection.GetValues(key) ?? new string[] { null };
+                var orderedValues = values.OrderBy(s => s);
+                foreach (var val in orderedValues)
+                {
+                    if (!isFirstItem)
+                    {
+                        sb.Append("&");
+                    }
+
+                    var value = val ?? "";
+
+                    sb.Append(string.Format("{0}={1}", key.UrlEncodeForOAuth(), value.UrlEncodeForOAuth()));
+                    isFirstItem = false;
+                }
+
+            }
+
+            return sb.ToString();
+        }
         private static IEnumerable<string> SortKeys(NameObjectCollectionBase.KeysCollection keys)
         {
             var sortedList = new SortedSet<string>();

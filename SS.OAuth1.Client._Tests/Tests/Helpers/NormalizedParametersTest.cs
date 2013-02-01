@@ -82,24 +82,5 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
         }
 
-
-        [Test]
-        public void EncodeKeysAndValues()
-        {
-            // Arrange
-            var key = "na@me1";
-            var value = "va@lue1";
-            var content = new NameValueCollection { { key, value } };
-
-            // Act
-            var normalizedRequestParams = _testParam.GetAllRequestParameters(content);
-
-            // Assert;
-            var asString = normalizedRequestParams.Stringify();
-            Assert.That(asString, Is.Not.ContainsSubstring(key), "EncodedKey");
-            Assert.That(asString, Is.Not.ContainsSubstring(value), "EncodedValue");
-            LOG.Debug("normal params.Stringify: " + asString);
-        }
-
     }
 }

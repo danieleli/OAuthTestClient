@@ -23,6 +23,8 @@ namespace SS.OAuth1.Client.Parameters
     /// </summary>
     public abstract class OAuthParametersBase : IMessageParameters
     {
+        private readonly bool _includeVersion;
+
         #region -- Properties --
 
         private string _nonce;
@@ -36,12 +38,12 @@ namespace SS.OAuth1.Client.Parameters
         public Uri RequestUri { get; private set; }
         public string Authority { get; private set; }
 
-        public string Timestamp
+        public virtual string Timestamp
         {
             get { return _timestamp ?? (_timestamp = OAuth.GenerateTimeStamp()); }
         }
 
-        public string Nonce
+        public virtual string Nonce
         {
             get { return _nonce ?? (_nonce = OAuth.GenerateNonce()); }
         }
@@ -49,8 +51,9 @@ namespace SS.OAuth1.Client.Parameters
         #endregion -- Properties --
 
         // Constructor
-        protected OAuthParametersBase(Creds consumer, HttpMethod method, string url, string authority = null)
+        protected OAuthParametersBase(Creds consumer, HttpMethod method, string url, string authority = null, bool includeVersion = true)
         {
+            _includeVersion = includeVersion;
             ValidateInputs(consumer, method, url);
 
             this.Consumer = consumer;
@@ -87,9 +90,12 @@ namespace SS.OAuth1.Client.Parameters
             d.AddIfNotNullOrEmpty(Keys.NONCE, this.Nonce);
             d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, this.Timestamp);
             d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, this.Consumer.Key);
-            
-            d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);
             d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
+
+            if (_includeVersion)
+            {
+                d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);    
+            }
 
             return d;
         }
