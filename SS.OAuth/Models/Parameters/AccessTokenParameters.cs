@@ -19,14 +19,5 @@ namespace SS.OAuth.Models.Parameters
             RequestToken = requestToken;
             Verifier = verifier;
         }
-
-        public override NameValueCollection GetOAuthParams()
-        {
-            var paramPairs = base.GetOAuthParams();
-            paramPairs.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key);
-            paramPairs.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERIFIER, this.Verifier);
-
-            return paramPairs;
-        }
     }
 }

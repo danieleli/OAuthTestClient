@@ -6,25 +6,28 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using SS.OAuth.Extensions;
+using SS.OAuth.Misc;
 using SS.OAuth.Models.Parameters;
 
 namespace SS.OAuth.Models.Requests
 {
-    public class RequestTokenRequest
+    public class SignatureFactory
     {
         private readonly RequestTokenParameters _paramz;
-        private readonly HttpRequestMessage _msg;
+        private readonly HttpMethod _method;
+        private readonly Uri _uri;
 
-        public RequestTokenRequest(RequestTokenParameters paramz, HttpRequestMessage msg)
+        public SignatureFactory(RequestTokenParameters paramz, HttpMethod method, Uri uri)
         {
             _paramz = paramz;
-            _msg = msg;
+            _method = method;
+            _uri = uri;
         }
 
         public string GetSignatureBase()
         {
-            var method = _msg.Method.ToString().ToUpper();
-            var baseUri = _msg.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
+            var method = _method.ToString().ToUpper();
+            var baseUri = _uri.GetBaseStringUri().UrlEncodeForOAuth();
             var paramz = GetAllRequestParameters().Normalize().UrlEncodeForOAuth();
 
             var rtn = string.Format("{0}&{1}&{2}", method, baseUri, paramz);
@@ -36,7 +39,8 @@ namespace SS.OAuth.Models.Requests
         {
 
             var rtnCollection = new NameValueCollection();
-            var oauthParams = _paramz.GetOAuthParams();
+            var oauthParams = new OAuthCollection(_paramz);
+
             rtnCollection.Add(oauthParams);
 
             //httpContent = _msg.Content;
@@ -49,6 +53,14 @@ namespace SS.OAuth.Models.Requests
             //rtnCollection.Add(queryParams);
 
             return rtnCollection;
+        }
+
+        public string GetOAuthHeader()
+        {
+            var sig = GetSignature();
+            var col = new OAuthCollection(_paramz) {{V1.Keys.SIGNATURE, sig}};
+
+            return "OAuth " + col.Stringify();
         }
 
         public string GetSignature()

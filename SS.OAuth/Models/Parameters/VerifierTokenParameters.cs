@@ -14,14 +14,5 @@ namespace SS.OAuth.Models.Parameters
             RequestToken = requestToken;
             UserToken = userToken;
         }
-
-        public override NameValueCollection GetOAuthParams()
-        {
-            var paramPairs = base.GetOAuthParams();
-            paramPairs.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key);
-            
-            return paramPairs;
-        }
-
     }
 }

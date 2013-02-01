@@ -8,7 +8,6 @@ namespace SS.OAuth.Models.Parameters
     {
         #region -- Properties --
 
-        private readonly bool _includeVersion;
         private string _nonce;
         private string _timestamp;
         
@@ -31,28 +30,10 @@ namespace SS.OAuth.Models.Parameters
         #endregion -- Properties --
 
         // Constructor
-        protected BaseParameters(Creds consumer, string realm = null, bool includeVersion = true)
+        protected BaseParameters(Creds consumer, string realm = null)
         {
-            _includeVersion = includeVersion;
             this.Consumer = consumer;
             Realm = realm;
-        }
-
-        public virtual NameValueCollection GetOAuthParams()
-        {
-            var collection = new NameValueCollection();
-            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
-            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
-            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
-            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
-            collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
-
-            if (_includeVersion)
-            {
-                collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
-            }
-
-            return collection;
         }
 
         public virtual string GetSignatureKey()
@@ -60,17 +41,7 @@ namespace SS.OAuth.Models.Parameters
             return this.Consumer.Secret;
         }
 
-        public virtual string GetOAuthHeader(string signature)
-        {
-            var col = new NameValueCollection();
-            var oauthParams = GetOAuthParams();
 
-            col.Add(oauthParams);
-            col.Add(V1.Keys.SIGNATURE, signature);
-
-            return "OAuth " + col.Stringify();
-
-        }
     }
 
     public static class Extensions

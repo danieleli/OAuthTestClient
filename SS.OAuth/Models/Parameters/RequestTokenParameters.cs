@@ -11,13 +11,5 @@ namespace SS.OAuth.Models.Parameters
         {
             Callback = callback;
         }
-
-        public override NameValueCollection GetOAuthParams()
-        {
-            var paramPairs = base.GetOAuthParams();
-            paramPairs.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.Callback);
-
-            return paramPairs;
-        }
     }
 }
