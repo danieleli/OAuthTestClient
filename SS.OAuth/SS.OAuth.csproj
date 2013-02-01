@@ -52,7 +52,7 @@
     <Compile Include="OAuth.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Models\Creds.cs" />
-    <Compile Include="Models\Parameters\BaseParameter.cs" />
+    <Compile Include="Models\Parameters\BaseParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

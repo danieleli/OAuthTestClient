@@ -4,8 +4,8 @@ using SS.OAuth.Models.Parameters;
 
 namespace SS.OAuth.Helpers
 {
-    public class TestParameter : BaseParameter
+    public class TestParameters : BaseParameters
     {
-        public TestParameter(Creds consumer) : base(consumer) {}
+        public TestParameters(Creds consumer) : base(consumer) {}
     }
 }

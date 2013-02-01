@@ -3,10 +3,8 @@ using SS.OAuth.Misc;
 
 namespace SS.OAuth.Models.Parameters
 {
-    public class BaseParameter
+    public class BaseParameters
     {
-
-
         #region -- Properties --
 
         private readonly bool _includeVersion;
@@ -32,7 +30,7 @@ namespace SS.OAuth.Models.Parameters
         #endregion -- Properties --
 
         // Constructor
-        protected BaseParameter(Creds consumer, string realm = null, bool includeVersion = true)
+        protected BaseParameters(Creds consumer, string realm = null, bool includeVersion = true)
         {
             _includeVersion = includeVersion;
             this.Consumer = consumer;
