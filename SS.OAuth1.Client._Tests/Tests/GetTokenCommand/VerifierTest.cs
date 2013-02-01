@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Specialized;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -17,7 +16,7 @@ using log4net;
 
 #endregion
 
-namespace SS.OAuth1.Client._Tests.Tests
+namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
 {
     [TestFixture]
     public class VerifierTest
@@ -43,7 +42,7 @@ namespace SS.OAuth1.Client._Tests.Tests
             {
                 var requestToken = GetRequestToken(user);
                 var input = new AccessTokenParameters(user, requestToken, null);
-                var cmd = new GetTokenCommand();
+                var cmd = new Commands.GetTokenCommand();
                 var accessToken = cmd.GetToken(input);
 
                 return accessToken;
@@ -51,7 +50,7 @@ namespace SS.OAuth1.Client._Tests.Tests
 
             public static Creds GetRequestToken(Creds consumer)
             {
-                var requestTokenCmd = new GetTokenCommand();
+                var requestTokenCmd = new Commands.GetTokenCommand();
                 LOG.LogCreds("consumer", consumer);
                 var requestInput = new RequestTokenParameters(consumer);
                 var requestToken = requestTokenCmd.GetToken(requestInput);

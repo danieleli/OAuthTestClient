@@ -55,16 +55,15 @@
     <Compile Include="Tests\Extensions\UriExTest.cs" />
     <Compile Include="Tests\Helpers\NormalizedParametersTest.cs" />
     <Compile Include="Tests\Helpers\OAuthParserTest.cs" />
-    <Compile Include="Tests\Helpers\RfcSample.cs" />
-    <Compile Include="Tests\Parameters\ParameterBaseTest.cs" />
+    <Compile Include="Tests\Parameters\RfcSample.cs" />
     <Compile Include="Helpers\TestParameter.cs" />
-    <Compile Include="Tests\TwoLegTest.cs" />
+    <Compile Include="Tests\GetTokenCommand\TwoLeg_AccessToken_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\OAuth2Test.cs" />
     <Compile Include="Tests\Parameters\VerifierParametersTest.cs" />
-    <Compile Include="Tests\RequestTokenTest.cs" />
+    <Compile Include="Tests\GetTokenCommand\RequestTokenTest.cs" />
     <Compile Include="Tests\RoutesTest.cs" />
-    <Compile Include="Tests\VerifierTest.cs" />
+    <Compile Include="Tests\GetTokenCommand\VerifierTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SS.OAuth1.Client\SS.OAuth1.Client.csproj">

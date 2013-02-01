@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="SS.OAuth1.Client.Commands.GetTokenCommand">
     <Position X="0.5" Y="4" Width="3.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>AAABAQABAAgASAAAAAAAAAAAAAQCAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Commands\GetTokenCommand.cs</FileName>
@@ -11,9 +14,10 @@
     <Position X="5.5" Y="2.75" Width="9" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>EAAAAAAAAAAgAAQAEIACAABAAAAAAEAQAEACAAAACAg=</HashCode>
+      <HashCode>EACAAAAAAAAgABAAEIACAABAABAAAAAQCECCAAAACAg=</HashCode>
       <FileName>Parameters\OAuthParametersBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -21,21 +25,21 @@
   <Class Name="SS.OAuth1.Client.Parameters.AccessTokenParameters">
     <Position X="2" Y="9" Width="5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAAAAAIAAAIAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAIAAAIAAAAAACAAAAAAAACA=</HashCode>
       <FileName>Parameters\AccessTokenParameters.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SS.OAuth1.Client.Parameters.RequestTokenParameters">
     <Position X="7.75" Y="9" Width="4.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAACAAAAAAAQAA=</HashCode>
       <FileName>Parameters\RequestTokenParameters.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SS.OAuth1.Client.Parameters.VerifierTokenParameters">
     <Position X="13.25" Y="9" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAIAAAAAACAAAAAAAAAA=</HashCode>
       <FileName>Parameters\VerifierTokenParameters.cs</FileName>
     </TypeIdentifier>
   </Class>

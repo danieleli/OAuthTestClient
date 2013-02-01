@@ -2,9 +2,7 @@
 
 using System;
 using System.Net;
-using System.Net.Http;
 using NUnit.Framework;
-using SS.OAuth1.Client.Commands;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Messages;
 using SS.OAuth1.Client.Parameters;
@@ -12,7 +10,7 @@ using log4net;
 
 #endregion
 
-namespace SS.OAuth1.Client._Tests.Tests
+namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
 {
     [TestFixture]
     public class RequestTokenTest
@@ -21,7 +19,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         private static readonly ILog LOG = LogManager.GetLogger(typeof(RequestTokenTest));
         private readonly Creds _user = G.TestCreds.DanUser;
         private readonly Creds _consumer = G.TestCreds.DanConsumer;
-        GetTokenCommand _cmd = new GetTokenCommand();
+        Commands.GetTokenCommand _cmd = new Commands.GetTokenCommand();
 
         [Test]
         public void CallbackPresent_Redirects_ToCallback()
@@ -117,8 +115,8 @@ namespace SS.OAuth1.Client._Tests.Tests
         {
             // Arrange
             var parameters = new RequestTokenParameters(_consumer);
-            var factory = new MessageFactory();
-            var msg = factory.Create(parameters);
+            var p = new Commands.GetTokenCommand();
+            var msg = p.CreateMessage(parameters);
             var sender = new MessageSender();
 
             // Act

@@ -48,7 +48,6 @@
     <Compile Include="Extensions\UriEx.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Extensions\LogEx.cs" />
-    <Compile Include="Messages\MessageFactory.cs" />
     <Compile Include="Parameters\AccessTokenParameters.cs" />
     <Compile Include="Helpers\OAuth.cs" />
     <Compile Include="Helpers\Creds.cs" />

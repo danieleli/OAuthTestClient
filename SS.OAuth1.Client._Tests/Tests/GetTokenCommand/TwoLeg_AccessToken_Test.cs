@@ -1,9 +1,7 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
-using SS.OAuth1.Client.Commands;
 using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
@@ -11,12 +9,12 @@ using log4net;
 
 #endregion
 
-namespace SS.OAuth1.Client._Tests.Tests
+namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
 {
     [TestFixture]
-    public class TwoLegTest
+    public class TwoLeg_AccessToken_Test
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(TwoLegTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(TwoLeg_AccessToken_Test));
 
         private readonly Creds _consumer = G.TestCreds.DanConsumer;
         private readonly Creds _user = G.TestCreds.DanUser;
@@ -26,7 +24,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void TwoLegged_Success()
         {
             // Arrange            
-            var cmd = new GetTokenCommand();
+            var cmd = new Commands.GetTokenCommand();
             var requestInput = new RequestTokenParameters(_user);
             var requestToken = cmd.GetToken(requestInput);
             LOG.LogCreds("requestToken", requestToken);
@@ -48,7 +46,7 @@ namespace SS.OAuth1.Client._Tests.Tests
         public void RequestTokenNotFromCurrentUser__Returns_401WithForeignConsumerCredentialsMessage()
         {
             // Arrange            
-            var cmd = new GetTokenCommand();
+            var cmd = new Commands.GetTokenCommand();
             var requestInput = new RequestTokenParameters(_consumer);
             var requestToken = cmd.GetToken(requestInput);
             var input = new AccessTokenParameters(_user, requestToken, null);

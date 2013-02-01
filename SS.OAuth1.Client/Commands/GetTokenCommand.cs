@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using SS.OAuth1.Client.Messages;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
@@ -9,30 +11,37 @@ namespace SS.OAuth1.Client.Commands
 {
     public class GetTokenCommand
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(GetTokenCommand));
+        #region -- Properties --
+
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (GetTokenCommand));
         private MessageSender _messageSender;
-        private MessageFactory _messageFactory;
-
-        public MessageFactory MessageFactory
-        {
-            get { return _messageFactory ?? (_messageFactory = new MessageFactory()); }
-        }
-
+        
         public MessageSender MessageSender
         {
             get { return _messageSender = _messageSender ?? new MessageSender(); }
             set { _messageSender = value; }
         }
 
+        #endregion
+
         public Creds GetToken(OAuthParametersBase paramz)
         {
-            var msg = this.MessageFactory.Create(paramz);
+            var msg = this.CreateMessage(paramz);
             AddOAuthHeader(paramz, msg);
             var response = this.MessageSender.Send(msg);
             
             var token = ExtractToken(response);
 
             return token;
+        }
+
+        public HttpRequestMessage CreateMessage(IMessageParameters paramz)
+        {
+            var msg = new HttpRequestMessage(paramz.HttpMethod, paramz.RequestUri);
+            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
+            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+
+            return msg;
         }
 
         private static void AddOAuthHeader(OAuthParametersBase parameters, HttpRequestMessage msg)
