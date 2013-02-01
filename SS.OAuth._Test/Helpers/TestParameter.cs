@@ -7,12 +7,5 @@ namespace SS.OAuth.Helpers
     public class TestParameter : BaseParameter
     {
         public TestParameter(Creds consumer) : base(consumer) {}
-
-
-        public override NameValueCollection GetOAuthParams()
-        {
-            return base.GetOAuthParamsCore();
-        }
-
     }
 }
