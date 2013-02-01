@@ -25,8 +25,8 @@ namespace SS.OAuth1.Client.Commands
                 result = response.Headers.Location.ParseQueryString();
             }
 
-            var key = result[Keys.TOKEN];
-            var secret = result[Keys.VERIFIER];
+            var key = result[OAuth.V1.Keys.TOKEN];
+            var secret = result[OAuth.V1.Keys.VERIFIER];
             var token = new Creds(key, secret);
 
             return token;

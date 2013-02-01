@@ -33,6 +33,25 @@ namespace SS.OAuth1.Client.Helpers
         {
             public const string AUTHORIZATION_HEADER = "Authorization";
 
+            public class Keys
+            {
+                public const string CALLBACK = "oauth_callback";
+                public const string CONSUMER_KEY = "oauth_consumer_key";
+                public const string NONCE = "oauth_nonce";
+                public const string SIGNATURE = "oauth_signature";
+                public const string SIGNATURE_METHOD = "oauth_signature_method";
+                public const string TIMESTAMP = "oauth_timestamp";
+                public const string TOKEN = "oauth_token";
+                public const string TOKEN_SECRET = "oauth_token_secret";
+                public const string VERIFIER = "oauth_verifier";
+                public const string VERSION = "oauth_version";
+            }
+
+            public static class Values
+            {
+                public const string VERSION = "1.0";
+                public const string SIGNATURE_METHOD = "HMAC-SHA1";
+            }
 
             public static class Routes
             {

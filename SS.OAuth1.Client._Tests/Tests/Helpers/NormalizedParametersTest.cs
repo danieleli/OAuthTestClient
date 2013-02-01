@@ -57,9 +57,9 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             var normalizedRequestParams = _testParam.GetAllRequestParameters(null);
 
             // Assert
-            var values = normalizedRequestParams.GetValues(Keys.CONSUMER_KEY);
+            var values = normalizedRequestParams.GetValues(OAuth.V1.Keys.CONSUMER_KEY);
             Assert.That(values, Is.Not.Null, "oauthConsumerTokenKey_Values");
-            Assert.That(values.Length, Is.EqualTo(1), "Count of RequestParams Named " + Keys.CONSUMER_KEY);
+            Assert.That(values.Length, Is.EqualTo(1), "Count of RequestParams Named " + OAuth.V1.Keys.CONSUMER_KEY);
             LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
         }
 

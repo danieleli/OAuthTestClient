@@ -16,9 +16,5 @@ namespace SS.OAuth1.Client._Tests.Helpers
             return base.GetOAuthParamsCore();
         }
 
-        public override string GetOAuthHeader()
-        {
-            return OAuthParser.CreateHeader(this, null);
-        }
     }
 }

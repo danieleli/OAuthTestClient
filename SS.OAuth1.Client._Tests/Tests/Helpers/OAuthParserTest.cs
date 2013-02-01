@@ -18,10 +18,9 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             const string secret = "secretDEF";
             var consumer = new Creds(key, secret);
             var param = new RequestTokenParameters(consumer);
-            var parser = new OAuthParser();
 
             // Act
-            var header = OAuthParser.CreateHeader(param, null);
+            var header = param.GetOAuthHeader();
 
             // Assert
             LOG.Info(header);

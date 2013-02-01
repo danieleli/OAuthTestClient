@@ -30,8 +30,8 @@ namespace SS.OAuth1.Client.Parameters
         private string _nonce;
         private string _timestamp;
 
-        public const string SIGNATURE_METHOD = Values.SIGNATURE_METHOD;
-        public const string VERSION = Values.VERSION;
+        public const string SIGNATURE_METHOD = OAuth.V1.Values.SIGNATURE_METHOD;
+        public const string VERSION = OAuth.V1.Values.VERSION;
 
         public Creds Consumer { get; protected set; }
         public HttpMethod HttpMethod { get; private set; }
@@ -64,8 +64,6 @@ namespace SS.OAuth1.Client.Parameters
 
         public abstract NameValueCollection GetOAuthParams();
 
-        public abstract string GetOAuthHeader();
-
         public NameValueCollection GetAllRequestParameters(NameValueCollection httpContent)
         {
             var rtnCollection = new NameValueCollection();
@@ -84,17 +82,66 @@ namespace SS.OAuth1.Client.Parameters
             return rtnCollection;
         }
 
+        public virtual string GetOAuthHeader()
+        {
+            return GetOAuthHeader(null);
+        }
+
+        protected string GetOAuthHeader(string callback)
+        {
+            var requestToken = new Creds(null, null);
+            return this.GetOAuthHeader(requestToken, callback);
+        }
+
+        protected string GetOAuthHeader(Creds requestToken, string callback = null, string verifier = null)
+        {
+            requestToken = requestToken ?? new Creds(null, null);
+
+            var oauthParamDictionary = this.GetOAuthParams();
+
+            var sig = CreateSignature(this, requestToken, callback, verifier);
+
+            oauthParamDictionary.Add(OAuth.V1.Keys.SIGNATURE, sig);
+
+            return oauthParamDictionary.Stringify();
+        }
+                                   
+        private static string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
+        {
+            string requestTokenKey = null;
+            string requestTokenSecret = null;
+
+            if (requestToken != null)
+            {
+                requestTokenKey = requestToken.Key;
+                requestTokenSecret = requestToken.Secret;
+            }
+
+            var signature = Signature.GetOAuth1ASignature(paramz.RequestUri,
+                                                            paramz.HttpMethod,
+                                                            paramz.Consumer.Key,
+                                                            paramz.Consumer.Secret,
+                                                            requestTokenKey,
+                                                            requestTokenSecret,
+                                                            paramz.Timestamp,
+                                                            paramz.Nonce,
+                                                            callback,
+                                                            verifier);
+            return signature;
+
+        }
+
         protected NameValueCollection GetOAuthParamsCore()
         {
             var d = new NameValueCollection();
-            d.AddIfNotNullOrEmpty(Keys.NONCE, this.Nonce);
-            d.AddIfNotNullOrEmpty(Keys.TIMESTAMP, this.Timestamp);
-            d.AddIfNotNullOrEmpty(Keys.CONSUMER_KEY, this.Consumer.Key);
-            d.AddIfNotNullOrEmpty(Keys.SIGNATURE_METHOD, Values.SIGNATURE_METHOD);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
 
             if (_includeVersion)
             {
-                d.AddIfNotNullOrEmpty(Keys.VERSION, Values.VERSION);    
+                d.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);    
             }
 
             return d;

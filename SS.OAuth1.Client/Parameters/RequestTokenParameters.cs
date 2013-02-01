@@ -19,14 +19,14 @@ namespace SS.OAuth1.Client.Parameters
         public override NameValueCollection GetOAuthParams()
         {
             var paramPairs = base.GetOAuthParamsCore();
-            paramPairs.AddIfNotNullOrEmpty(Keys.CALLBACK, this.Callback);
+            paramPairs.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.Callback);
 
             return paramPairs;
         }
 
         public override string GetOAuthHeader()
         {
-            return OAuthParser.CreateHeader(this, null, this.Callback);
+            return base.GetOAuthHeader(this.Callback);
         }
     }
 }
