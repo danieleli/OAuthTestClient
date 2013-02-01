@@ -63,6 +63,24 @@ namespace SS.OAuth1.Client.Parameters
 
         public abstract string GetOAuthHeader();
 
+        public NameValueCollection GetAllRequestParameters(NameValueCollection httpContent)
+        {
+            var rtnCollection = new NameValueCollection();
+            if (httpContent != null)
+            {
+                rtnCollection.Add(httpContent);
+            }
+
+            var queryParams = this.RequestUri.ParseQueryString();
+            var oauthParams = this.GetOAuthParams();
+
+            rtnCollection.Add(queryParams);
+            rtnCollection.Add(oauthParams);
+            
+
+            return rtnCollection;
+        }
+
         protected NameValueCollection GetOAuthParamsCore()
         {
             var d = new NameValueCollection();
