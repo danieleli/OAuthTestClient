@@ -37,7 +37,8 @@ namespace SS.OAuth.Models.Parameters
             Realm = realm;
         }
 
-        protected NameValueCollection GetOAuthParamsCore()
+
+        public virtual NameValueCollection GetOAuthParams()
         {
             var collection = new NameValueCollection();
             collection.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
@@ -52,11 +53,6 @@ namespace SS.OAuth.Models.Parameters
             }
 
             return collection;
-        }
-
-        public virtual NameValueCollection GetOAuthParams()
-        {
-            return this.GetOAuthParamsCore();
         }
     }
 
