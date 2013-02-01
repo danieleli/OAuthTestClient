@@ -7,8 +7,17 @@ namespace SS.OAuth.Extensions
 {
     public static class NameValueCollectionEx
     {
+        public static void AddIfNotNullOrEmpty(this NameValueCollection collection, string key, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                collection.Add(key, value);
+            }
+        }
+
+        #region -- Stringify --
+
         /*
-            
             3.5.1.  Authorization Header
 
             Protocol parameters can be transmitted using the HTTP "Authorization"
@@ -47,10 +56,10 @@ namespace SS.OAuth.Extensions
             client requests for protected resources.  As per [RFC2617], such a
             response MAY include additional HTTP "WWW-Authenticate" header
             fields 
-             
         */
-  
-        public static string Stringify(this NameValueCollection collection, bool quoteValues = true, string separator = ",")
+
+        public static string Stringify(this NameValueCollection collection, bool quoteValues = true,
+                                       string separator = ",")
         {
             var sb = new StringBuilder();
             var sortedKeys = collection.Keys.GetSortedKeys();
@@ -60,8 +69,8 @@ namespace SS.OAuth.Extensions
             foreach (var key in sortedKeys)
             {
                 // Keys can have null, one, or multiple values.
-                var values = collection.GetValues(key) ?? new string[] { null };
-                
+                var values = collection.GetValues(key) ?? new string[] {null};
+
                 var orderedValues = values.OrderBy(s => s);
                 foreach (var val in orderedValues)
                 {
@@ -71,7 +80,7 @@ namespace SS.OAuth.Extensions
                 }
             }
 
-            return sb.ToString().TrimEnd(",".ToCharArray());
+            return sb.ToString().TrimEnd(separator.ToCharArray());
         }
 
         public static string Normalize(this NameValueCollection collection)
@@ -88,5 +97,7 @@ namespace SS.OAuth.Extensions
             }
             return sortedList;
         }
+
+        #endregion
     }
 }

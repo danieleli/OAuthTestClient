@@ -4,7 +4,7 @@ using SS.OAuth.Misc;
 
 namespace SS.OAuth.Models.Parameters
 {
-    public class BaseParameters
+    public class BaseParams
     {
         #region -- Properties --
 
@@ -29,29 +29,19 @@ namespace SS.OAuth.Models.Parameters
 
         #endregion -- Properties --
 
-        // Constructor
-        protected BaseParameters(Creds consumer, string realm = null)
-        {
-            this.Consumer = consumer;
-            Realm = realm;
-        }
-
+        /// <summary>
+        /// key - is set to the concatenated values of:
+        /// 
+        /// 1.  The client shared-secret, after being encoded (Section 3.6).
+        ///
+        /// 2.  An "&" character (ASCII code 38), which MUST be included
+        /// even when either secret is empty.
+        /// 
+        /// 3.  The token shared-secret, after being encoded (Section 3.6). 
+        /// </summary>
         public virtual string GetSignatureKey()
         {
-            return this.Consumer.Secret;
-        }
-
-
-    }
-
-    public static class Extensions
-    {
-        public static void AddIfNotNullOrEmpty(this NameValueCollection collection, string key, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                collection.Add(key, value);
-            }
+            return this.Consumer.Secret.UrlEncodeForOAuth() + "&";
         }
     }
 }

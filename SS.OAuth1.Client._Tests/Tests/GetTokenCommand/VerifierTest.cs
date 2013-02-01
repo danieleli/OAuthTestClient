@@ -87,7 +87,7 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
             var twoLegAccessToken = Helper.GetTwoLegAccessToken(_user);
 
 
-            var verifierParams = new VerifierTokenParameters(_consumer, requestToken, twoLegAccessToken.Key);
+            var verifierParams = new VerifierTokenParameters(_user, twoLegAccessToken, requestToken.Key);
             var verifierCmd = new GetVerifierCommand();
 
 

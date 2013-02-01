@@ -10,9 +10,9 @@ using log4net;
 namespace SS.OAuth.Tests.Extensions
 {
     [TestFixture]
-    public class NameValueCollectionTest
+    public class NameValueCollectionExTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (NameValueCollectionTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (NameValueCollectionExTest));
 
         [Test]
         public void Stringify_Escapes_KeysAndValues()
