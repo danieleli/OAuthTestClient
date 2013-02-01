@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SS.OAuth1.Client.Extensions
 {
@@ -12,8 +8,9 @@ namespace SS.OAuth1.Client.Extensions
         {
             var scheme = uri.Scheme;
             var host = uri.Host;
+            var path = uri.AbsolutePath;
 
-            var rtn = string.Format("{0}://{1}", scheme, host);
+            var rtn = string.Format("{0}://{1}{2}", scheme, host, path);
             return rtn;
         }
     }

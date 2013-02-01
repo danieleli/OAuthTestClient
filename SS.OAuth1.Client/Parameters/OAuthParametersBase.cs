@@ -62,7 +62,16 @@ namespace SS.OAuth1.Client.Parameters
             this.RequestUri = new Uri(url);
         }
 
+
+        
+        // Public Methods
+        
         public abstract NameValueCollection GetOAuthParams();
+
+        public virtual string GetOAuthHeader()
+        {
+            return GetOAuthHeader(null);
+        }
 
         public NameValueCollection GetAllRequestParameters(NameValueCollection httpContent)
         {
@@ -82,10 +91,20 @@ namespace SS.OAuth1.Client.Parameters
             return rtnCollection;
         }
 
-        public virtual string GetOAuthHeader()
+        public string GetSignatureBase(NameValueCollection httpContent)
         {
-            return GetOAuthHeader(null);
+            var method = this.HttpMethod.ToString().ToUpper();
+            var baseUri = this.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
+            var paramz = this.GetAllRequestParameters(httpContent).Normalize().UrlEncodeForOAuth();
+
+            var rtn = string.Format("{0}&{1}&{2}", method, baseUri, paramz);
+
+            return rtn;
         }
+
+
+
+        // Protected Methods
 
         protected string GetOAuthHeader(string callback)
         {
@@ -105,7 +124,28 @@ namespace SS.OAuth1.Client.Parameters
 
             return oauthParamDictionary.Stringify();
         }
-                                   
+
+        protected NameValueCollection GetOAuthParamsCore()
+        {
+            var d = new NameValueCollection();
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
+            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
+
+            if (_includeVersion)
+            {
+                d.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
+            }
+
+            return d;
+        }                           
+
+
+
+        // Private Method
+
+        [Obsolete]
         private static string CreateSignature(OAuthParametersBase paramz, Creds requestToken, string callback = null, string verifier = null)
         {
             string requestTokenKey = null;
@@ -129,22 +169,6 @@ namespace SS.OAuth1.Client.Parameters
                                                             verifier);
             return signature;
 
-        }
-
-        protected NameValueCollection GetOAuthParamsCore()
-        {
-            var d = new NameValueCollection();
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.NONCE, this.Nonce);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
-            d.AddIfNotNullOrEmpty(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
-
-            if (_includeVersion)
-            {
-                d.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);    
-            }
-
-            return d;
         }
 
         #region -- Validation --

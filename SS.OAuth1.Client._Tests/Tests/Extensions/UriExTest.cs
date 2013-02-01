@@ -1,11 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using SS.OAuth1.Client.Extensions;
-using SS.OAuth1.Client.Helpers;
-using SS.OAuth1.Client.Parameters;
 using log4net;
 
-namespace SS.OAuth1.Client._Tests.Tests.Helpers
+namespace SS.OAuth1.Client._Tests.Tests.Extensions
 {
     [TestFixture]
     public class UriExTest
@@ -14,6 +12,19 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
 
         private const string SSL_URL = "HTTPS://WWW.EXAMPLE.COM/ROUT1/ROUT2?NAME=SOMENAME&ZIP=20303";
         private readonly Uri _uri = new Uri(SSL_URL);
+
+        
+        [Test]
+        public void RfcSample()
+        {
+            var rfcExample = "http://EXAMPLE.COM:80/r%20v/X?id=123";
+            var uri = new Uri(rfcExample);
+
+            var baseUri = uri.GetBaseStringUri();
+
+            LOG.Debug(baseUri);
+            Assert.That(baseUri, Is.EqualTo("http://example.com/r%20v/X"), "baseUri");
+        }
 
         [Test]
         public void GetBaseStringUri_Returns_LowerCaseScheme()
@@ -31,7 +42,7 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             var result = UriEx.GetBaseStringUri(_uri);
 
             LOG.Debug("result: " + result);
-            Assert.That(result, Is.StringEnding("www.example.com"), "host");
+            Assert.That(result, Is.StringContaining("www.example.com"), "host");
         }
 
         [Test]
