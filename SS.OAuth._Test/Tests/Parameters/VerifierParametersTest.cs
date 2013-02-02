@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using SS.OAuth.Extensions;
+using SS.OAuth.Factories;
 using SS.OAuth.Models;
+using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth1.Client._Tests.Tests.Parameters
+namespace SS.OAuth.Tests.Parameters
 {
     [TestFixture]
     public class VerifierParametersTest
@@ -25,14 +24,15 @@ namespace SS.OAuth1.Client._Tests.Tests.Parameters
             const string rSecret = "requestTokenSecret";
             var requestToken = new Creds(rKey, rSecret);
 
-            var param = new VerifierTokenParameters(consumer, requestToken, "");
+            var param = new VerifierTokenParams(consumer, requestToken, "sss");
+            var headerFactory = new HeaderFactory();
 
             // Act
-            var header =  param.GetOAuthHeader();
+            var header = headerFactory.GetOAuthParams(param).Stringify();
 
             // Assert
             LOG.Info(header);
-            Assert.IsNotNullOrEmpty(header, "header");
+            Assert.That(header, Is.Not.Null, "header");
             Assert.That(header, Contains.Substring(cKey), "consumer key");
             Assert.That(header, Is.Not.ContainsSubstring(cSecret), "consumer secret");
             Assert.That(header, Contains.Substring(rKey), "requestToken key");
