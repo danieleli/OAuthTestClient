@@ -48,7 +48,8 @@
     <Compile Include="Tests\Extensions\UriExTest.cs" />
     <Compile Include="Helpers\TestParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Factories\NormalizedParametersTest.cs" />
+    <Compile Include="Tests\Factories\Header\StringifyParamsTest.cs" />
+    <Compile Include="Tests\Factories\Signature\NormalizeParamsTest.cs" />
     <Compile Include="Tests\Parameters\VerifierParametersTest.cs" />
     <Compile Include="Tests\RfcSample.cs" />
     <Compile Include="Tests\Requests\RequestTokenTest.cs" />

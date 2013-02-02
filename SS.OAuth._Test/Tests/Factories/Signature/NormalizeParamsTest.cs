@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth.Extensions;
@@ -9,13 +7,13 @@ using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using log4net;
 
-namespace SS.OAuth.Tests.Factories
+namespace SS.OAuth.Tests.Factories.Signature
 {
 
     [TestFixture]
-    public class NormalizedParametersTest
+    public class NormalizeParamsTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizedParametersTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizeParamsTest));
 
         const string URL = "HTTPS://www.ExAMplwwwe.com/Auth?a=valuea&z=valuez&b=valueb1&b=valueb2";
         private const string KEY = "name1";
@@ -25,7 +23,7 @@ namespace SS.OAuth.Tests.Factories
         readonly TestParams _testParam;
 
 
-        public NormalizedParametersTest()
+        public NormalizeParamsTest()
         {
             // Arrange
             const string cKey = "consumerKey";
