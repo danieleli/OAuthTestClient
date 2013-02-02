@@ -47,7 +47,7 @@ namespace SS.OAuth.Tests.Requests
             LOG.Debug("Signature Base: " + sigBase);
             LOG.Debug("Signature Key: " + sigKey);
             LOG.Debug("Signature: " + sig);
-            LOG.Debug("Encode Signature: " + sig.UrlEncodeForOAuth());
+            LOG.Debug("Encode Signature (Don't do this.): " + sig.UrlEncodeForOAuth());
             Assert.That(sigBase, Is.EqualTo(EXPECTED_BASE), "Signature Base");
             Assert.That(sig, Is.EqualTo(EXPECTED_SIG), "Signature");
 
@@ -56,6 +56,7 @@ namespace SS.OAuth.Tests.Requests
             headerParams.Add(V1.Keys.SIGNATURE, sig);
             var headString = "OAuth " + headerParams.Stringify();
             LOG.Debug("Header: " + headString);
+
             Assert.That(headString, Is.EqualTo(EXPECTED_HEADER), "Header");
         }
     }
