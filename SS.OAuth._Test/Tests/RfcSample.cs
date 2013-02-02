@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth.Extensions;
 using SS.OAuth.Factories;
-using SS.OAuth.Misc;
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Parameters
+namespace SS.OAuth.Tests
 {
     public class RfcParameters : BaseParams
     {
         private readonly string _testNonce;
         private readonly string _testTimestamp;
-
-        public Creds RequestToken { get; set; }
 
         public RfcParameters(Creds consumer, Creds requestToken, string nonce, string timestamp)
         {
@@ -82,10 +78,9 @@ namespace SS.OAuth.Tests.Parameters
         readonly Creds _requestToken = new Creds(R_KEY, R_SECRET);
 
         readonly HttpMethod _method = HttpMethod.Post;
-        readonly NameValueCollection _content = new NameValueCollection { { "c2", null }, { "a3", "2 q" } };
 
         readonly RfcParameters _paramz;
-        private HttpRequestMessage _msg;
+        private readonly HttpRequestMessage _msg;
 
 
         // Constructor
@@ -93,6 +88,9 @@ namespace SS.OAuth.Tests.Parameters
         {
             _paramz = new RfcParameters(_consumer, _requestToken, NONCE, TIMESTAMP);
             _msg = new HttpRequestMessage(_method, URL);
+
+            var contentDictionary = new Dictionary<string, string> { { "c2", null }, { "a3", "2 q" } };
+            _msg.Content = new FormUrlEncodedContent(contentDictionary);
         }
 
         [Test]
@@ -114,8 +112,8 @@ namespace SS.OAuth.Tests.Parameters
         public void Normalize()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_paramz,_msg);
-
+            var sigFactory = new SignatureFactory(_paramz, _msg);
+            
             // Act
             //var normalizedRequestParams = _paramz.GetAllRequestParameters(_content);
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();

@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using SS.OAuth.Extensions;
 using SS.OAuth.Models.Parameters;
 
@@ -39,15 +40,12 @@ namespace SS.OAuth.Factories
     public class SignatureFactory
     {
         private readonly BaseParams _paramz;
-        private readonly HttpMethod _method;
-        private readonly Uri _uri;
+        private readonly HttpRequestMessage _msg;
 
-        public SignatureFactory(BaseParams paramz, HttpRequestMessage httpMessage)
+        public SignatureFactory(BaseParams paramz, HttpRequestMessage msg)
         {
-            
             _paramz = paramz;
-            _method = httpMessage.Method;
-            _uri = httpMessage.RequestUri;
+            _msg = msg;
         }
 
         public string GetSignature(string sigBase, string sigKey)
@@ -64,8 +62,8 @@ namespace SS.OAuth.Factories
 
         public string GetSignatureBase()
         {
-            var method = _method.ToString().ToUpper();
-            var baseUri = _uri.GetBaseStringUri().UrlEncodeForOAuth();
+            var method = _msg.Method.ToString().ToUpper();
+            var baseUri = _msg.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
             var paramz = GetAllRequestParameters().Normalize().UrlEncodeForOAuth();
 
             var rtn = string.Format("{0}&{1}&{2}", method, baseUri, paramz);
@@ -80,17 +78,37 @@ namespace SS.OAuth.Factories
             var oauthParams = GetOAuthParams();
             rtnCollection.Add(oauthParams);
 
-            var queryParams = _uri.ParseQueryString();
+            var queryParams = _msg.RequestUri.ParseQueryString();
             rtnCollection.Add(queryParams);
+
+            var contentCollection = GetRequestContent();
+            rtnCollection.Add(contentCollection);
 
             return rtnCollection;
         }
-           
+
+        private NameValueCollection GetRequestContent()
+        {
+            var contentCollection = new NameValueCollection();
+            if (_msg.Content != null)
+            {
+                var contentAsString = _msg.Content.ReadAsStringAsync().Result;
+                contentCollection = HttpUtility.ParseQueryString(contentAsString);
+            }
+            return contentCollection;
+        }
+
+        private HeaderFactory _headerFactory;
+
+        public HeaderFactory HeaderFactory
+        {
+            get { return _headerFactory ?? (_headerFactory = new HeaderFactory()); }
+            set { _headerFactory = value; }
+        }
+
         public NameValueCollection GetOAuthParams()
         {
-            var factory = new HeaderFactory();
-            var col = factory.GetOAuthParams(_paramz);
-
+            var col = this.HeaderFactory.GetOAuthParams(_paramz);
             return col;
         }
     }

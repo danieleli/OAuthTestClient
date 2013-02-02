@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net.Http;
 using NUnit.Framework;
@@ -17,9 +18,12 @@ namespace SS.OAuth.Tests.Factories
         private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizedParametersTest));
 
         const string URL = "HTTPS://www.ExAMplwwwe.com/Auth?a=valuea&z=valuez&b=valueb1&b=valueb2";
+        private const string KEY = "name1";
+        private const string VALUE = "value1";
+
         private readonly HttpRequestMessage _httpMessage;
         readonly TestParams _testParam;
-        
+
 
         public NormalizedParametersTest()
         {
@@ -28,19 +32,20 @@ namespace SS.OAuth.Tests.Factories
             const string cSecret = "consumerSecret";
             var consumer = new Creds(cKey, cSecret);
 
-
             _testParam = new TestParams(consumer, "123", "456");
             _httpMessage = new HttpRequestMessage(HttpMethod.Get, URL);
 
-
+            var contentDictionary = new Dictionary<string, string> {{KEY, VALUE}};
+            _httpMessage.Content = new FormUrlEncodedContent(contentDictionary);
         }
+
 
         [Test]
         public void Include_QueryStringParams()
         {
             // Arrange 
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
-            
+
             // Act
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();
 
@@ -72,23 +77,20 @@ namespace SS.OAuth.Tests.Factories
             LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
         }
 
+
         [Test]
         public void Includes_EntityBody()
         {
-            // Arrange
-            var key = "name1";
-            var value = "value1";
-            var content = new NameValueCollection { { key, value } };
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();
 
             // Assert;
-            var values = normalizedRequestParams.GetValues(key);
-            Assert.That(values, Is.Not.Null, key);
-            Assert.That(values.Length, Is.EqualTo(1), "Count of " + key);
-            Assert.That(values[0], Is.EqualTo(value), "Value: " + value);
+            var values = normalizedRequestParams.GetValues(KEY);
+            Assert.That(values, Is.Not.Null, KEY);
+            Assert.That(values.Length, Is.EqualTo(1), "Count of " + KEY);
+            Assert.That(values[0], Is.EqualTo(VALUE), "Value: " + VALUE);
             LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
         }
 

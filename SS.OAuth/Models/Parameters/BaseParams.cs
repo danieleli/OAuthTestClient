@@ -4,6 +4,7 @@ using SS.OAuth.Misc;
 
 namespace SS.OAuth.Models.Parameters
 {
+
     public class BaseParams
     {
         #region -- Properties --
@@ -15,6 +16,7 @@ namespace SS.OAuth.Models.Parameters
         public const string VERSION = OAuth.V1.Values.VERSION;
 
         public Creds Consumer { get; protected set; }
+        public Creds RequestToken { get; protected set; }
         public string Realm { get; protected set; }
 
         public virtual string Timestamp

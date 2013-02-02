@@ -15,6 +15,10 @@ namespace SS.OAuth.Factories
             col.Add(OAuth.V1.Keys.CONSUMER_KEY, p.Consumer.Key);
 
             col.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, p.Realm);
+            if (p.RequestToken != null)
+            {
+                col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, p.RequestToken.Key);
+            }
 
             return col;
         }
@@ -26,17 +30,9 @@ namespace SS.OAuth.Factories
             return col;
         }
 
-        public NameValueCollection GetOAuthParams(VerifierTokenParams p)
-        {
-            var col = GetOAuthParams((BaseParams)p);
-            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, p.RequestToken.Key);
-            return col;
-        }
-
         public NameValueCollection GetOAuthParams(AccessTokenParams p)
         {
             var col = GetOAuthParams((BaseParams)p);
-            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, p.RequestToken.Key);
             col.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERIFIER, p.Verifier);
             return col;
         }

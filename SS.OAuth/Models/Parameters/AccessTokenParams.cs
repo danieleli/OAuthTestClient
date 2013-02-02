@@ -4,8 +4,6 @@ namespace SS.OAuth.Models.Parameters
 {
     public class AccessTokenParams : BaseParams
     {
-        
-        public Creds RequestToken { get; set; }
         public string Verifier { get; set; }
         public string SessionHandle { get; set; }
 
