@@ -69,13 +69,9 @@ namespace SS.OAuth.Tests.Parameters
 
         private static readonly ILog LOG = LogManager.GetLogger(typeof(RfcSample));
 
-
         const string URL = "HTTP://example.com/request?b5=%3D%253D&a3=a&c%40=&a2=r%20b";
-
         const string NONCE = "7d8f3e4a";
         const string TIMESTAMP = "137131201";
-
-        readonly HttpMethod _method = HttpMethod.Post;
 
         const string C_KEY = "9djdj82h48djs9d2";
         const string C_SECRET = "consumerSecret";
@@ -85,24 +81,25 @@ namespace SS.OAuth.Tests.Parameters
         const string R_SECRET = "tokenSecret";
         readonly Creds _requestToken = new Creds(R_KEY, R_SECRET);
 
+        readonly HttpMethod _method = HttpMethod.Post;
         readonly NameValueCollection _content = new NameValueCollection { { "c2", null }, { "a3", "2 q" } };
 
         readonly RfcParameters _paramz;
-        readonly Uri _uri;
+        private HttpRequestMessage _msg;
 
 
         // Constructor
         public RfcSample()
         {
             _paramz = new RfcParameters(_consumer, _requestToken, NONCE, TIMESTAMP);
-            _uri = new Uri(URL);
+            _msg = new HttpRequestMessage(_method, URL);
         }
 
         [Test]
         public void SignatureBase()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_paramz, _method, _uri);
+            var sigFactory = new SignatureFactory(_paramz, _msg);
 
             // Act
             //var sigBase = sigFactory.GetSignatureBase(_content);
@@ -117,7 +114,7 @@ namespace SS.OAuth.Tests.Parameters
         public void Normalize()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_paramz, _method, _uri);
+            var sigFactory = new SignatureFactory(_paramz,_msg);
 
             // Act
             //var normalizedRequestParams = _paramz.GetAllRequestParameters(_content);

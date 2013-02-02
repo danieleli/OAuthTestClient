@@ -42,11 +42,12 @@ namespace SS.OAuth.Factories
         private readonly HttpMethod _method;
         private readonly Uri _uri;
 
-        public SignatureFactory(BaseParams paramz, HttpMethod method, Uri uri)
+        public SignatureFactory(BaseParams paramz, HttpRequestMessage httpMessage)
         {
+            
             _paramz = paramz;
-            _method = method;
-            _uri = uri;
+            _method = httpMessage.Method;
+            _uri = httpMessage.RequestUri;
         }
 
         public string GetSignature(string sigBase, string sigKey)

@@ -17,9 +17,9 @@ namespace SS.OAuth.Tests.Factories
         private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizedParametersTest));
 
         const string URL = "HTTPS://www.ExAMplwwwe.com/Auth?a=valuea&z=valuez&b=valueb1&b=valueb2";
-        readonly HttpMethod _method = HttpMethod.Get;
+        private readonly HttpRequestMessage _httpMessage;
         readonly TestParams _testParam;
-        Uri _uri;
+        
 
         public NormalizedParametersTest()
         {
@@ -30,7 +30,8 @@ namespace SS.OAuth.Tests.Factories
 
 
             _testParam = new TestParams(consumer, "123", "456");
-            _uri = new Uri(URL);
+            _httpMessage = new HttpRequestMessage(HttpMethod.Get, URL);
+
 
         }
 
@@ -38,7 +39,7 @@ namespace SS.OAuth.Tests.Factories
         public void Include_QueryStringParams()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_testParam, _method, _uri);
+            var sigFactory = new SignatureFactory(_testParam, _httpMessage);
             
             // Act
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();
@@ -59,7 +60,7 @@ namespace SS.OAuth.Tests.Factories
         public void Includes_ItemWithName_ConsumerKey()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_testParam, _method, _uri);
+            var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();
@@ -78,7 +79,7 @@ namespace SS.OAuth.Tests.Factories
             var key = "name1";
             var value = "value1";
             var content = new NameValueCollection { { key, value } };
-            var sigFactory = new SignatureFactory(_testParam, _method, _uri);
+            var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();

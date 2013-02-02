@@ -36,8 +36,9 @@ namespace SS.OAuth.Tests.Requests
         public void GetSignature()
         {
             var param = new TestParams(_consumer, "3937336", "1359756560");
-            
-            var sigFactory = new SignatureFactory(param, HttpMethod.Post, new Uri("http://term.ie/oauth/example/request_token.php"));
+
+            var msg = new HttpRequestMessage(HttpMethod.Post, "http://term.ie/oauth/example/request_token.php");
+            var sigFactory = new SignatureFactory(param, msg);
             var sigBase = sigFactory.GetSignatureBase();
             var sigKey = param.GetSignatureKey();
             var sig = sigFactory.GetSignature(sigBase, sigKey);

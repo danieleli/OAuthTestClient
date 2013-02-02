@@ -15,7 +15,7 @@ namespace SS.OAuth.Tests.Extensions
 
         
         [Test]
-        public void RfcSample()
+        public void RfcSampleUri()
         {
             var rfcExample = "http://EXAMPLE.COM:80/r%20v/X?id=123";
             var uri = new Uri(rfcExample);
