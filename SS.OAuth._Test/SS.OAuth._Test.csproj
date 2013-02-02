@@ -43,6 +43,8 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="G.cs" />
+    <Compile Include="Tests\Commands\TwoLeg_AccessToken_Test.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
     <Compile Include="Tests\Extensions\StringExTest.cs" />
     <Compile Include="Tests\Extensions\UriExTest.cs" />
@@ -66,9 +68,7 @@
       <Name>SS.OAuth</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

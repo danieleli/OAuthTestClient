@@ -1,6 +1,6 @@
 ﻿namespace SS.OAuth
 {
-    public static class G
+    public static partial class G
     {
         private static readonly string _BaseApiUrl;
         private static readonly string _BaseSiteUrl;
