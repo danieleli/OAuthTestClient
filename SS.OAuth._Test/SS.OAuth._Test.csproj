@@ -41,11 +41,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
@@ -65,10 +60,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SS.OAuth1.Client._Tests\SS.OAuth1.Client._Tests.csproj">
-      <Project>{5DDE2022-1B5E-4F13-8499-1029A986FB35}</Project>
-      <Name>SS.OAuth1.Client._Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SS.OAuth\SS.OAuth.csproj">
       <Project>{82f0264d-2b91-41be-be27-13a57e73da3e}</Project>
       <Name>SS.OAuth</Name>
