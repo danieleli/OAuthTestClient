@@ -6,7 +6,7 @@ using System.Text;
 using SS.OAuth.Extensions;
 using SS.OAuth.Models.Parameters;
 
-namespace SS.OAuth.Misc
+namespace SS.OAuth.Factories
 {
     /* 3.4.2.  HMAC-SHA1
     

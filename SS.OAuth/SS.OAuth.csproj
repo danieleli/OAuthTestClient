@@ -50,12 +50,12 @@
     <Compile Include="Extensions\NameValueCollectionEx.cs" />
     <Compile Include="Extensions\StringEx.cs" />
     <Compile Include="Extensions\UriEx.cs" />
-    <Compile Include="Misc\HeaderFactory.cs" />
+    <Compile Include="Factories\HeaderFactory.cs" />
     <Compile Include="Misc\Utils.cs" />
     <Compile Include="Models\Parameters\AccessTokenParams.cs" />
     <Compile Include="Models\Parameters\RequestTokenParams.cs" />
     <Compile Include="Models\Parameters\VerifierTokenParams.cs" />
-    <Compile Include="Misc\SignatureFactory.cs" />
+    <Compile Include="Factories\SignatureFactory.cs" />
     <Compile Include="OAuth.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Models\Creds.cs" />

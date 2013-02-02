@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
 using SS.OAuth.Extensions;
 using SS.OAuth.Models.Parameters;
 
-namespace SS.OAuth.Misc
+namespace SS.OAuth.Factories
 {
     public class HeaderFactory
     {

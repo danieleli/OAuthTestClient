@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth.Extensions;
+using SS.OAuth.Factories;
 using SS.OAuth.Misc;
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;

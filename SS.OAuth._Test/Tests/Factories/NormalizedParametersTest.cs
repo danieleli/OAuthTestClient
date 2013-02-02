@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Net.Http;
 using NUnit.Framework;
+using SS.OAuth.Extensions;
+using SS.OAuth.Factories;
 using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using log4net;
 
-namespace SS.OAuth1.Client._Tests.Tests.Helpers
+namespace SS.OAuth.Tests.Factories
 {
 
     [TestFixture]
     public class NormalizedParametersTest
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizedParametersTest));
-        private readonly TestParameter _testParam;
+
+        const string URL = "HTTPS://www.ExAMplwwwe.com/Auth?a=valuea&z=valuez&b=valueb1&b=valueb2";
+        readonly HttpMethod _method = HttpMethod.Get;
+        readonly TestParams _testParam;
+        Uri _uri;
 
         public NormalizedParametersTest()
         {
@@ -20,17 +27,21 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             const string cKey = "consumerKey";
             const string cSecret = "consumerSecret";
             var consumer = new Creds(cKey, cSecret);
-            
 
-            _testParam = new TestParameter(consumer);
-            
+
+            _testParam = new TestParams(consumer, "123", "456");
+            _uri = new Uri(URL);
+
         }
 
         [Test]
         public void Include_QueryStringParams()
         {
+            // Arrange 
+            var sigFactory = new SignatureFactory(_testParam, _method, _uri);
+            
             // Act
-            var normalizedRequestParams = _testParam.GetAllRequestParameters(null);
+            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
 
             // Assert
             Assert.That(normalizedRequestParams, Is.Not.Null, "normalizedRequestParams");
@@ -47,8 +58,11 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
         [Test]
         public void Includes_ItemWithName_ConsumerKey()
         {
+            // Arrange 
+            var sigFactory = new SignatureFactory(_testParam, _method, _uri);
+
             // Act
-            var normalizedRequestParams = _testParam.GetAllRequestParameters(null);
+            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
 
             // Assert
             var values = normalizedRequestParams.GetValues(OAuth.V1.Keys.CONSUMER_KEY);
@@ -63,10 +77,11 @@ namespace SS.OAuth1.Client._Tests.Tests.Helpers
             // Arrange
             var key = "name1";
             var value = "value1";
-            var content = new NameValueCollection {{key, value}};
-            
+            var content = new NameValueCollection { { key, value } };
+            var sigFactory = new SignatureFactory(_testParam, _method, _uri);
+
             // Act
-            var normalizedRequestParams = _testParam.GetAllRequestParameters(content);
+            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
 
             // Assert;
             var values = normalizedRequestParams.GetValues(key);
