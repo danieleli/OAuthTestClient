@@ -87,21 +87,4 @@ namespace SS.OAuth.Tests.Commands
         //    LOG.LogCreds("accessToken", accessToken);
         //}
     }
-
-
-    public class GetAccessTokenCommand
-    {
-        public Creds GetToken(AccessTokenParams p)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class GetRequestTokenCommand
-    {
-        public Creds GetToken(RequestTokenParams p)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

@@ -42,6 +42,8 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\GetAccessTokenCommand.cs" />
+    <Compile Include="Commands\GetRequestTokenCommand.cs" />
     <Compile Include="Extensions\LogEx.cs" />
     <Compile Include="Extensions\NameValueCollectionEx.cs" />
     <Compile Include="Extensions\StringEx.cs" />
@@ -61,9 +63,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

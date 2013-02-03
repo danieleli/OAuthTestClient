@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="G.cs" />
+    <Compile Include="Tests\Commands\RequestTokenTest.cs" />
     <Compile Include="Tests\Commands\TwoLeg_AccessToken_Test.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
     <Compile Include="Tests\Extensions\StringExTest.cs" />
