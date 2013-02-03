@@ -1,12 +1,11 @@
 ﻿using System.Collections.Specialized;
 using SS.OAuth.Extensions;
-using SS.OAuth.Models.Parameters;
 
-namespace SS.OAuth.Factories
+namespace SS.OAuth.Models.Parameters
 {
-    public class HeaderFactory
+    public static class Extensions
     {
-        public NameValueCollection GetOAuthParams(BaseParams p)
+        public static NameValueCollection ToCollection(this BaseParams p)
         {
             var col = new NameValueCollection();
             col.Add(OAuth.V1.Keys.NONCE, p.Nonce);
@@ -23,16 +22,16 @@ namespace SS.OAuth.Factories
             return col;
         }
 
-        public NameValueCollection GetOAuthParams(RequestTokenParams p)
+        public static NameValueCollection ToCollection(this RequestTokenParams p)
         {
-            var col = GetOAuthParams((BaseParams) p);
+            var col = ToCollection((BaseParams) p);
             col.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, p.Callback);
             return col;
         }
 
-        public NameValueCollection GetOAuthParams(AccessTokenParams p)
+        public static NameValueCollection ToCollection(this AccessTokenParams p)
         {
-            var col = GetOAuthParams((BaseParams)p);
+            var col = ToCollection((BaseParams)p);
             col.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERIFIER, p.Verifier);
             return col;
         }

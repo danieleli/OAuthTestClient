@@ -75,7 +75,7 @@ namespace SS.OAuth.Factories
         {
             var rtnCollection = new NameValueCollection();
 
-            var oauthParams = GetOAuthParams();
+            var oauthParams = _paramz.ToCollection();
             rtnCollection.Add(oauthParams);
 
             var queryParams = _msg.RequestUri.ParseQueryString();
@@ -98,18 +98,5 @@ namespace SS.OAuth.Factories
             return contentCollection;
         }
 
-        private HeaderFactory _headerFactory;
-
-        public HeaderFactory HeaderFactory
-        {
-            get { return _headerFactory ?? (_headerFactory = new HeaderFactory()); }
-            set { _headerFactory = value; }
-        }
-
-        public NameValueCollection GetOAuthParams()
-        {
-            var col = this.HeaderFactory.GetOAuthParams(_paramz);
-            return col;
-        }
     }
 }

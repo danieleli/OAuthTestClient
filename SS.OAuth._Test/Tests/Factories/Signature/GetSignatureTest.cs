@@ -5,14 +5,15 @@ using SS.OAuth.Factories;
 using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using SS.OAuth.Extensions;
+using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Requests
+namespace SS.OAuth.Tests.Factories.Signature
 {
     [TestFixture]
-    public class RequestTokenTest
+    public class GetSignatureTest
     {
-        static readonly ILog LOG = LogManager.GetLogger(typeof(RequestTokenTest));
+        static readonly ILog LOG = LogManager.GetLogger(typeof(GetSignatureTest));
 
         #region -- Expected Values --
 
@@ -44,7 +45,7 @@ namespace SS.OAuth.Tests.Requests
             var sigBase      = sigFactory.GetSignatureBase();
             var sigKey       = param.GetSignatureKey();
             var sig          = sigFactory.GetSignature(sigBase, sigKey);
-            var headerParams = AddSig(sigFactory, sig);
+            var headerParams = AddSig(sig, param);
             var headString   = "OAuth " + headerParams.Stringify();
             
             LogValues(param, sigBase, sigKey, sig, headString);
@@ -55,9 +56,9 @@ namespace SS.OAuth.Tests.Requests
             Assert.That(headString, Is.EqualTo(EXPECTED_HEADER), "Header");
         }
 
-        private static NameValueCollection AddSig(SignatureFactory sigFactory, string sig)
+        private static NameValueCollection AddSig(string sig, TestParams p)
         {
-            var headerParams = sigFactory.GetOAuthParams();
+            var headerParams = p.ToCollection();
             headerParams.Add(OAuth.V1.Keys.SIGNATURE, sig);
             return headerParams;
         }

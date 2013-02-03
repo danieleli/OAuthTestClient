@@ -25,10 +25,9 @@ namespace SS.OAuth.Tests.Parameters
             var requestToken = new Creds(rKey, rSecret);
 
             var param = new VerifierTokenParams(consumer, requestToken, "sss");
-            var headerFactory = new HeaderFactory();
 
             // Act
-            var header = headerFactory.GetOAuthParams(param).Stringify();
+            var header = param.ToCollection().Stringify();
 
             // Assert
             LOG.Info(header);
