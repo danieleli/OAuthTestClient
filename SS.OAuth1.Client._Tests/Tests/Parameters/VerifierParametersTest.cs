@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Parameters;
-using SS.OAuth1.Client._Tests.Tests.Helpers;
 using log4net;
 
 namespace SS.OAuth1.Client._Tests.Tests.Parameters

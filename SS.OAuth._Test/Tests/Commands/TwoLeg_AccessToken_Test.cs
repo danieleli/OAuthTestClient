@@ -67,25 +67,25 @@ namespace SS.OAuth.Tests.Commands
         }
 
 
-        [Test]
-        public void TwoLegged_Success()
-        {
-            //// Arrange            
-            //var cmd = new Commands.GetTokenCommand();
-            //var requestInput = new RequestTokenParameters(_user);
-            //var requestToken = cmd.GetToken(requestInput);
-            //LOG.LogCreds("requestToken", requestToken);
+        //[Test]
+        //public void TwoLegged_Success()
+        //{
+        //    // Arrange            
+        //    var cmd = new Commands.GetTokenCommand();
+        //    var requestInput = new RequestTokenParameters(_user);
+        //    var requestToken = cmd.GetToken(requestInput);
+        //    LOG.LogCreds("requestToken", requestToken);
 
-            //// Act
-            //var input = new AccessTokenParameters(_user, requestToken, null);
-            //var accessToken = cmd.GetToken(input);
+        //    // Act
+        //    var input = new AccessTokenParameters(_user, requestToken, null);
+        //    var accessToken = cmd.GetToken(input);
 
-            //// Assert
-            //Assert.IsNotNull(accessToken, "AccessToken");
-            //Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
-            //Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
-            //LOG.LogCreds("accessToken", accessToken);
-        }
+        //    // Assert
+        //    Assert.IsNotNull(accessToken, "AccessToken");
+        //    Assert.IsNotNullOrEmpty(accessToken.Key, "oauth_token");
+        //    Assert.IsNotNullOrEmpty(accessToken.Secret, "oauth_token_secret");
+        //    LOG.LogCreds("accessToken", accessToken);
+        //}
     }
 
 

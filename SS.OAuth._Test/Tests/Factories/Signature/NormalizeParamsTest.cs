@@ -15,8 +15,8 @@ namespace SS.OAuth.Tests.Factories.Signature
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(NormalizeParamsTest));
 
-        const string URL = "HTTPS://www.ExAMplwwwe.com/Auth?a=valuea&z=valuez&b=valueb1&b=valueb2";
-        private const string KEY = "name1";
+        const string URL           = "HTTPS://www.ExAMplwwwe.com/Auth?a=valuea&z=valuez&b=valueb1&b=valueb2";
+        private const string KEY   = "name1";
         private const string VALUE = "value1";
 
         private readonly HttpRequestMessage _httpMessage;
@@ -26,15 +26,15 @@ namespace SS.OAuth.Tests.Factories.Signature
         public NormalizeParamsTest()
         {
             // Arrange
-            const string cKey = "consumerKey";
+            const string cKey    = "consumerKey";
             const string cSecret = "consumerSecret";
-            var consumer = new Creds(cKey, cSecret);
+            var consumer         = new Creds(cKey, cSecret);
 
-            _testParam = new TestParams(consumer, "123", "456");
+            _testParam   = new TestParams(consumer, "123", "456");
             _httpMessage = new HttpRequestMessage(HttpMethod.Get, URL);
 
             var contentDictionary = new Dictionary<string, string> {{KEY, VALUE}};
-            _httpMessage.Content = new FormUrlEncodedContent(contentDictionary);
+            _httpMessage.Content  = new FormUrlEncodedContent(contentDictionary);
         }
 
 

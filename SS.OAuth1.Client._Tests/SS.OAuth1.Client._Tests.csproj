@@ -69,10 +69,6 @@
       <Project>{97192fd1-6091-4187-a919-9b32bc3db9e7}</Project>
       <Name>SS.OAuth1.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SS.OAuth\SS.OAuth.csproj">
-      <Project>{82F0264D-2B91-41BE-BE27-13A57E73DA3E}</Project>
-      <Name>SS.OAuth</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">

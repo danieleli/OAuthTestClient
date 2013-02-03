@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
+﻿using System.Collections.Specialized;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using NUnit.Framework;
 using SS.OAuth.Factories;
 using SS.OAuth.Helpers;
-using SS.OAuth.Misc;
 using SS.OAuth.Models;
-using SS.OAuth.Models.Parameters;
 using SS.OAuth.Extensions;
 using log4net;
 
 namespace SS.OAuth.Tests.Requests
 {
-    
     [TestFixture]
     public class RequestTokenTest
     {
@@ -43,17 +35,17 @@ namespace SS.OAuth.Tests.Requests
         public void GetSignature()
         {
             // Arrange
-            var consumer = new Creds("key", "secret");
-            var param = new TestParams(consumer, "3937336", "1359756560");
-            var msg = new HttpRequestMessage(HttpMethod.Post, "http://term.ie/oauth/example/request_token.php");
+            var consumer   = new Creds("key", "secret");
+            var param      = new TestParams(consumer, "3937336", "1359756560");
+            var msg        = new HttpRequestMessage(HttpMethod.Post, "http://term.ie/oauth/example/request_token.php");
             var sigFactory = new SignatureFactory(param, msg);
 
             // Act            
-            var sigBase = sigFactory.GetSignatureBase();
-            var sigKey = param.GetSignatureKey();
-            var sig = sigFactory.GetSignature(sigBase, sigKey);
+            var sigBase      = sigFactory.GetSignatureBase();
+            var sigKey       = param.GetSignatureKey();
+            var sig          = sigFactory.GetSignature(sigBase, sigKey);
             var headerParams = AddSig(sigFactory, sig);
-            var headString = "OAuth " + headerParams.Stringify();
+            var headString   = "OAuth " + headerParams.Stringify();
             
             LogValues(param, sigBase, sigKey, sig, headString);
 
@@ -66,7 +58,7 @@ namespace SS.OAuth.Tests.Requests
         private static NameValueCollection AddSig(SignatureFactory sigFactory, string sig)
         {
             var headerParams = sigFactory.GetOAuthParams();
-            headerParams.Add(V1.Keys.SIGNATURE, sig);
+            headerParams.Add(OAuth.V1.Keys.SIGNATURE, sig);
             return headerParams;
         }
 

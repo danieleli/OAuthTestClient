@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
-using SS.OAuth1.Client.Messages;
 using SS.OAuth1.Client._Tests.Helpers;
-using SS.OAuth1.Client._Tests.Tests.Parameters;
 using log4net;
 
-namespace SS.OAuth1.Client._Tests.Tests.Helpers
+namespace SS.OAuth1.Client._Tests.Tests.Parameters
 {
 
     [TestFixture]

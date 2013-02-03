@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using NUnit.Framework;
+using SS.OAuth;
 using SS.OAuth.Extensions;
 using SS.OAuth.Factories;
 using SS.OAuth.Helpers;
@@ -87,9 +88,9 @@ namespace SS.OAuth.Tests.Factories.Header
             var normalizedRequestParams = sigFactory.GetAllRequestParameters();
 
             // Assert
-            var values = normalizedRequestParams.GetValues(V1.Keys.CONSUMER_KEY);
+            var values = normalizedRequestParams.GetValues(OAuth.V1.Keys.CONSUMER_KEY);
             Assert.That(values, Is.Not.Null, "oauthConsumerTokenKey_Values");
-            Assert.That(values.Length, Is.EqualTo(1), "Count of RequestParams Named " + V1.Keys.CONSUMER_KEY);
+            Assert.That(values.Length, Is.EqualTo(1), "Count of RequestParams Named " + OAuth.V1.Keys.CONSUMER_KEY);
             LOG.Debug("normal params.Stringify: " + normalizedRequestParams.Stringify());
         }
     }
