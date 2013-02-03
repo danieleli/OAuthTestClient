@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using SS.OAuth.Extensions;
 using SS.OAuth.Models.Parameters;
+using log4net;
 
 namespace SS.OAuth.Factories
 {
@@ -39,16 +40,42 @@ namespace SS.OAuth.Factories
 
     public class SignatureFactory
     {
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(SignatureFactory));
+        
         private readonly BaseParams _paramz;
         private readonly HttpRequestMessage _msg;
 
+        private BaseStringFactory _baseStringFactory;
+
+        public BaseStringFactory BaseStringFactory { get; private set; }
+        
         public SignatureFactory(BaseParams paramz, HttpRequestMessage msg)
         {
             _paramz = paramz;
             _msg = msg;
+            BaseStringFactory = new BaseStringFactory(_paramz, _msg);
         }
 
-        public string GetSignature(string sigBase, string sigKey)
+        public string GetSignature()
+        {
+            var sigBase = BaseStringFactory.GetSignatureBase();
+            var sigKey = _paramz.GetSignatureKey();
+            var sig = GetSignature(sigBase, sigKey);
+
+            LogInfo(sigBase, sigKey, sig);
+            return sig;
+        }
+
+        private static void LogInfo(string sigBase, string sigKey, string sig)
+        {
+            LOG.Info("");
+            LOG.Info("Signature Base  : " + sigBase);
+            LOG.Info("Signature Key   : " + sigKey);
+            LOG.Info("Signature Value : " + sig);
+            LOG.Info("");
+        }
+
+        public static string GetSignature(string sigBase, string sigKey)
         {
             var keyBytes = Encoding.UTF8.GetBytes(sigKey);
             var sha1 = new HMACSHA1(keyBytes);
@@ -58,45 +85,5 @@ namespace SS.OAuth.Factories
 
             return Convert.ToBase64String(hash);
         }
-
-
-        public string GetSignatureBase()
-        {
-            var method = _msg.Method.ToString().ToUpper();
-            var baseUri = _msg.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
-            var paramz = GetAllRequestParameters().Normalize().UrlEncodeForOAuth();
-
-            var rtn = string.Format("{0}&{1}&{2}", method, baseUri, paramz);
-
-            return rtn;
-        }
-
-        public NameValueCollection GetAllRequestParameters()
-        {
-            var rtnCollection = new NameValueCollection();
-
-            var oauthParams = _paramz.ToCollection();
-            rtnCollection.Add(oauthParams);
-
-            var queryParams = _msg.RequestUri.ParseQueryString();
-            rtnCollection.Add(queryParams);
-
-            var contentCollection = GetRequestContent();
-            rtnCollection.Add(contentCollection);
-
-            return rtnCollection;
-        }
-
-        private NameValueCollection GetRequestContent()
-        {
-            var contentCollection = new NameValueCollection();
-            if (_msg.Content != null)
-            {
-                var contentAsString = _msg.Content.ReadAsStringAsync().Result;
-                contentCollection = HttpUtility.ParseQueryString(contentAsString);
-            }
-            return contentCollection;
-        }
-
     }
 }

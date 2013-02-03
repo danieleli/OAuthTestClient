@@ -10,5 +10,10 @@ namespace SS.OAuth.Models.Parameters
             RequestToken = requestToken;
             UserToken = userToken;
         }
+
+        public override string GetSignatureKey()
+        {
+            return base.GetSignatureKey();
+        }
     }
 }

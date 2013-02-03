@@ -47,7 +47,7 @@ namespace SS.OAuth.Tests.Factories.Header
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
-            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
 
             // Assert
             Assert.That(normalizedRequestParams, Is.Not.Null, "normalizedRequestParams");
@@ -68,7 +68,7 @@ namespace SS.OAuth.Tests.Factories.Header
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
-            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
 
             // Assert;
             var values = normalizedRequestParams.GetValues(KEY);
@@ -85,7 +85,7 @@ namespace SS.OAuth.Tests.Factories.Header
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
-            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
 
             // Assert
             var values = normalizedRequestParams.GetValues(OAuth.V1.Keys.CONSUMER_KEY);

@@ -42,9 +42,9 @@ namespace SS.OAuth.Tests.Factories.Signature
             var sigFactory = new SignatureFactory(param, msg);
 
             // Act            
-            var sigBase      = sigFactory.GetSignatureBase();
+            var sigBase      = sigFactory.BaseStringFactory.GetSignatureBase();
             var sigKey       = param.GetSignatureKey();
-            var sig          = sigFactory.GetSignature(sigBase, sigKey);
+            var sig          = sigFactory.GetSignature();
             var headerParams = AddSig(sig, param);
             var headString   = "OAuth " + headerParams.Stringify();
             

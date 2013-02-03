@@ -9,39 +9,6 @@ using log4net;
 
 namespace SS.OAuth.Tests.Commands
 {
-    public class GetRequestTokenCommand
-    {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(GetRequestTokenCommand));
-
-
-
-        public Creds GetToken(BaseParams paramz, HttpRequestMessage msg)
-        {
-            
-            AddOAuthHeader(paramz, msg);
-            
-
-            var client = new HttpClient();
-            var response = client.SendAsync(msg).Result;
-            
-            var token = ExtractToken(response);
-
-            return token;
-        }
-
-        private Creds ExtractToken(object response)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void AddOAuthHeader(BaseParams paramz, HttpRequestMessage msg)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
-
     [TestFixture]
     public class AccessTokenTest
     {
@@ -49,13 +16,13 @@ namespace SS.OAuth.Tests.Commands
         private static readonly ILog LOG                        = LogManager.GetLogger(typeof(AccessTokenTest));
         private readonly Creds _user                            = G.DanUser;
         private readonly Creds _consumer                        = G.DanTestAppConsumer;
-        private readonly GetRequestTokenCommand _cmd            = new GetRequestTokenCommand();
+        //private readonly GetRequestTokenCommand _cmd            = new GetRequestTokenCommand();
 
 
         [Test]
         public void GetRequestToken_Success()
         {
-            throw new NotImplementedException();
+            Assert.Ignore();
             //// Arrange
             //var input = new RequestTokenParams(_consumer);
 

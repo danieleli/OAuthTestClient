@@ -49,6 +49,7 @@
     <Compile Include="Extensions\NameValueCollectionEx.cs" />
     <Compile Include="Extensions\StringEx.cs" />
     <Compile Include="Extensions\UriEx.cs" />
+    <Compile Include="Factories\BaseStringFactory.cs" />
     <Compile Include="Models\Parameters\Extensions.cs" />
     <Compile Include="Misc\Utils.cs" />
     <Compile Include="Models\Parameters\AccessTokenParams.cs" />

@@ -100,8 +100,7 @@ namespace SS.OAuth.Tests
             var sigFactory = new SignatureFactory(_paramz, _msg);
 
             // Act
-            //var sigBase = sigFactory.GetSignatureBase(_content);
-            var sigBase = sigFactory.GetSignatureBase();
+            var sigBase = sigFactory.BaseStringFactory.GetSignatureBase();
 
             // Assert
             LOG.Debug(sigBase);
@@ -115,8 +114,7 @@ namespace SS.OAuth.Tests
             var sigFactory = new SignatureFactory(_paramz, _msg);
             
             // Act
-            //var normalizedRequestParams = _paramz.GetAllRequestParameters(_content);
-            var normalizedRequestParams = sigFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
             var normalized = normalizedRequestParams.Normalize();
 
             // Assert

@@ -19,7 +19,7 @@ using log4net;
 
 namespace SS.OAuth.Tests.Commands
 {
-    [TestFixture]
+    [TestFixture,Ignore]
     public class VerifierTest
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof (VerifierTest));
