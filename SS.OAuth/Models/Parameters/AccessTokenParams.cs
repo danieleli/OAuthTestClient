@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using SS.OAuth.Extensions;
 
 namespace SS.OAuth.Models.Parameters
@@ -17,6 +18,13 @@ namespace SS.OAuth.Models.Parameters
         public override string GetSignatureKey()
         {
             return this.Consumer.Secret.UrlEncodeForOAuth() + "&" + RequestToken.Secret.UrlEncodeForOAuth();
+        }
+
+        public override NameValueCollection ToCollection()
+        {
+            var col = base.ToCollection();
+            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.VERIFIER, this.Verifier);
+            return col;
         }
     }
 }

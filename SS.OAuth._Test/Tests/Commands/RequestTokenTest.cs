@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
@@ -39,6 +40,33 @@ namespace SS.OAuth.Tests.Commands
         }
     }
 
+    public class NoVersionRequestToken:RequestTokenParams
+    {
+        public NoVersionRequestToken(Creds consumer, string callback = "oob") : base(consumer, callback)
+        {
+        }
+
+        public override NameValueCollection ToCollection()
+        {
+            var col = new NameValueCollection();
+            col.Add(OAuth.V1.Keys.NONCE, this.Nonce);
+            col.Add(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
+            col.Add(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
+            col.Add(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
+           // col.Add(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
+
+            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
+            if (this.RequestToken != null)
+            {
+                col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key);
+            }
+
+            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.Callback);
+            return col;
+            
+        }
+    }
+
     [TestFixture]
     public class RequestTokenTest
     {
@@ -67,6 +95,31 @@ namespace SS.OAuth.Tests.Commands
             Assert.That(result, Is.Not.Null);
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status Code");
         }
+
+
+        [Test]
+        public void NoVersionInHeader_Returns_OK()
+        {
+            // Arrange            
+            var requestParam = new NoVersionRequestToken(_consumer);
+            var msg = new HttpRequestMessage(HttpMethod.Get, OAuth.V1.Routes.RequestToken);
+            var client = new HttpClient();
+            var sigFactory = new SignatureFactory(requestParam, msg);
+            var sig = sigFactory.GetSignature();
+            var headString = GetHeaderString(requestParam, sig);
+            LOG.Debug("Header: " + headString);
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, headString);
+
+            // Act
+            var result = client.SendAsync(msg).Result;
+            LOG.Debug(result);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status Code");
+        }
+
+
 
         private static string GetHeaderString(RequestTokenParams requestParam, string sig)
         {

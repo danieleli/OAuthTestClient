@@ -1,4 +1,7 @@
 
+using System.Collections.Specialized;
+using SS.OAuth.Extensions;
+
 namespace SS.OAuth.Models.Parameters
 {
     public class RequestTokenParams : BaseParams
@@ -9,6 +12,12 @@ namespace SS.OAuth.Models.Parameters
         {
             Consumer = consumer;
             Callback = callback;
+        }
+        public override NameValueCollection ToCollection()
+        {
+            var col = base.ToCollection();
+            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.Callback);
+            return col;
         }
     }
 }
