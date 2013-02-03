@@ -11,9 +11,9 @@ namespace SS.OAuth.Tests.Commands
 
 
     [TestFixture]
-    public class RequestTokenTest
+    public class AccessTokenTest
     {
-
+        
         private static readonly ILog LOG               = LogManager.GetLogger(typeof(RequestTokenTest));
         private readonly Creds _user                   = G.DanUser;
         private readonly Creds _consumer               = G.DanTestAppConsumer;

@@ -18,5 +18,9 @@ namespace SS.OAuth
         
         // Might not be consumer - ???
         public static Creds DanTestAppConsumer = new Creds("6rexu7a9ezawyss6krucyh9v", "oe793wU6pxvpSAUm7U1nF8Ol000=");
+
+
+        public const string INVALID_SIGNATURE_MESSAGE = "ErrorCode: InvalidSignature; Message: Invalid signature.";
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using NUnit.Framework;
+using SS.OAuth.Commands;
 using SS.OAuth.Extensions;
 using SS.OAuth.Factories;
 using SS.OAuth.Models;

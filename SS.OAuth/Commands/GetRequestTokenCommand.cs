@@ -2,7 +2,7 @@
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 
-namespace SS.OAuth.Tests.Commands
+namespace SS.OAuth.Commands
 {
     public class GetRequestTokenCommand
     {

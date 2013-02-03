@@ -42,6 +42,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\GetVerifierTokenCommand.cs" />
     <Compile Include="Commands\GetAccessTokenCommand.cs" />
     <Compile Include="Commands\GetRequestTokenCommand.cs" />
     <Compile Include="Extensions\LogEx.cs" />

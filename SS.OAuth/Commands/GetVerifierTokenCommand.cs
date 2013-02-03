@@ -4,9 +4,9 @@ using SS.OAuth.Models.Parameters;
 
 namespace SS.OAuth.Commands
 {
-    public class GetAccessTokenCommand
+    public class GetVerifierTokenCommand
     {
-        public Creds GetToken(AccessTokenParams p)
+        public Creds GetToken(VerifierTokenParams p)
         {
             throw new NotImplementedException();
         }

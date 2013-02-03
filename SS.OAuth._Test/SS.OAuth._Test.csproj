@@ -41,11 +41,14 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="G.cs" />
+    <Compile Include="Tests\Commands\AccessTokenTest.cs" />
     <Compile Include="Tests\Commands\RequestTokenTest.cs" />
     <Compile Include="Tests\Commands\TwoLeg_AccessToken_Test.cs" />
+    <Compile Include="Tests\Commands\VerifierTest.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
     <Compile Include="Tests\Extensions\StringExTest.cs" />
     <Compile Include="Tests\Extensions\UriExTest.cs" />

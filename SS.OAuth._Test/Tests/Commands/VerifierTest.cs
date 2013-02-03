@@ -2,29 +2,30 @@
 
 using System;
 using System.Collections.Specialized;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
-using SS.OAuth1.Client.Commands;
-using SS.OAuth1.Client.Extensions;
-using SS.OAuth1.Client.Helpers;
-using SS.OAuth1.Client.Parameters;
+using SS.OAuth.Commands;
+using SS.OAuth.Extensions;
+using SS.OAuth.Models;
+using SS.OAuth.Models.Parameters;
 using log4net;
 
 #endregion
 
-namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
+namespace SS.OAuth.Tests.Commands
 {
     [TestFixture]
     public class VerifierTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(VerifierTest));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (VerifierTest));
 
-        private readonly Creds _consumer = G.TestCreds.DanConsumer;
-        private readonly Creds _user = G.TestCreds.DanUser;
+        private readonly Creds _consumer = G.DanTestAppConsumer;
+        private readonly Creds _user = G.DanUser;
 
         private static class Helper
         {
@@ -40,22 +41,24 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
 
             public static Creds GetTwoLegAccessToken(Creds user)
             {
-                var requestToken = GetRequestToken(user);
-                var input = new AccessTokenParameters(user, requestToken, null);
-                var cmd = new Commands.GetTokenCommand();
-                var accessToken = cmd.GetToken(input);
+                //var requestToken = GetRequestToken(user);
+                //var input = new AccessTokenParams(user, requestToken, null);
+                //var cmd = new Commands.GetTokenCommand();
+                //var accessToken = cmd.GetToken(input);
 
-                return accessToken;
+                //return accessToken;
+                return new Creds("","");
             }
 
             public static Creds GetRequestToken(Creds consumer)
             {
-                var requestTokenCmd = new Commands.GetTokenCommand();
-                LOG.LogCreds("consumer", consumer);
-                var requestInput = new RequestTokenParameters(consumer);
-                var requestToken = requestTokenCmd.GetToken(requestInput);
-                LOG.LogCreds("requestToken", requestToken);
-                return requestToken;
+                //var requestTokenCmd = new Commands.GetTokenCommand();
+                //LOG.LogCreds("consumer", consumer);
+                //var requestInput = new RequestTokenParams(consumer);
+                //var requestToken = requestTokenCmd.GetToken(requestInput);
+                //LOG.LogCreds("requestToken", requestToken);
+                //return requestToken;
+                return new Creds("", "");
             }
 
             public static string EncodeTo64(string toEncode)
@@ -75,40 +78,10 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
             }
         }
 
-        
-
-
-        [Test]
-        public void Success()
-        {
-            // Arrange            
-            var requestToken = Helper.GetRequestToken(_consumer);
-            Helper.HitWebView(requestToken.Key);
-            var twoLegAccessToken = Helper.GetTwoLegAccessToken(_user);
-
-
-            var verifierParams = new VerifierTokenParameters(_user, twoLegAccessToken, requestToken.Key);
-            var verifierCmd = new GetVerifierCommand();
-
-
-            // Act
-            var verifierToken = verifierCmd.GetToken(verifierParams);
-
-
-            // Assert
-            Assert.IsNotNull(verifierToken, "AccessToken");
-            Assert.IsNotNullOrEmpty(verifierToken.Key, "oauth_token");
-            Assert.IsNotNullOrEmpty(verifierToken.Secret, "oauth_token_secret");
-            LOG.LogCreds("verifierToken", verifierToken);
-        }
-
-
-
-
-
 
         // Original code.
-        public string GetTokenVerifier(NameValueCollection rt, string token, string consumerKey = null, string consumerSecret = null)
+        public string GetTokenVerifier(NameValueCollection rt, string token, string consumerKey = null,
+                                       string consumerSecret = null)
         {
             //48200
             //100001320
@@ -118,21 +91,21 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
 
 
             var authRequest = new HttpRequestMessage
-            {
-                RequestUri = new Uri(requestUrl),
-                Method = HttpMethod.Post
-            };
+                {
+                    RequestUri = new Uri(requestUrl),
+                    Method = HttpMethod.Post
+                };
 
             string mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
             authRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
             //   authRequest.Sign(SignatureMethod.OAuth1A, consumerKey, consumerSecret, rt["oauth_token"], rt["oauth_token_secret"], null, null, null);
 
-            HttpClient httpClient = new HttpClient();
+            var httpClient = new HttpClient();
             var result = httpClient.SendAsync(authRequest);
 
-            HttpResponseMessage authResponse = result.Result;
+            var authResponse = result.Result;
 
-            if (authResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (authResponse.StatusCode == HttpStatusCode.Unauthorized)
                 return null;
             if (authResponse.Headers.Location == null)
                 return authResponse.Content.ReadAsFormDataAsync().Result["oauth_verifier"];
@@ -172,7 +145,7 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
             //Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), "HttpStatusCode");
         }
 
-        [Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
+        [Test, ExpectedException(ExpectedException = typeof (UnauthorizedAccessException))]
         public void BadVerifier_Returns_UnauthorizedStatusCode()
         {
             throw new NotImplementedException();
@@ -216,6 +189,30 @@ namespace SS.OAuth1.Client._Tests.Tests.GetTokenCommand
             //// Assert
             //LOG.Debug("Verifier: " + verifier);
             //Assert.IsNotNullOrEmpty(verifier.Secret, "Verifier");
+        }
+
+        [Test]
+        public void Success()
+        {
+            // Arrange            
+            var requestToken = Helper.GetRequestToken(_consumer);
+            Helper.HitWebView(requestToken.Key);
+            var twoLegAccessToken = Helper.GetTwoLegAccessToken(_user);
+
+
+            var verifierParams = new VerifierTokenParams(_user, twoLegAccessToken, requestToken.Key);
+            var verifierCmd = new GetVerifierTokenCommand();
+
+
+            // Act
+            var verifierToken = verifierCmd.GetToken(verifierParams);
+
+
+            // Assert
+            Assert.IsNotNull(verifierToken, "AccessToken");
+            Assert.IsNotNullOrEmpty(verifierToken.Key, "oauth_token");
+            Assert.IsNotNullOrEmpty(verifierToken.Secret, "oauth_token_secret");
+            LOG.LogCreds("verifierToken", verifierToken);
         }
 
         [Test]
