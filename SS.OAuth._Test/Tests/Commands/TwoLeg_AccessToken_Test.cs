@@ -50,7 +50,7 @@ namespace SS.OAuth.Tests.Commands
         [Test]
         public void TwoLegged()
         {
-            Assert.Ignore();
+            Assert.Fail();
             //var user = G.DanUser;
             //var requestParams = new RequestTokenParams(user);
             
