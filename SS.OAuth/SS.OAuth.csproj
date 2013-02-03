@@ -52,7 +52,6 @@
     <Compile Include="Factories\OAuthHeaderFactory.cs" />
     <Compile Include="Factories\RequestTokenMessageFactory.cs" />
     <Compile Include="Factories\SignatureBaseStringFactory.cs" />
-    <Compile Include="Models\Parameters\Extensions.cs" />
     <Compile Include="Misc\Utils.cs" />
     <Compile Include="Models\Parameters\AccessTokenParams.cs" />
     <Compile Include="Models\Parameters\RequestTokenParams.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net.Http;
 using NUnit.Framework;
 using SS.OAuth.Extensions;
@@ -30,6 +31,26 @@ namespace SS.OAuth.Tests
         public override string Timestamp
         {
             get { return _testTimestamp; }
+        }
+
+        public override NameValueCollection ToCollection()
+        {
+            var col = new NameValueCollection();
+            col.Add(OAuth.V1.Keys.NONCE, this.Nonce);
+            col.Add(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
+            col.Add(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
+            col.Add(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
+          
+            // No version in rfc sample so don't add.
+            // col.Add(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
+
+            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
+            if (this.RequestToken != null)
+            {
+                col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key);
+            }
+
+            return col;
         }
     }
 

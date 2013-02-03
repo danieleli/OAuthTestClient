@@ -34,7 +34,6 @@ namespace SS.OAuth.Helpers
 
             col.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.Callback);
             return col;
-
         }
     }
 
