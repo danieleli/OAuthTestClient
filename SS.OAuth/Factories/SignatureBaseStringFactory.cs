@@ -6,12 +6,12 @@ using SS.OAuth.Models.Parameters;
 
 namespace SS.OAuth.Factories
 {
-    public class BaseStringFactory
+    public class SignatureBaseStringFactory
     {
         private readonly BaseParams _paramz;
         private readonly HttpRequestMessage _msg;
 
-        public BaseStringFactory(BaseParams paramz, HttpRequestMessage msg)
+        public SignatureBaseStringFactory(BaseParams paramz, HttpRequestMessage msg)
         {
             _paramz = paramz;
             _msg = msg;
@@ -35,11 +35,7 @@ namespace SS.OAuth.Factories
             var queryParams       = _msg.RequestUri.ParseQueryString();
             var contentCollection = GetRequestContent();
 
-            var rtnCollection = new NameValueCollection();
-
-            rtnCollection.Add(oauthParams);
-            rtnCollection.Add(queryParams);
-            rtnCollection.Add(contentCollection);
+            var rtnCollection = new NameValueCollection {oauthParams, queryParams, contentCollection};
 
             return rtnCollection;
         }

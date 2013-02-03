@@ -45,20 +45,20 @@ namespace SS.OAuth.Factories
         private readonly BaseParams _paramz;
         private readonly HttpRequestMessage _msg;
 
-        private BaseStringFactory _baseStringFactory;
+        private SignatureBaseStringFactory _signatureBaseStringFactory;
 
-        public BaseStringFactory BaseStringFactory { get; private set; }
+        public SignatureBaseStringFactory SignatureBaseStringFactory { get; private set; }
         
         public SignatureFactory(BaseParams paramz, HttpRequestMessage msg)
         {
             _paramz = paramz;
             _msg = msg;
-            BaseStringFactory = new BaseStringFactory(_paramz, _msg);
+            SignatureBaseStringFactory = new SignatureBaseStringFactory(_paramz, _msg);
         }
 
         public string GetSignature()
         {
-            var sigBase = BaseStringFactory.GetSignatureBase();
+            var sigBase = SignatureBaseStringFactory.GetSignatureBase();
             var sigKey = _paramz.GetSignatureKey();
             var sig = GetSignature(sigBase, sigKey);
 

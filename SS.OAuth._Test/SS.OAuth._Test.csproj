@@ -58,6 +58,7 @@
     <Compile Include="Tests\Factories\Signature\StringifyParamsTest.cs" />
     <Compile Include="Tests\Factories\Signature\NormalizeParamsTest.cs" />
     <Compile Include="Tests\Parameters\VerifierParametersTest.cs" />
+    <Compile Include="Tests\Requests\RequestTokenTest.cs" />
     <Compile Include="Tests\RfcSample.cs" />
     <Compile Include="Tests\Factories\Signature\GetSignatureTest.cs" />
   </ItemGroup>
@@ -75,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\Factories\Header\" />
-    <Folder Include="Tests\Requests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

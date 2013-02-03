@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using NUnit.Framework;
-using SS.OAuth;
 using SS.OAuth.Extensions;
 using SS.OAuth.Factories;
 using SS.OAuth.Helpers;
@@ -12,7 +11,7 @@ using log4net;
 
 #endregion
 
-namespace SS.OAuth.Tests.Factories.Header
+namespace SS.OAuth.Tests.Factories.Signature
 {
     [TestFixture]
     public class StringifyParamsTest
@@ -47,7 +46,7 @@ namespace SS.OAuth.Tests.Factories.Header
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
-            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters();
 
             // Assert
             Assert.That(normalizedRequestParams, Is.Not.Null, "normalizedRequestParams");
@@ -68,7 +67,7 @@ namespace SS.OAuth.Tests.Factories.Header
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
-            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters();
 
             // Assert;
             var values = normalizedRequestParams.GetValues(KEY);
@@ -85,7 +84,7 @@ namespace SS.OAuth.Tests.Factories.Header
             var sigFactory = new SignatureFactory(_testParam, _httpMessage);
 
             // Act
-            var normalizedRequestParams = sigFactory.BaseStringFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters();
 
             // Assert
             var values = normalizedRequestParams.GetValues(OAuth.V1.Keys.CONSUMER_KEY);

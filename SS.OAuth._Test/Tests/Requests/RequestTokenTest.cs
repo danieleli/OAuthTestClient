@@ -1,50 +1,18 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
-using SS.OAuth.Commands;
-using SS.OAuth.Extensions;
 using SS.OAuth.Factories;
 using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Commands
+namespace SS.OAuth.Tests.Requests
 {
-    public class TestCommand
+    [TestFixture]
+    public class RequestTokenEndpointTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(TestCommand));
-
-        public Creds GetToken( BaseParams paramz, HttpRequestMessage msg )
-        {
-
-            AddOAuthHeader(paramz, msg);
-
-            var client = new HttpClient();
-            var response = client.SendAsync(msg).Result;
-
-            var token = ExtractToken(response);
-
-            return token;
-        }
-
-        private Creds ExtractToken( object response )
-        {
-            throw new NotImplementedException();
-        }
-
-        private void AddOAuthHeader( BaseParams paramz, HttpRequestMessage msg )
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [TestFixture, Ignore]
-    public class RequestTokenTest
-    {
-        private static readonly ILog LOG                                  = LogManager.GetLogger(typeof(RequestTokenTest));
+        private static readonly ILog LOG                                  = LogManager.GetLogger(typeof(RequestTokenEndpointTest));
         private readonly Creds _user                                      = G.DanUser;
         private readonly Creds _consumer                                  = G.DanTestAppConsumer;
         readonly HttpClient _httpClient                                   = new HttpClient();
@@ -68,8 +36,8 @@ namespace SS.OAuth.Tests.Commands
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status Code");
         }
 
-        [Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
-        public void BadConsumerKey_Throws_UnauthorizedException()
+        [Test]
+        public void BadConsumerKey_Returns_Unauthorized()
         {
             // Arrange
             var consumer = new Creds("xxxx", _consumer.Secret);
@@ -83,11 +51,8 @@ namespace SS.OAuth.Tests.Commands
             LOG.Debug("Status: " + result.StatusCode);
 
 
-            // Act
-            //var requestToken = _cmd.GetToken(input);
-
-            // Asset
-            Assert.Fail("Exception not thrown.");
+            // Assert
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Status Code.");
         }
 
         [Test]
@@ -140,6 +105,25 @@ namespace SS.OAuth.Tests.Commands
         //    // Assert
         //    Assert.Ignore("Not Implemented");
         //}
+
+        [Test]
+        public void CallbackPresent_Redirects_ToCallback()
+        {
+            // Arrange            
+            var requestParam = new RequestTokenParams(_consumer, "http://www.example.com/callback");
+            var msgFactory = new RequestTokenMessageFactory(requestParam);
+            var msg = msgFactory.CreateMessage();
+
+
+            // Act
+            var result = _httpClient.SendAsync(msg).Result;
+            LOG.Debug("Status: " + result.StatusCode);
+
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Redirect), "Status Code");
+        }
 
         //[Test, ExpectedException(ExpectedException = typeof(UnauthorizedAccessException))]
         //public void BadConsumerKey_Throws_UnauthorizedException()
