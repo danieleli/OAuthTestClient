@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SS.OAuth.Commands;
 using SS.OAuth.Extensions;
 using SS.OAuth.Factories;
+using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
@@ -40,33 +41,7 @@ namespace SS.OAuth.Tests.Commands
         }
     }
 
-    public class NoVersionRequestToken:RequestTokenParams
-    {
-        public NoVersionRequestToken(Creds consumer, string callback = "oob") : base(consumer, callback)
-        {
-        }
-
-        public override NameValueCollection ToCollection()
-        {
-            var col = new NameValueCollection();
-            col.Add(OAuth.V1.Keys.NONCE, this.Nonce);
-            col.Add(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
-            col.Add(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
-            col.Add(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
-           // col.Add(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
-
-            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
-            if (this.RequestToken != null)
-            {
-                col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key);
-            }
-
-            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.Callback);
-            return col;
-            
-        }
-    }
-
+    
     [TestFixture]
     public class RequestTokenTest
     {
@@ -101,7 +76,7 @@ namespace SS.OAuth.Tests.Commands
         public void NoVersionInHeader_Returns_OK()
         {
             // Arrange            
-            var requestParam = new NoVersionRequestToken(_consumer);
+            var requestParam = new NoVersionRequestTokenParams(_consumer);
             var msg = new HttpRequestMessage(HttpMethod.Get, OAuth.V1.Routes.RequestToken);
             var client = new HttpClient();
             var sigFactory = new SignatureFactory(requestParam, msg);

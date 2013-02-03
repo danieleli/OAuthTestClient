@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="G.cs" />
+    <Compile Include="Helpers\NoVersionRequestTokenParam.cs" />
     <Compile Include="Tests\Commands\AccessTokenTest.cs" />
     <Compile Include="Tests\Commands\RequestTokenTest.cs" />
     <Compile Include="Tests\Commands\TwoLeg_AccessToken_Test.cs" />
