@@ -11,9 +11,27 @@ using log4net;
 namespace SS.OAuth.Tests.Commands
 {
     [TestFixture]
-    public class TwoLeg_AccessToken_Test
+    public class TwoLegTest
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(TwoLeg_AccessToken_Test));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(TwoLegTest));
+
+        [Test]
+        public void TwoLegged()
+        {
+            var user              = G.DanUser;
+            var requestToken      = GetRequestToken(user);
+            var accessTokenParams = new AccessTokenParams(user, requestToken, null);
+            var accessCmd         = new GetAccessTokenCommand(accessTokenParams);
+            var accessToken       = accessCmd.GetToken();
+
+            LOG.LogCreds("AccessToken", accessToken);
+            Assert.That(accessToken, Is.Not.Null, "AccessToken");
+            Assert.That(accessToken.Key, Is.Not.Null, "AccessToken.Key");
+            Assert.That(accessToken.Key, Is.Not.Empty, "AccessToken.Key");
+            Assert.That(accessToken.Secret, Is.Not.Null, "AccessToken.Secret");
+            Assert.That(accessToken.Secret, Is.Not.Empty, "AccessToken.Secret");
+
+        }
 
         /// <summary>
         /// Two leg oauth should use SAME user and consumer.  Different user and consumer is three leg
@@ -55,24 +73,6 @@ namespace SS.OAuth.Tests.Commands
             var requestToken       = cmd.GetToken();
             
             return requestToken;
-        }
-
-        [Test]
-        public void TwoLegged()
-        {
-            var user              = G.DanUser;
-            var requestToken      = GetRequestToken(user);
-            var accessTokenParams = new AccessTokenParams(user, requestToken, null);
-            var accessCmd         = new GetAccessTokenCommand(accessTokenParams);
-            var accessToken       = accessCmd.GetToken();
-
-            LOG.LogCreds("AccessToken", accessToken);
-            Assert.That(accessToken, Is.Not.Null, "AccessToken");
-            Assert.That(accessToken.Key, Is.Not.Null, "AccessToken.Key");
-            Assert.That(accessToken.Key, Is.Not.Empty, "AccessToken.Key");
-            Assert.That(accessToken.Secret, Is.Not.Null, "AccessToken.Secret");
-            Assert.That(accessToken.Secret, Is.Not.Empty, "AccessToken.Secret");
-
         }
     }
 }

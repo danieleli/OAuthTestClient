@@ -7,9 +7,9 @@ namespace SS.OAuth.Tests.Commands
 {
 
     [TestFixture]
-    public class GetRequestTokenCommandTest
+    public class RequestTokenTest
     {
-        private static readonly ILog LOG  = LogManager.GetLogger(typeof(GetRequestTokenCommandTest));
+        private static readonly ILog LOG  = LogManager.GetLogger(typeof(RequestTokenTest));
 
         [Test]
         public void HappyPath()

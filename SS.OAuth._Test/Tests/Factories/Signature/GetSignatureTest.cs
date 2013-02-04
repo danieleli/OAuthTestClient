@@ -32,7 +32,7 @@ namespace SS.OAuth.Tests.Factories.Signature
 
         #endregion
 
-        [Test, Ignore("Too fragile.")]
+        [Test]
         public void GetSignature()
         {
             // Arrange

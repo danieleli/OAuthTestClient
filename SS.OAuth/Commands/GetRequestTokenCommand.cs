@@ -21,9 +21,9 @@ namespace SS.OAuth.Commands
         public Creds GetToken()
         {
             var msg = this.CreateMessage();
-            var sig = this.GetSignature(msg);
-            var header = this.CreateHeader(sig);
-            msg.Headers.Add((string)OAuth.V1.AUTHORIZATION_HEADER, header);
+            var sig = base.GetSignature(msg);
+            var header = base.CreateHeader(sig);
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, header);
             var response = _httpClient.SendAsync(msg).Result;
             var token = base.ExtractToken(response);
 

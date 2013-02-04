@@ -62,6 +62,14 @@ namespace SS.OAuth.Factories
             return sig;
         }
 
+        public string CreateHeader( string sig )
+        {
+            var oauthHeaderValues = _paramz.ToCollection();
+            oauthHeaderValues.Add(OAuth.V1.Keys.SIGNATURE, sig);
+            var headString = oauthHeaderValues.Stringify();
+            return "OAuth " + headString;
+        }
+
         private static void LogInfo(string sigBase, string sigKey, string sig)
         {
             LOG.Info("");
@@ -71,7 +79,7 @@ namespace SS.OAuth.Factories
             LOG.Info("");
         }
 
-        public static string GetSignature(string sigBase, string sigKey)
+        private static string GetSignature(string sigBase, string sigKey)
         {
             var keyBytes = Encoding.UTF8.GetBytes(sigKey);
             var sha1 = new HMACSHA1(keyBytes);

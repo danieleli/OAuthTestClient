@@ -50,8 +50,8 @@
     <Compile Include="G.cs" />
     <Compile Include="Helpers\NoVersionRequestTokenParam.cs" />
     <Compile Include="Tests\Commands\AccessTokenTest.cs" />
-    <Compile Include="Tests\Commands\GetRequestTokenCommandTest.cs" />
-    <Compile Include="Tests\Commands\TwoLeg_AccessToken_Test.cs" />
+    <Compile Include="Tests\Commands\RequestTokenTest.cs" />
+    <Compile Include="Tests\Commands\TwoLegTest.cs" />
     <Compile Include="Tests\Commands\VerifierTest.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
     <Compile Include="Tests\Extensions\StringExTest.cs" />

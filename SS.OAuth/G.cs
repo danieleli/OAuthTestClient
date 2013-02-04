@@ -2,24 +2,24 @@
 {
     public static partial class G
     {
-        private static readonly string _BaseApiUrl;
-        private static readonly string _BaseSiteUrl;
+        private static readonly string BASE_API_URL;
+        private static readonly string BASE_SITE_URL;
 
         static G()
         {
             // todo: get from appsettings
-            _BaseApiUrl = "https://test.api.mxmerchant.com/v1";
-            _BaseSiteUrl = "http://test.mxmerchant.com";
+            BASE_API_URL = "https://test.api.mxmerchant.com/v1";
+            BASE_SITE_URL = "http://test.mxmerchant.com";
         }
 
         public static string BaseSiteUrl
         {
-            get { return _BaseSiteUrl; }
+            get { return BASE_SITE_URL; }
         }
 
         public static string BaseApiUrl
         {
-            get { return _BaseApiUrl; }
+            get { return BASE_API_URL; }
         }
     }
 }

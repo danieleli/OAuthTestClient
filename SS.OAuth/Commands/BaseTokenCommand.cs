@@ -15,26 +15,22 @@ namespace SS.OAuth.Commands
 {
     public class BaseTokenCommand
     {
-        protected BaseParams _paramz;
-        private SignatureFactory _sigFactory;
-
-        public BaseTokenCommand(BaseParams p)
+        protected BaseTokenCommand(BaseParams p)
         {
-            _paramz = p;
-            _sigFactory = new SignatureFactory(p);
+            SigFactory = new SignatureFactory(p);
         }
 
-        private SignatureFactory SigFactory
-        {
-            get { return _sigFactory; }
-        }
+        private SignatureFactory SigFactory { get; set; }
 
         protected string CreateHeader( string sig )
         {
-            var oauthHeaderValues = _paramz.ToCollection();
-            oauthHeaderValues.Add(OAuth.V1.Keys.SIGNATURE, sig);
-            var headString = oauthHeaderValues.Stringify();
-            return "OAuth " + headString;
+            var header = this.SigFactory.CreateHeader(sig);
+            return header;
+        }
+
+        protected string CreateHeader( HttpRequestMessage msg )
+        {
+            throw new NotImplementedException();
         }
 
         protected string GetSignature( HttpRequestMessage msg )
