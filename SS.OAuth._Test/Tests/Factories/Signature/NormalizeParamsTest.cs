@@ -42,7 +42,7 @@ namespace SS.OAuth.Tests.Factories.Signature
         public void Include_QueryStringParams()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_testParam);
+            var sigFactory = new OAuthHeaderFactory(_testParam);
 
             // Act
             var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_httpMessage);
@@ -63,7 +63,7 @@ namespace SS.OAuth.Tests.Factories.Signature
         public void Includes_ItemWithName_ConsumerKey()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_testParam);
+            var sigFactory = new OAuthHeaderFactory(_testParam);
 
             // Act
             var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_httpMessage);
@@ -79,7 +79,7 @@ namespace SS.OAuth.Tests.Factories.Signature
         [Test]
         public void Includes_EntityBody()
         {
-            var sigFactory = new SignatureFactory(_testParam);
+            var sigFactory = new OAuthHeaderFactory(_testParam);
 
             // Act
             var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_httpMessage);

@@ -118,7 +118,7 @@ namespace SS.OAuth.Tests
         public void SignatureBase()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_paramz);
+            var sigFactory = new OAuthHeaderFactory(_paramz);
 
             // Act
             var sigBase = sigFactory.SignatureBaseStringFactory.GetSignatureBase(_msg);
@@ -132,7 +132,7 @@ namespace SS.OAuth.Tests
         public void Normalize()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_paramz);
+            var sigFactory = new OAuthHeaderFactory(_paramz);
             
             // Act
             var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_msg);

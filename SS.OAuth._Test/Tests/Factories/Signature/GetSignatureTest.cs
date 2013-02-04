@@ -39,7 +39,7 @@ namespace SS.OAuth.Tests.Factories.Signature
             var consumer   = new Creds("key", "secret");
             var param      = new TestParams(consumer, "3937336", "1359756560");
             var msg        = new HttpRequestMessage(HttpMethod.Post, "http://term.ie/oauth/example/request_token.php");
-            var sigFactory = new SignatureFactory(param);
+            var sigFactory = new OAuthHeaderFactory(param);
 
             // Act            
             var sigBase      = sigFactory.SignatureBaseStringFactory.GetSignatureBase(msg);

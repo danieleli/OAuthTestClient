@@ -17,26 +17,16 @@ namespace SS.OAuth.Commands
     {
         protected BaseTokenCommand(BaseParams p)
         {
-            SigFactory = new SignatureFactory(p);
+            HeaderFactory = new OAuthHeaderFactory(p);
         }
 
-        private SignatureFactory SigFactory { get; set; }
+        private OAuthHeaderFactory HeaderFactory { get; set; }
 
-        protected string CreateHeader( string sig )
+        protected void SignMessage( HttpRequestMessage msg )
         {
-            var header = this.SigFactory.CreateHeader(sig);
-            return header;
-        }
-
-        protected string CreateHeader( HttpRequestMessage msg )
-        {
-            throw new NotImplementedException();
-        }
-
-        protected string GetSignature( HttpRequestMessage msg )
-        {
-            var sig = this.SigFactory.GetSignature(msg);
-            return sig;
+            var sig = this.HeaderFactory.GetSignature(msg);
+            var header = this.HeaderFactory.CreateHeader(sig);
+            msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, header);
         }
 
         protected Creds ExtractToken( HttpResponseMessage response )

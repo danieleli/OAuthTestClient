@@ -53,14 +53,13 @@
     <Compile Include="Extensions\NameValueCollectionEx.cs" />
     <Compile Include="Extensions\StringEx.cs" />
     <Compile Include="Extensions\UriEx.cs" />
-    <Compile Include="Factories\OAuthHeaderFactory.cs" />
     <Compile Include="Factories\RequestTokenMessageFactory.cs" />
     <Compile Include="Factories\SignatureBaseStringFactory.cs" />
     <Compile Include="Misc\Utils.cs" />
     <Compile Include="Models\Parameters\AccessTokenParams.cs" />
     <Compile Include="Models\Parameters\RequestTokenParams.cs" />
     <Compile Include="Models\Parameters\VerifierTokenParams.cs" />
-    <Compile Include="Factories\SignatureFactory.cs" />
+    <Compile Include="Factories\OAuthHeaderFactory.cs" />
     <Compile Include="G.cs" />
     <Compile Include="Models\Creds.cs" />
     <Compile Include="Models\Parameters\BaseParams.cs" />

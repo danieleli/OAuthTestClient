@@ -38,7 +38,7 @@ namespace SS.OAuth.Factories
 
         private string GetSignature( HttpRequestMessage msg )
         {
-            var sigFactory = new SignatureFactory(_requestParam);
+            var sigFactory = new OAuthHeaderFactory(_requestParam);
             var sig = sigFactory.GetSignature(msg);
             return sig;
         }
