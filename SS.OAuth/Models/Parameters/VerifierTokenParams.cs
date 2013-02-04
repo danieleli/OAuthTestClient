@@ -1,3 +1,5 @@
+using System.Collections.Specialized;
+
 namespace SS.OAuth.Models.Parameters
 {
     public class VerifierTokenParams : BaseParams
@@ -14,6 +16,11 @@ namespace SS.OAuth.Models.Parameters
         public override string GetSignatureKey()
         {
             return base.GetSignatureKey();
+        }
+
+        public override NameValueCollection ToCollection()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

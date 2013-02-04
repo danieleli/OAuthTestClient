@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Net;
-using System.Net.Http;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SS.OAuth.Commands;
-using SS.OAuth.Extensions;
-using SS.OAuth.Factories;
-using SS.OAuth.Helpers;
-using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
 

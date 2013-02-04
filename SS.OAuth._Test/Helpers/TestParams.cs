@@ -26,5 +26,10 @@ namespace SS.OAuth.Helpers
         {
             get { return _nonce; }
         }
+
+        public override NameValueCollection ToCollection()
+        {
+            return base.ToCollectionInternal();
+        }
     }
 }

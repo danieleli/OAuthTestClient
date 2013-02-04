@@ -45,6 +45,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BaseTokenCommand.cs" />
     <Compile Include="Commands\GetVerifierTokenCommand.cs" />
     <Compile Include="Commands\GetAccessTokenCommand.cs" />
     <Compile Include="Commands\GetRequestTokenCommand.cs" />

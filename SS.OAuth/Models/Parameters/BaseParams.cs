@@ -5,7 +5,7 @@ using SS.OAuth.Misc;
 namespace SS.OAuth.Models.Parameters
 {
 
-    public class BaseParams
+    public abstract class BaseParams
     {
         #region -- Properties --
 
@@ -46,7 +46,8 @@ namespace SS.OAuth.Models.Parameters
             return this.Consumer.Secret.UrlEncodeForOAuth() + "&";
         }
 
-        public virtual NameValueCollection ToCollection()
+        public abstract NameValueCollection ToCollection();
+        protected  NameValueCollection ToCollectionInternal()
         {
             var col = new NameValueCollection();
             col.Add(OAuth.V1.Keys.NONCE, this.Nonce);
