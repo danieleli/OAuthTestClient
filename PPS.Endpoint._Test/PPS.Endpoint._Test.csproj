@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="G.cs" />
     <Compile Include="Helpers\TestParams.cs" />
+    <Compile Include="Helpers\TokenHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AccessTokenTest.cs" />
     <Compile Include="Tests\RequestTokenTest.cs" />

@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
+using PPS.Endpoint.Helpers;
 using SS.OAuth;
 using SS.OAuth.Commands;
 using SS.OAuth.Extensions;
@@ -39,79 +40,16 @@ namespace PPS.Endpoint.Tests
                 var response = webClient.SendAsync(msg).Result;
                 LOG.Debug("Response: " + response);
             }
-
-            public static Creds GetTwoLegAccessToken(Creds user)
-            {
-                //var requestToken = GetRequestToken(user);
-                //var input = new AccessTokenParams(user, requestToken, null);
-                //var cmd = new Commands.GetTokenCommand();
-                //var accessToken = cmd.GetToken(input);
-
-                //return accessToken;
-                return new Creds("","");
-            }
-
-            public static Creds GetRequestToken(Creds consumer)
-            {
-                //var requestTokenCmd = new Commands.GetTokenCommand();
-                //LOG.LogCreds("consumer", consumer);
-                //var requestInput = new RequestTokenParams(consumer);
-                //var requestToken = requestTokenCmd.GetToken(requestInput);
-                //LOG.LogCreds("requestToken", requestToken);
-                //return requestToken;
-                return new Creds("", "");
-            }
-
-            public static string EncodeTo64(string toEncode)
-            {
-                var toEncodeAsBytes
-                    = Encoding.UTF8.GetBytes(toEncode);
-                var returnValue
-                    = Convert.ToBase64String(toEncodeAsBytes);
-                return returnValue;
-            }
-
-            public static string GetSha1(string secret)
-            {
-                var bytes = Encoding.UTF8.GetBytes(secret);
-                var hmac = new HMACSHA256(bytes);
-                return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(secret)));
-            }
         }
 
-
-        // Original code.
-        public string GetTokenVerifier(NameValueCollection rt, string token, string consumerKey = null,
-                                       string consumerSecret = null)
+        
+        [Test]
+        public void HappyPath()
         {
-            //48200
-            //100001320
-            //string requestURL = baseAddress + "/OAuth/1A/AuthorizeToken?token=" + (token ?? rt["oauth_token"]) + "&isAuthorized=true";
-            //"https://test.api.mxmerchant.com/v1/OAuth/1A/AuthorizeToken?token=" + (token ?? rt["oauth_token"]) + "&isAuthorized=true";
-            var requestUrl = OAuth.V1.Routes.GetAuthorizeTokenRoute(token);
-
-
-            var authRequest = new HttpRequestMessage
-                {
-                    RequestUri = new Uri(requestUrl),
-                    Method = HttpMethod.Post
-                };
-
-            string mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
-            authRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
-            //   authRequest.Sign(SignatureMethod.OAuth1A, consumerKey, consumerSecret, rt["oauth_token"], rt["oauth_token_secret"], null, null, null);
-
-            var httpClient = new HttpClient();
-            var result = httpClient.SendAsync(authRequest);
-
-            var authResponse = result.Result;
-
-            if (authResponse.StatusCode == HttpStatusCode.Unauthorized)
-                return null;
-            if (authResponse.Headers.Location == null)
-                return authResponse.Content.ReadAsFormDataAsync().Result["oauth_verifier"];
-            else
-                return authResponse.Headers.Location.ParseQueryString()["oauth_verifier"];
+            var consumer = G.DanTestAppConsumer;
+            var rToken = TokenHelper.GetRequestToken(consumer);
+            var verifierParams = new VerifierTokenParams(consumer, rToken, rToken.Key);
+            var verifierCommand = new GetVerifierTokenCommand(verifierParams);
         }
 
 

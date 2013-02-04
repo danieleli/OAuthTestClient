@@ -32,12 +32,31 @@ namespace PPS.Endpoint.Tests
 
         }
 
+
         /// <summary>
         /// Two leg oauth should use SAME user and consumer.  Different user and consumer is three leg
         /// and requires a verifier token.
         /// </summary>
         [Test, ExpectedException(typeof(UnauthorizedAccessException))]
-        public void RequestTokenNotFromCurrentUser__Returns_401WithForeignConsumerCredentialsMessage()
+        public void RequestTokenNotFromCurrentUser__Returns_Unauthorized()
+        {
+            // Arrange            
+            var foreignConsumer     = G.DanTestAppConsumer;
+            var foreignRequestToken = GetRequestToken(foreignConsumer);
+
+            var user                = G.DanUser;
+            var accessTokenParams   = new AccessTokenParams(user, foreignRequestToken, null);
+            var accessTokenCommand  = new GetAccessTokenCommand(accessTokenParams);
+
+            var accessToken = accessTokenCommand.GetToken();
+        }
+
+        /// <summary>
+        /// Two leg oauth should use SAME user and consumer.  Different user and consumer is three leg
+        /// and requires a verifier token.
+        /// </summary>
+        [Test]
+        public void RequestTokenNotFromCurrentUser_Returns_401WithForeignConsumerCredentialsMessage()
         {
             // Arrange            
             var foreignConsumer     = G.DanTestAppConsumer;
@@ -57,12 +76,14 @@ namespace PPS.Endpoint.Tests
                 var msg = uae.Message;
                 if (msg.ToLower().Contains("foreign consumer credentials"))
                 {
-                    throw;
+                    return;
                 }
 
                 Assert.Fail(
                     "Expected UnauthorizedAccessException found but 'request token acquired by foreign consumer credentials' msg not found.");
             }
+
+            Assert.Fail("Expected UnauthorizedAccessException not thrown.");
         }
 
         private static Creds GetRequestToken(Creds consumer)

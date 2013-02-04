@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="G.cs" />
-    <Compile Include="Helpers\NoVersionRequestTokenParam.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
     <Compile Include="Tests\Extensions\StringExTest.cs" />
     <Compile Include="Tests\Extensions\UriExTest.cs" />
