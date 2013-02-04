@@ -16,10 +16,7 @@ namespace SS.OAuth.Commands
 
         private readonly HttpClient _httpClient = new HttpClient();
 
-        public GetRequestTokenCommand( RequestTokenParams paramz )
-        {
-            base._paramz = paramz;
-        }
+        public GetRequestTokenCommand( RequestTokenParams paramz )   : base(paramz) {}
 
         public Creds GetToken()
         {

@@ -9,19 +9,17 @@ namespace SS.OAuth.Factories
     public class SignatureBaseStringFactory
     {
         private readonly BaseParams _paramz;
-        private readonly HttpRequestMessage _msg;
 
-        public SignatureBaseStringFactory(BaseParams paramz, HttpRequestMessage msg)
+        public SignatureBaseStringFactory(BaseParams paramz)
         {
             _paramz = paramz;
-            _msg = msg;
         }
 
-        public string GetSignatureBase()
+        public string GetSignatureBase( HttpRequestMessage msg )
         {
-            var method          = _msg.Method.ToString().ToUpper();
-            var baseUri         = _msg.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
-            var paramCollection = GetAllRequestParameters();
+            var method          = msg.Method.ToString().ToUpper();
+            var baseUri         = msg.RequestUri.GetBaseStringUri().UrlEncodeForOAuth();
+            var paramCollection = GetAllRequestParameters(msg);
             var paramz          = paramCollection.Normalize().UrlEncodeForOAuth();                                                       
 
             var rtn = string.Format("{0}&{1}&{2}", method, baseUri, paramz);
@@ -29,23 +27,23 @@ namespace SS.OAuth.Factories
             return rtn;
         }
 
-        public NameValueCollection GetAllRequestParameters()
+        public NameValueCollection GetAllRequestParameters( HttpRequestMessage msg )
         {
             var oauthParams       = _paramz.ToCollection();
-            var queryParams       = _msg.RequestUri.ParseQueryString();
-            var contentCollection = GetRequestContent();
+            var queryParams       = msg.RequestUri.ParseQueryString();
+            var contentCollection = GetRequestContent( msg );
 
             var rtnCollection = new NameValueCollection {oauthParams, queryParams, contentCollection};
 
             return rtnCollection;
         }
 
-        private NameValueCollection GetRequestContent()
+        private NameValueCollection GetRequestContent( HttpRequestMessage msg )
         {
             var contentCollection = new NameValueCollection();
-            if (_msg.Content != null)
+            if (msg.Content != null)
             {
-                var contentAsString =_msg.Content.ReadAsStringAsync().Result;
+                var contentAsString = msg.Content.ReadAsStringAsync().Result;
                 contentCollection = HttpUtility.ParseQueryString(contentAsString);
             }
             return contentCollection;

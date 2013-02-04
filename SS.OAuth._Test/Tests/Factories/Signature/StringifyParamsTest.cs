@@ -43,10 +43,10 @@ namespace SS.OAuth.Tests.Factories.Signature
         public void Include_QueryStringParams()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_testParam, _httpMessage);
+            var sigFactory = new SignatureFactory(_testParam);
 
             // Act
-            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_httpMessage);
 
             // Assert
             Assert.That(normalizedRequestParams, Is.Not.Null, "normalizedRequestParams");
@@ -64,10 +64,10 @@ namespace SS.OAuth.Tests.Factories.Signature
         [Test]
         public void Includes_EntityBody()
         {
-            var sigFactory = new SignatureFactory(_testParam, _httpMessage);
+            var sigFactory = new SignatureFactory(_testParam);
 
             // Act
-            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_httpMessage);
 
             // Assert;
             var values = normalizedRequestParams.GetValues(KEY);
@@ -81,10 +81,10 @@ namespace SS.OAuth.Tests.Factories.Signature
         public void Includes_ItemWithName_ConsumerKey()
         {
             // Arrange 
-            var sigFactory = new SignatureFactory(_testParam, _httpMessage);
+            var sigFactory = new SignatureFactory(_testParam);
 
             // Act
-            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters();
+            var normalizedRequestParams = sigFactory.SignatureBaseStringFactory.GetAllRequestParameters(_httpMessage);
 
             // Assert
             var values = normalizedRequestParams.GetValues(OAuth.V1.Keys.CONSUMER_KEY);

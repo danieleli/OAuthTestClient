@@ -16,7 +16,19 @@ namespace SS.OAuth.Commands
     public class BaseTokenCommand
     {
         protected BaseParams _paramz;
-        
+        private SignatureFactory _sigFactory;
+
+        public BaseTokenCommand(BaseParams p)
+        {
+            _paramz = p;
+            _sigFactory = new SignatureFactory(p);
+        }
+
+        private SignatureFactory SigFactory
+        {
+            get { return _sigFactory; }
+        }
+
         protected string CreateHeader( string sig )
         {
             var oauthHeaderValues = _paramz.ToCollection();
@@ -25,12 +37,9 @@ namespace SS.OAuth.Commands
             return "OAuth " + headString;
         }
 
-        
-
         protected string GetSignature( HttpRequestMessage msg )
         {
-            var sigFactory = new SignatureFactory(_paramz, msg);
-            var sig = sigFactory.GetSignature();
+            var sig = this.SigFactory.GetSignature(msg);
             return sig;
         }
 

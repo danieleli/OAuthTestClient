@@ -43,22 +43,18 @@ namespace SS.OAuth.Factories
         private static readonly ILog LOG = LogManager.GetLogger(typeof(SignatureFactory));
         
         private readonly BaseParams _paramz;
-        private readonly HttpRequestMessage _msg;
-
-        private SignatureBaseStringFactory _signatureBaseStringFactory;
 
         public SignatureBaseStringFactory SignatureBaseStringFactory { get; private set; }
         
-        public SignatureFactory(BaseParams paramz, HttpRequestMessage msg)
+        public SignatureFactory(BaseParams paramz)
         {
             _paramz = paramz;
-            _msg = msg;
-            SignatureBaseStringFactory = new SignatureBaseStringFactory(_paramz, _msg);
+            SignatureBaseStringFactory = new SignatureBaseStringFactory(_paramz);
         }
 
-        public string GetSignature()
+        public string GetSignature(HttpRequestMessage msg)
         {
-            var sigBase = SignatureBaseStringFactory.GetSignatureBase();
+            var sigBase = SignatureBaseStringFactory.GetSignatureBase(msg);
             var sigKey = _paramz.GetSignatureKey();
             var sig = GetSignature(sigBase, sigKey);
 
