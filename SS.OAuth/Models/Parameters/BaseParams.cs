@@ -7,17 +7,23 @@ namespace SS.OAuth.Models.Parameters
 
     public abstract class BaseParams
     {
+        private readonly bool _includeVersion;
+
         #region -- Properties --
 
         private string _nonce;
         private string _timestamp;
-        
-        public const string SIGNATURE_METHOD = OAuth.V1.Values.SIGNATURE_METHOD;
-        public const string VERSION = OAuth.V1.Values.VERSION;
 
-        public Creds Consumer { get; protected set; }
-        public Creds RequestToken { get; protected set; }
-        public string Realm { get; protected set; }
+        protected BaseParams( bool includeVersion = true, string realm = null  )
+        {
+            IncludeVersion = includeVersion;
+            Realm = realm;
+        }
+
+        protected Creds Consumer { get; set; }
+        protected Creds RequestToken { get; set; }
+        public string Realm { get; set; }
+        private bool IncludeVersion { get; set; }
 
         public virtual string Timestamp
         {
@@ -47,20 +53,19 @@ namespace SS.OAuth.Models.Parameters
         }
 
         public abstract NameValueCollection ToCollection();
+
         protected  NameValueCollection ToCollectionInternal()
         {
-            var col = new NameValueCollection();
-            col.Add(OAuth.V1.Keys.NONCE, this.Nonce);
-            col.Add(OAuth.V1.Keys.TIMESTAMP, this.Timestamp);
-            col.Add(OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD);
-            col.Add(OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key);
-            col.Add(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION);
+            var col = new NameValueCollection
+                {
+                    {OAuth.V1.Keys.NONCE, this.Nonce},
+                    {OAuth.V1.Keys.TIMESTAMP, this.Timestamp},
+                    {OAuth.V1.Keys.SIGNATURE_METHOD, OAuth.V1.Values.SIGNATURE_METHOD},
+                    {OAuth.V1.Keys.CONSUMER_KEY, this.Consumer.Key}
+                };
 
-            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.REALM, this.Realm);
-            if (this.RequestToken != null)
-            {
-                col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key);
-            }
+            if (this.IncludeVersion) { col.Add(OAuth.V1.Keys.VERSION, OAuth.V1.Values.VERSION); }
+            if (this.RequestToken != null) { col.AddIfNotNullOrEmpty(OAuth.V1.Keys.TOKEN, this.RequestToken.Key); }
 
             return col;
         }

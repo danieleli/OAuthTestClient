@@ -8,7 +8,8 @@ namespace SS.OAuth.Models.Parameters
     {
         public string Callback { get; private set; }
 
-        public RequestTokenParams(Creds consumer, string callback = "oob")
+        public RequestTokenParams( Creds consumer, string callback = "oob", bool includeVersion = true, string realm = null )
+            : base(includeVersion, realm)
         {
             Consumer = consumer;
             Callback = callback;
