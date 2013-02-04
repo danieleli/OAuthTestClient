@@ -15,11 +15,6 @@ namespace SS.OAuth.Models.Parameters
             Verifier = verifier;
         }
 
-        public override string GetSignatureKey()
-        {
-            return this.Consumer.Secret.UrlEncodeForOAuth() + "&" + RequestToken.Secret.UrlEncodeForOAuth();
-        }
-
         public override NameValueCollection ToCollection()
         {
             var col = base.ToCollectionInternal();

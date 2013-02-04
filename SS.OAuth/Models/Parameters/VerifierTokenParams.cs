@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using SS.OAuth.Extensions;
 
 namespace SS.OAuth.Models.Parameters
 {
@@ -13,14 +14,12 @@ namespace SS.OAuth.Models.Parameters
             UserToken = userToken;
         }
 
-        public override string GetSignatureKey()
-        {
-            return base.GetSignatureKey();
-        }
 
         public override NameValueCollection ToCollection()
         {
-            throw new System.NotImplementedException();
+            var col = base.ToCollectionInternal();
+            col.AddIfNotNullOrEmpty(OAuth.V1.Keys.CALLBACK, this.UserToken);
+            return col;
         }
     }
 }

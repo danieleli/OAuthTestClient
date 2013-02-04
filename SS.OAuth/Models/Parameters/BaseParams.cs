@@ -7,14 +7,12 @@ namespace SS.OAuth.Models.Parameters
 
     public abstract class BaseParams
     {
-        private readonly bool _includeVersion;
-
         #region -- Properties --
 
         private string _nonce;
         private string _timestamp;
 
-        protected BaseParams( bool includeVersion = true, string realm = null  )
+        protected BaseParams( bool includeVersion = true, string realm = null )
         {
             IncludeVersion = includeVersion;
             Realm = realm;
@@ -37,6 +35,8 @@ namespace SS.OAuth.Models.Parameters
 
         #endregion -- Properties --
 
+        public abstract NameValueCollection ToCollection();
+
         /// <summary>
         /// key - is set to the concatenated values of:
         /// 
@@ -47,14 +47,17 @@ namespace SS.OAuth.Models.Parameters
         /// 
         /// 3.  The token shared-secret, after being encoded (Section 3.6). 
         /// </summary>
-        public virtual string GetSignatureKey()
+        public string GetSignatureKey()
         {
-            return this.Consumer.Secret.UrlEncodeForOAuth() + "&";
+            var key = this.Consumer.Secret.UrlEncodeForOAuth() + "&";
+            if (this.RequestToken != null)
+            {
+                key += this.RequestToken.Secret.UrlEncodeForOAuth();
+            }
+            return key;
         }
 
-        public abstract NameValueCollection ToCollection();
-
-        protected  NameValueCollection ToCollectionInternal()
+        protected NameValueCollection ToCollectionInternal()
         {
             var col = new NameValueCollection
                 {
