@@ -1,14 +1,14 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using PPS.Endpoint.Helpers;
+using SS.OAuth;
 using SS.OAuth.Factories;
-using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Endpoints
+namespace PPS.Endpoint.Tests
 {
     [TestFixture]
     public class RequestTokenEndpointTest
@@ -48,7 +48,7 @@ namespace SS.OAuth.Tests.Endpoints
         public void NoVersionInHeader_Returns_OK()
         {
             // Arrange            
-            var requestParam = new NoVersionRequestTokenParams(_consumer);
+            var requestParam = new RequestTokenParams(_consumer);
             var msgFactory = new RequestTokenMessageFactory(requestParam);
             var msg = msgFactory.CreateMessage();
 
