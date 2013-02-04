@@ -17,6 +17,14 @@ namespace SS.OAuth.Commands
 {
     public class BaseTokenCommand
     {
+        private HttpClient _httpClient;
+
+        protected HttpClient HttpClient
+        {
+            get { return _httpClient ?? (_httpClient = new HttpClient()); }
+            set { _httpClient = value; }
+        }
+
         protected BaseTokenCommand(BaseParams p)
         {
             HeaderFactory = new OAuthHeaderFactory(p);

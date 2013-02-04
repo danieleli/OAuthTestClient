@@ -14,15 +14,13 @@ namespace SS.OAuth.Commands
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(GetRequestTokenCommand));
 
-        private readonly HttpClient _httpClient = new HttpClient();
-
         public GetRequestTokenCommand( RequestTokenParams paramz )   : base(paramz) {}
 
         public Creds GetToken()
         {
             var msg      = this.CreateMessage();
             SignMessage(msg);
-            var response = _httpClient.SendAsync(msg).Result;
+            var response = base.HttpClient.SendAsync(msg).Result;
             var token    = base.ExtractToken(response);
 
             return token;
