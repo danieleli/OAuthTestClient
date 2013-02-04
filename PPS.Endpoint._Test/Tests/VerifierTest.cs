@@ -134,17 +134,17 @@ namespace PPS.Endpoint.Tests
         public void Success()
         {
             // Arrange            
-            var requestToken = Helper.GetRequestToken(_consumer);
+            var requestToken = TokenHelper.GetRequestToken(_consumer);
             Helper.HitWebView(requestToken.Key);
-            var twoLegAccessToken = Helper.GetTwoLegAccessToken(_user);
+            var twoLegAccessToken = TokenHelper.GetTwoLegAccessToken(_user);
 
 
             var verifierParams = new VerifierTokenParams(_user, twoLegAccessToken, requestToken.Key);
-            var verifierCmd = new GetVerifierTokenCommand();
+            var verifierCmd = new GetVerifierTokenCommand(verifierParams);
 
 
             // Act
-            var verifierToken = verifierCmd.GetToken(verifierParams);
+            var verifierToken = verifierCmd.GetToken();
 
 
             // Assert
