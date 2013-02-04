@@ -1,6 +1,6 @@
 ﻿using SS.OAuth.Models;
 
-namespace SS.OAuth
+namespace PPS.Endpoint
 {
     public static partial class G
     {

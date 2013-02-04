@@ -1,13 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using NUnit.Framework;
-using SS.OAuth.Commands;
+﻿using NUnit.Framework;
 using SS.OAuth.Models;
-using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Commands
+namespace PPS.Endpoint.Tests
 {
     [TestFixture]
     public class AccessTokenTest

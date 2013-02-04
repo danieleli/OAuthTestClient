@@ -2,18 +2,20 @@
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using PPS.Endpoint.Helpers;
+using SS.OAuth;
+using SS.OAuth.Commands;
 using SS.OAuth.Factories;
-using SS.OAuth.Helpers;
 using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Endpoints
+namespace PPS.Endpoint.Tests
 {
     [TestFixture]
-    public class RequestTokenEndpointTest
+    public class RequestTokenTest
     {
-        private static readonly ILog LOG  = LogManager.GetLogger(typeof(RequestTokenEndpointTest));
+        private static readonly ILog LOG  = LogManager.GetLogger(typeof(RequestTokenTest));
         private readonly Creds _consumer  = G.DanTestAppConsumer;
         readonly HttpClient _httpClient   = new HttpClient();
 
@@ -21,48 +23,42 @@ namespace SS.OAuth.Tests.Endpoints
         public void HappyPath()
         {
             // Arrange            
-            var requestParam = new RequestTokenParams(_consumer);
-            var msgFactory   = new RequestTokenMessageFactory(requestParam);
-            var msg          = msgFactory.CreateMessage();
-
-            var msg2 = CreateMessage();
+            var requestParam = new RequestTokenParams(G.DanTestAppConsumer);
+            var cmd = new GetRequestTokenCommand(requestParam);
 
             // Act
-            var result = _httpClient.SendAsync(msg).Result;
-            LOG.Debug("Status: " + result.StatusCode);
-
+            var token = cmd.GetToken();
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status Code");
+            AssertTokenOk(token);
         }
 
-
-        private HttpRequestMessage CreateMessage()
+        private static void AssertTokenOk(Creds token)
         {
-            var msg = new HttpRequestMessage(HttpMethod.Get, OAuth.V1.Routes.RequestToken);
-            return msg;
+            Assert.That(token, Is.Not.Null);
+            Assert.That(token.Key, Is.Not.Null, "Key");
+            Assert.That(token.Key, Is.Not.Empty, "Key");
+            Assert.That(token.Secret, Is.Not.Null, "Secret");
+            Assert.That(token.Secret, Is.Not.Empty, "Secret");
         }
 
         [Test]
-        public void NoVersionInHeader_Returns_OK()
+        public void NoVersionInHeader_Returns_Token()
         {
             // Arrange            
-            var requestParam = new NoVersionRequestTokenParams(_consumer);
-            var msgFactory = new RequestTokenMessageFactory(requestParam);
-            var msg = msgFactory.CreateMessage();
-
+            var requestParam = new RequestTokenParams(G.DanTestAppConsumer, null, false);
+            var cmd = new GetRequestTokenCommand(requestParam);
 
             // Act
-            var result = _httpClient.SendAsync(msg).Result;
-            LOG.Debug(result);
-
+            var token = cmd.GetToken();
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status Code");
+            Assert.That(token, Is.Not.Null);
+            Assert.That(token.Key, Is.Not.Null, "Key");
+            Assert.That(token.Key, Is.Not.Empty, "Key");
+            Assert.That(token.Key, Is.Not.Null, "Secret");
+            Assert.That(token.Key, Is.Not.Empty, "Secret");
         }
-
 
         [Test]
         public void NoAuthHeader_Returns_UnauthorizedStatus()
@@ -79,8 +75,6 @@ namespace SS.OAuth.Tests.Endpoints
             Assert.That(result, Is.Not.Null);
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Status Code");
         }
-
-
 
         [Test]
         public void CallbackPresent_Redirects_ToCallback()
@@ -101,43 +95,29 @@ namespace SS.OAuth.Tests.Endpoints
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Redirect), "Status Code");
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(UnauthorizedAccessException))]
         public void BadConsumerKey_Returns_Unauthorized()
         {
             // Arrange
             var consumer     = new Creds("xxxx", _consumer.Secret);
             var requestParam = new RequestTokenParams(consumer);
-            var msgFactory   = new RequestTokenMessageFactory(requestParam);
-            var msg          = msgFactory.CreateMessage();
-
+            var cmd = new GetRequestTokenCommand(requestParam);
 
             // Act
-            var result = _httpClient.SendAsync(msg).Result;
-            LOG.Debug("Status: " + result.StatusCode);
-
-
-            // Assert
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Status Code.");
+            var token = cmd.GetToken();
         }
 
 
-        [Test]
+        [Test, ExpectedException(typeof(UnauthorizedAccessException))]
         public void BadConsumerSecret_Returns_Unauthorized()
         {
             // Arrange
             var consumer = new Creds(_consumer.Key,"xxx");
             var requestParam = new RequestTokenParams(consumer);
-            var msgFactory = new RequestTokenMessageFactory(requestParam);
-            var msg = msgFactory.CreateMessage();
-
+            var cmd = new GetRequestTokenCommand(requestParam);
 
             // Act
-            var result = _httpClient.SendAsync(msg).Result;
-            LOG.Debug("Status: " + result.StatusCode);
-
-
-            // Assert
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Status Code.");
+            var token = cmd.GetToken();
         }
 
 
@@ -147,20 +127,22 @@ namespace SS.OAuth.Tests.Endpoints
             // Arrange
             var consumer     = new Creds(_consumer.Key, "dsds");
             var requestParam = new RequestTokenParams(consumer);
-            var msgFactory   = new RequestTokenMessageFactory(requestParam);
-            var msg          = msgFactory.CreateMessage();
-
+            var cmd = new GetRequestTokenCommand(requestParam);
 
             // Act
-            var response = _httpClient.SendAsync(msg).Result;
-            var content  = response.Content.ReadAsStringAsync().Result;
-            
-            LOG.Debug("Status: " + response.StatusCode);
-            LOG.Debug("Content: " + content);
+            try
+            {
+                var token = cmd.GetToken();
+            }
+            catch (UnauthorizedAccessException e)
+            {
 
-            // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Status Code.");
-            Assert.That(content.ToLower(), Contains.Substring("signature"));            
+                Assert.That(e.Message.ToLower(), Contains.Substring("invalid"));
+                return;
+            }
+
+            Assert.Fail("Expected exception (UnauthorizedAccessException) not thrown.");
+            
         }
 
         [Test]

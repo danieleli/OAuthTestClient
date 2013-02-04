@@ -49,10 +49,6 @@
   <ItemGroup>
     <Compile Include="G.cs" />
     <Compile Include="Helpers\NoVersionRequestTokenParam.cs" />
-    <Compile Include="Tests\Commands\AccessTokenTest.cs" />
-    <Compile Include="Tests\Commands\RequestTokenTest.cs" />
-    <Compile Include="Tests\Commands\TwoLegTest.cs" />
-    <Compile Include="Tests\Commands\VerifierTest.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
     <Compile Include="Tests\Extensions\StringExTest.cs" />
     <Compile Include="Tests\Extensions\UriExTest.cs" />
@@ -61,7 +57,6 @@
     <Compile Include="Tests\Factories\Signature\StringifyParamsTest.cs" />
     <Compile Include="Tests\Factories\Signature\NormalizeParamsTest.cs" />
     <Compile Include="Tests\Parameters\VerifierParametersTest.cs" />
-    <Compile Include="Tests\Endpoints\RequestTokenEndpointTest.cs" />
     <Compile Include="Tests\RfcSample.cs" />
     <Compile Include="Tests\Factories\Signature\GetSignatureTest.cs" />
   </ItemGroup>
@@ -78,6 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Tests\Commands\" />
     <Folder Include="Tests\Factories\Header\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

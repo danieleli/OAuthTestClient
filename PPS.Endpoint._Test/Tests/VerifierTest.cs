@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
+using SS.OAuth;
 using SS.OAuth.Commands;
 using SS.OAuth.Extensions;
 using SS.OAuth.Models;
@@ -17,7 +18,7 @@ using log4net;
 
 #endregion
 
-namespace SS.OAuth.Tests.Commands
+namespace PPS.Endpoint.Tests
 {
     [TestFixture,Ignore]
     public class VerifierTest
