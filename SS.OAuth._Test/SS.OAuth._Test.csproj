@@ -35,6 +35,9 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -47,7 +50,7 @@
     <Compile Include="G.cs" />
     <Compile Include="Helpers\NoVersionRequestTokenParam.cs" />
     <Compile Include="Tests\Commands\AccessTokenTest.cs" />
-    <Compile Include="Tests\Commands\RequestTokenTest.cs" />
+    <Compile Include="Tests\Commands\GetRequestTokenCommandTest.cs" />
     <Compile Include="Tests\Commands\TwoLeg_AccessToken_Test.cs" />
     <Compile Include="Tests\Commands\VerifierTest.cs" />
     <Compile Include="Tests\Extensions\NameValueCollectionExTest.cs" />
@@ -58,7 +61,7 @@
     <Compile Include="Tests\Factories\Signature\StringifyParamsTest.cs" />
     <Compile Include="Tests\Factories\Signature\NormalizeParamsTest.cs" />
     <Compile Include="Tests\Parameters\VerifierParametersTest.cs" />
-    <Compile Include="Tests\Requests\RequestTokenTest.cs" />
+    <Compile Include="Tests\Endpoints\RequestTokenEndpointTest.cs" />
     <Compile Include="Tests\RfcSample.cs" />
     <Compile Include="Tests\Factories\Signature\GetSignatureTest.cs" />
   </ItemGroup>

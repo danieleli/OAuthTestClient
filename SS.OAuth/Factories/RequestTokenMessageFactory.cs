@@ -1,9 +1,11 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using SS.OAuth.Extensions;
 using SS.OAuth.Models.Parameters;
 
 namespace SS.OAuth.Factories
 {
+    [Obsolete]
     public class RequestTokenMessageFactory
     {
         private readonly RequestTokenParams _requestParam;

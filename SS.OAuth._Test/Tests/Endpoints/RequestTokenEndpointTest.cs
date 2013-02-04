@@ -8,14 +8,14 @@ using SS.OAuth.Models;
 using SS.OAuth.Models.Parameters;
 using log4net;
 
-namespace SS.OAuth.Tests.Requests
+namespace SS.OAuth.Tests.Endpoints
 {
     [TestFixture]
     public class RequestTokenEndpointTest
     {
-        private static readonly ILog LOG                                  = LogManager.GetLogger(typeof(RequestTokenEndpointTest));
-        private readonly Creds _consumer                                  = G.DanTestAppConsumer;
-        readonly HttpClient _httpClient                                   = new HttpClient();
+        private static readonly ILog LOG  = LogManager.GetLogger(typeof(RequestTokenEndpointTest));
+        private readonly Creds _consumer  = G.DanTestAppConsumer;
+        readonly HttpClient _httpClient   = new HttpClient();
 
         [Test]
         public void HappyPath()
@@ -25,6 +25,7 @@ namespace SS.OAuth.Tests.Requests
             var msgFactory   = new RequestTokenMessageFactory(requestParam);
             var msg          = msgFactory.CreateMessage();
 
+            var msg2 = CreateMessage();
 
             // Act
             var result = _httpClient.SendAsync(msg).Result;
@@ -34,6 +35,13 @@ namespace SS.OAuth.Tests.Requests
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK), "Status Code");
+        }
+
+
+        private HttpRequestMessage CreateMessage()
+        {
+            var msg = new HttpRequestMessage(HttpMethod.Get, OAuth.V1.Routes.RequestToken);
+            return msg;
         }
 
         [Test]
@@ -153,19 +161,6 @@ namespace SS.OAuth.Tests.Requests
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized), "Status Code.");
             Assert.That(content.ToLower(), Contains.Substring("signature"));            
-        }
-
-        protected virtual Creds ExtractToken( HttpResponseMessage response )
-        {
-            var result = response.Content.ReadAsFormDataAsync().Result;
-
-            if (result == null) throw new Exception("No content found.");
-
-            var key = result[OAuth.V1.Keys.TOKEN];
-            var secret = result[OAuth.V1.Keys.TOKEN_SECRET];
-            var token = new Creds(key, secret);
-
-            return token;
         }
 
         [Test]

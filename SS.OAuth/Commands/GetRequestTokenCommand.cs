@@ -1,67 +1,74 @@
-﻿//using System;
-//using System.Net.Http;
-//using System.Net.Http.Formatting;
-//using System.Net.Http.Headers;
-//using SS.OAuth.Models;
-//using SS.OAuth.Models.Parameters;
-//using log4net;
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+using SS.OAuth.Extensions;
+using SS.OAuth.Factories;
+using SS.OAuth.Models;
+using SS.OAuth.Models.Parameters;
+using log4net;
 
-//namespace SS.OAuth.Commands
-//{
-//    public class GetRequestTokenCommand
-//    {
-//        private static readonly ILog LOG = LogManager.GetLogger(typeof(GetRequestTokenCommand));
-        
-        
-//        private MessageSender _messageSender;
+namespace SS.OAuth.Commands
+{
+    public class GetRequestTokenCommand
+    {
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(GetRequestTokenCommand));
 
-//        public MessageSender MessageSender
-//        {
-//            get { return _messageSender = _messageSender ?? new MessageSender(); }
-//            set { _messageSender = value; }
-//        }
+        private readonly RequestTokenParams _paramz;
+        private readonly HttpClient _httpClient = new HttpClient();
 
-        
-//        public Creds GetToken(BaseParams paramz)
-//        {
-//            var msg = this.CreateMessage(paramz);
-//            AddOAuthHeader(paramz, msg);
-//            var response = this.MessageSender.Send(msg);
+        public GetRequestTokenCommand( RequestTokenParams paramz )
+        {
+            _paramz = paramz;
+        }
 
-//            var token = ExtractToken(response);
+        public Creds GetToken()
+        {
+            var msg = this.CreateMessage();
+            var sig = this.GetSignature(msg);
+            var header = this.CreateHeader(sig);
+            msg.Headers.Add((string)OAuth.V1.AUTHORIZATION_HEADER, header);
+            var response = _httpClient.SendAsync(msg).Result;
+            var token = ExtractToken(response);
 
-//            return token;
-//        }
+            return token;
+        }
 
-//        public HttpRequestMessage CreateMessage(IMessageParameters paramz)
-//        {
-//            var msg = new HttpRequestMessage(paramz.HttpMethod, paramz.RequestUri);
-//            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
-//            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+        private string CreateHeader( string sig )
+        {
+            var oauthHeaderValues = _paramz.ToCollection();
+            oauthHeaderValues.Add(OAuth.V1.Keys.SIGNATURE, sig);
+            var headString = oauthHeaderValues.Stringify();
+            return "OAuth " + headString;
+        }
 
-//            return msg;
-//        }
+        private HttpRequestMessage CreateMessage()
+        {
+            var msg = new HttpRequestMessage(HttpMethod.Get, OAuth.V1.Routes.RequestToken);
+            var mediaType = FormUrlEncodedMediaTypeFormatter.DefaultMediaType.MediaType;
+            msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
 
-//        private static void AddOAuthHeader(OAuthParametersBase parameters, HttpRequestMessage msg)
-//        {
-//            var authHeader = parameters.GetOAuthHeader();
-//            if (!string.IsNullOrEmpty(authHeader))
-//            {
-//                msg.Headers.Add(OAuth.V1.AUTHORIZATION_HEADER, "OAuth " + authHeader);
-//            }
-//        }
+            return msg;
+        }
 
-//        protected virtual Creds ExtractToken(HttpResponseMessage response)
-//        {
-//            var result = response.Content.ReadAsFormDataAsync().Result;
+        private string GetSignature( HttpRequestMessage msg )
+        {
+            var sigFactory = new SignatureFactory(_paramz, msg);
+            var sig = sigFactory.GetSignature();
+            return sig;
+        }
 
-//            if (result == null) throw new Exception("No content found.");
+        private Creds ExtractToken( HttpResponseMessage response )
+        {
+            var result = response.Content.ReadAsFormDataAsync().Result;
 
-//            var key = result[OAuth.V1.Keys.TOKEN];
-//            var secret = result[OAuth.V1.Keys.TOKEN_SECRET];
-//            var token = new Creds(key, secret);
+            if (result == null) throw new Exception("No content found.");
 
-//            return token;
-//        }
-//    }
-//}
+            var key = result[OAuth.V1.Keys.TOKEN];
+            var secret = result[OAuth.V1.Keys.TOKEN_SECRET];
+            var token = new Creds(key, secret);
+
+            return token;
+        }
+    }
+}
