@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using SS.OAuth1.Client.Extensions;
 using SS.OAuth1.Client.Helpers;
 using SS.OAuth1.Client.Messages;
+using SS.OAuth1.Client.NewFolder1;
 
 namespace SS.OAuth1.Client.Parameters
 {

@@ -4,7 +4,6 @@ using SS.OAuth.Misc;
 
 namespace SS.OAuth.Models.Parameters
 {
-
     public abstract class BaseParams
     {
         #region -- Properties --

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Web;
 using DotNetOpenAuth.AspNet;
 using DotNetOpenAuth.AspNet.Clients;
 using DotNetOpenAuth.Messaging;
@@ -12,6 +13,20 @@ using log4net;
 
 namespace SimpleMembership.Auth.OAuth1a
 {
+    public class MxClient2 : IAuthenticationClient
+    {
+        public void RequestAuthentication(HttpContextBase context, Uri returnUrl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AuthenticationResult VerifyAuthentication(HttpContextBase context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ProviderName { get { return "MxClient"; } }
+    }
 
     public class MxClient : OAuthClient
     {
@@ -45,13 +60,28 @@ namespace SimpleMembership.Auth.OAuth1a
 
         #endregion  -- Constructors --
 
-        protected override AuthenticationResult VerifyAuthenticationCore(AuthorizedTokenResponse response)
+
+
+        public override AuthenticationResult VerifyAuthentication (HttpContextBase context)
+        {
+            AuthorizedTokenResponse response = this.WebWorker.ProcessUserAuthorization();
+            if (response == null)
+                return AuthenticationResult.Failed;
+            AuthenticationResult authenticationResult = this.VerifyAuthenticationCore(response);
+            if (authenticationResult.IsSuccessful && authenticationResult.ExtraData != null)
+            {
+                IDictionary<string, string> extraData = authenticationResult.ExtraData.IsReadOnly ? (IDictionary<string, string>)new Dictionary<string, string>(authenticationResult.ExtraData) : authenticationResult.ExtraData;
+                extraData["accesstoken"] = response.AccessToken;
+                authenticationResult = new AuthenticationResult(authenticationResult.IsSuccessful, authenticationResult.Provider, authenticationResult.ProviderUserId, authenticationResult.UserName, extraData);
+            }
+            return authenticationResult;
+        }
+
+        protected override AuthenticationResult VerifyAuthenticationCore (AuthorizedTokenResponse response)
         {
             LOG.Debug("vERITY");
             return Helper.CreateAuthenticationResult(response, this.ProviderName);
         }
-
-
         
         public static class Helper
         {
